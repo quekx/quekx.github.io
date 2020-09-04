@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="PHP,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="时间函数： 123456$date = date(&amp;apos;Ymd&amp;apos;); // &amp;apos;Y-m-d H:m:s&amp;apos;$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期$w = date(&amp;apos;w&amp;apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6$now_start">
-<meta name="keywords" content="PHP">
+<meta name="description" content="常用工具tail1tail -300f shopbase.log #倒数300行并进入实时监听文件写入模式 grep123456789101112grep forest f.txt   #文件查找grep forest f.txt cpf.txt #多文件查找grep &amp;apos;log&amp;apos; /home/admin -r -n #目录下查找所有符合关键字的文件cat f.txt | gre">
 <meta property="og:type" content="article">
-<meta property="og:title" content="学习笔记(5):PHP">
-<meta property="og:url" content="http://yoursite.com/2017/07/10/PHPNote/index.html">
+<meta property="og:title" content="tools">
+<meta property="og:url" content="http://yoursite.com/2020/09/04/tools/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="时间函数： 123456$date = date(&amp;apos;Ymd&amp;apos;); // &amp;apos;Y-m-d H:m:s&amp;apos;$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期$w = date(&amp;apos;w&amp;apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6$now_start">
+<meta property="og:description" content="常用工具tail1tail -300f shopbase.log #倒数300行并进入实时监听文件写入模式 grep123456789101112grep forest f.txt   #文件查找grep forest f.txt cpf.txt #多文件查找grep &amp;apos;log&amp;apos; /home/admin -r -n #目录下查找所有符合关键字的文件cat f.txt | gre">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-01-06T03:06:30.000Z">
+<meta property="og:updated_time" content="2020-09-04T07:38:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="学习笔记(5):PHP">
-<meta name="twitter:description" content="时间函数： 123456$date = date(&amp;apos;Ymd&amp;apos;); // &amp;apos;Y-m-d H:m:s&amp;apos;$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期$w = date(&amp;apos;w&amp;apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6$now_start">
+<meta name="twitter:title" content="tools">
+<meta name="twitter:description" content="常用工具tail1tail -300f shopbase.log #倒数300行并进入实时监听文件写入模式 grep123456789101112grep forest f.txt   #文件查找grep forest f.txt cpf.txt #多文件查找grep &amp;apos;log&amp;apos; /home/admin -r -n #目录下查找所有符合关键字的文件cat f.txt | gre">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/10/PHPNote/">
+  <link rel="canonical" href="http://yoursite.com/2020/09/04/tools/">
 
 
 
 
 
-  <title>学习笔记(5):PHP | Hexo</title>
+  <title>tools | Hexo</title>
   
 
 
@@ -233,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/10/PHPNote/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/04/tools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Quekx">
@@ -250,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">学习笔记(5):PHP</h1>
+          <h1 class="post-title" itemprop="name headline">tools</h1>
         
 
         <div class="post-meta">
@@ -262,8 +261,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-10T23:52:38+08:00">
-                2017-07-10
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-04T14:42:01+08:00">
+                2020-09-04
               </time>
             
 
@@ -272,28 +271,6 @@
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tips/" itemprop="url" rel="index">
-                    <span itemprop="name">tips</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -322,16 +299,32 @@
       
 
       
-        <p>时间函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;); // &apos;Y-m-d H:m:s&apos;</span><br><span class="line">$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期</span><br><span class="line">$w = date(&apos;w&apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6</span><br><span class="line">$now_start = date(&apos;Ymd&apos;, strtotime(&quot;$date -&quot; . ($w ? $w - $first : 6) . &apos; days&apos;)); // 这周周一</span><br><span class="line">$last_start = date(&apos;Ymd&apos;, strtotime(&quot;$now_start - 7 days&quot;)); // 上周周一</span><br><span class="line">return $last_start;</span><br></pre></td></tr></table></figure>
-<p>时间格式转换：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;);      // Ymd格式</span><br><span class="line">$time = strtotime($date); // 转换为时间戳</span><br><span class="line">$date = date(&apos;Ymd H:m:s&apos;); // Ymd H:m:s格式</span><br></pre></td></tr></table></figure>
-<p>curl发送Get</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ch = curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $url);   //设置url</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);   // 不输出头部</span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 返回结果作为string</span><br><span class="line">$response = curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
-<p>Json解析</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$result = json_decode(&quot;&quot; . $response, true);  // true解析为数组</span><br><span class="line">$data = $result[&quot;data&quot;];</span><br></pre></td></tr></table></figure>
-<p>文件写入</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$fileName = &quot;puvLog.txt&quot;;</span><br><span class="line">$time = date(&quot;Y-m-d H:i:s&quot;, time());</span><br><span class="line">$log = $time . &quot;  &quot; . $log . &quot;\n&quot;;</span><br><span class="line">file_put_contents($fileName, $log, FILE_APPEND); // 尾部追加</span><br></pre></td></tr></table></figure>
+        <h2 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h2><h3 id="tail"><a href="#tail" class="headerlink" title="tail"></a>tail</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -300f shopbase.log #倒数300行并进入实时监听文件写入模式</span><br></pre></td></tr></table></figure>
+<h3 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">grep forest f.txt   #文件查找</span><br><span class="line">grep forest f.txt cpf.txt #多文件查找</span><br><span class="line">grep &apos;log&apos; /home/admin -r -n #目录下查找所有符合关键字的文件</span><br><span class="line">cat f.txt | grep -i shopbase    </span><br><span class="line">grep &apos;shopbase&apos; /home/admin -r -n --include *.&#123;vm,java&#125; #指定文件后缀</span><br><span class="line">grep &apos;shopbase&apos; /home/admin -r -n --exclude *.&#123;vm,java&#125; #反匹配</span><br><span class="line">seq 10 | grep 5 -A 3    #上匹配</span><br><span class="line">seq 10 | grep 5 -B 3    #下匹配</span><br><span class="line">seq 10 | grep 5 -C 3    #上下匹配，平时用这个就妥了</span><br><span class="line">cat f.txt | grep -c &apos;SHOPBASE&apos;</span><br><span class="line"></span><br><span class="line">grep &quot;xxx&quot; -v f.txt #不包含反向查找</span><br></pre></td></tr></table></figure>
+<h3 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat xx | awk -F= &apos;&#123;print $2&#125;&apos; | awk &apos;&#123;print $1&#125;&apos; | awk -F. &apos;&#123;if ($2==&quot;na61&quot;) &#123;print $1&quot;.&quot;$2&#125; else if($3==&quot;na61&quot;) &#123;print $1&quot;.&quot;$2&quot;.&quot;$3&#125;&#125;&apos; #分隔处理</span><br></pre></td></tr></table></figure>
+<h3 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -nat|awk  &apos;&#123;print $6&#125;&apos;|sort|uniq -c|sort -rn </span><br><span class="line">#查看当前连接，注意close_wait偏高的情况，比如如下</span><br></pre></td></tr></table></figure>
+<h3 id="jsp"><a href="#jsp" class="headerlink" title="jsp"></a>jsp</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jps -mlvV xxx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-m 输出main方案参数</li>
+<li>-l 显示主类全名</li>
+<li>-v jvm参数</li>
+<li>-V 通过flag file传入的jvm参数</li>
+</ul>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jstack xxx</span><br></pre></td></tr></table></figure>
+<p>堆栈状态</p>
+<h3 id="idea插件"><a href="#idea插件" class="headerlink" title="idea插件"></a>idea插件</h3><ul>
+<li>key promoter</li>
+<li>maven helper</li>
+<li>Rainbow Brackets</li>
+</ul>
+<h3 id="VM参数"><a href="#VM参数" class="headerlink" title="VM参数"></a>VM参数</h3><ul>
+<li><p>类来自哪个文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-XX:+TraceClassLoading</span><br><span class="line">结果形如[Loaded java.lang.invoke.MethodHandleImpl$Lazy from D:\programme\jdk\jdk8U74\jre\lib\rt.jar]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>应用挂了输出dump文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home/admin/logs/java.hprof</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
       
     </div>
@@ -347,12 +340,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/PHP/" rel="tag"># PHP</a>
-          
-        </div>
-      
 
       
       
@@ -362,8 +349,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/08/kafka/" rel="next" title="学习笔记(4):kafka">
-                <i class="fa fa-chevron-left"></i> 学习笔记(4):kafka
+              <a href="/2020/01/06/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
               </a>
             
           </div>
@@ -371,10 +358,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/01/06/hello-world/" rel="prev" title="Hello World">
-                Hello World <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -426,8 +409,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -487,6 +479,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用工具"><span class="nav-number">1.</span> <span class="nav-text">常用工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tail"><span class="nav-number">1.1.</span> <span class="nav-text">tail</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grep"><span class="nav-number">1.2.</span> <span class="nav-text">grep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#awk"><span class="nav-number">1.3.</span> <span class="nav-text">awk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netstat"><span class="nav-number">1.4.</span> <span class="nav-text">netstat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jsp"><span class="nav-number">1.5.</span> <span class="nav-text">jsp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack"><span class="nav-number">1.6.</span> <span class="nav-text">jstack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#idea插件"><span class="nav-number">1.7.</span> <span class="nav-text">idea插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VM参数"><span class="nav-number">1.8.</span> <span class="nav-text">VM参数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
