@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="时间函数： 123456$date = date(&amp;apos;Ymd&amp;apos;); // &amp;apos;Y-m-d H:m:s&amp;apos;$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期$w = date(&amp;apos;w&amp;apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6$now_start">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-01-06T03:06:30.000Z">
+<meta property="og:updated_time" content="2020-09-07T10:37:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习笔记(5):PHP">
 <meta name="twitter:description" content="时间函数： 123456$date = date(&amp;apos;Ymd&amp;apos;); // &amp;apos;Y-m-d H:m:s&amp;apos;$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期$w = date(&amp;apos;w&amp;apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6$now_start">
@@ -187,6 +187,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
           </a>
         </li>
       
@@ -324,6 +344,7 @@
       
         <p>时间函数：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;); // &apos;Y-m-d H:m:s&apos;</span><br><span class="line">$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期</span><br><span class="line">$w = date(&apos;w&apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6</span><br><span class="line">$now_start = date(&apos;Ymd&apos;, strtotime(&quot;$date -&quot; . ($w ? $w - $first : 6) . &apos; days&apos;)); // 这周周一</span><br><span class="line">$last_start = date(&apos;Ymd&apos;, strtotime(&quot;$now_start - 7 days&quot;)); // 上周周一</span><br><span class="line">return $last_start;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>时间格式转换：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;);      // Ymd格式</span><br><span class="line">$time = strtotime($date); // 转换为时间戳</span><br><span class="line">$date = date(&apos;Ymd H:m:s&apos;); // Ymd H:m:s格式</span><br></pre></td></tr></table></figure>
 <p>curl发送Get</p>
@@ -372,8 +393,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/01/06/hello-world/" rel="prev" title="Hello World">
-                Hello World <i class="fa fa-chevron-right"></i>
+              <a href="/2020/09/04/tools/" rel="prev" title="常用工具">
+                常用工具 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -442,7 +463,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

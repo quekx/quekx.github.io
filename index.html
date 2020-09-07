@@ -187,6 +187,26 @@
         </li>
       
         
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -299,167 +319,16 @@
 
       
         
-          
-            <h2 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h2><h3 id="tail"><a href="#tail" class="headerlink" title="tail"></a>tail</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -300f shopbase.log #倒数300行并进入实时监听文件写入模式</span><br></pre></td></tr></table></figure>
+          <h2 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h2><h3 id="tail"><a href="#tail" class="headerlink" title="tail"></a>tail</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail -300f shopbase.log #倒数300行并进入实时监听文件写入模式</span><br></pre></td></tr></table></figure>
 <h3 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">grep forest f.txt   #文件查找</span><br><span class="line">grep forest f.txt cpf.txt #多文件查找</span><br><span class="line">grep &apos;log&apos; /home/admin -r -n #目录下查找所有符合关键字的文件</span><br><span class="line">cat f.txt | grep -i shopbase    </span><br><span class="line">grep &apos;shopbase&apos; /home/admin -r -n --include *.&#123;vm,java&#125; #指定文件后缀</span><br><span class="line">grep &apos;shopbase&apos; /home/admin -r -n --exclude *.&#123;vm,java&#125; #反匹配</span><br><span class="line">seq 10 | grep 5 -A 3    #上匹配</span><br><span class="line">seq 10 | grep 5 -B 3    #下匹配</span><br><span class="line">seq 10 | grep 5 -C 3    #上下匹配，平时用这个就妥了</span><br><span class="line">cat f.txt | grep -c &apos;SHOPBASE&apos;</span><br><span class="line"></span><br><span class="line">grep &quot;xxx&quot; -v f.txt #不包含反向查找</span><br></pre></td></tr></table></figure>
 <h3 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat xx | awk -F= &apos;&#123;print $2&#125;&apos; | awk &apos;&#123;print $1&#125;&apos; | awk -F. &apos;&#123;if ($2==&quot;na61&quot;) &#123;print $1&quot;.&quot;$2&#125; else if($3==&quot;na61&quot;) &#123;print $1&quot;.&quot;$2&quot;.&quot;$3&#125;&#125;&apos; #分隔处理</span><br></pre></td></tr></table></figure>
-<h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 查看域名</span><br><span class="line">nslookup 11.11.33.123</span><br></pre></td></tr></table></figure>
-<h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 查找</span><br><span class="line">find . -name &quot;*option*&quot;</span><br><span class="line"></span><br><span class="line"># 将目前目录其其下子目录中所有一般文件列出</span><br><span class="line">find . -type f/d</span><br><span class="line"></span><br><span class="line"># 将目前目录及其子目录下所有最近 20 天内更新过的文件列出</span><br><span class="line">find . -ctime -20</span><br></pre></td></tr></table></figure>
-<h3 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -nat | awk  &apos;&#123;print $6&#125;&apos; | sort | uniq -c | sort -rn </span><br><span class="line">#查看当前连接，注意close_wait偏高的情况</span><br></pre></td></tr></table></figure>
-<h3 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 替换</span><br><span class="line">:%s/vivian/sky/g</span><br></pre></td></tr></table></figure>
-<p>###du/df<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">du -sh ./* #列出当前目录文件占用</span><br><span class="line">df -h #磁盘占用</span><br></pre></td></tr></table></figure></p>
-<h3 id="jsp"><a href="#jsp" class="headerlink" title="jsp"></a>jsp</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jps -mlvV xxx</span><br></pre></td></tr></table></figure>
-<ul>
-<li>-m 输出main方案参数</li>
-<li>-l 显示主类全名</li>
-<li>-v jvm参数</li>
-<li>-V 通过flag file传入的jvm参数</li>
-</ul>
-<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jstack xxx</span><br></pre></td></tr></table></figure>
-<p>堆栈状态</p>
-<h3 id="idea插件"><a href="#idea插件" class="headerlink" title="idea插件"></a>idea插件</h3><ul>
-<li>key promoter</li>
-<li>maven helper</li>
-<li>Rainbow Brackets</li>
-</ul>
-<h3 id="VM参数"><a href="#VM参数" class="headerlink" title="VM参数"></a>VM参数</h3><ul>
-<li><p>类来自哪个文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-XX:+TraceClassLoading</span><br><span class="line">结果形如[Loaded java.lang.invoke.MethodHandleImpl$Lazy from D:\programme\jdk\jdk8U74\jre\lib\rt.jar]</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>应用挂了输出dump文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home/admin/logs/java.hprof</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/06/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Quekx">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/06/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-06T11:06:30+08:00">
-                2020-01-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/09/04/tools/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -598,19 +467,15 @@
 
       
         
-          
-            <p>时间函数：</p>
+          <p>时间函数：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;); // &apos;Y-m-d H:m:s&apos;</span><br><span class="line">$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期</span><br><span class="line">$w = date(&apos;w&apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6</span><br><span class="line">$now_start = date(&apos;Ymd&apos;, strtotime(&quot;$date -&quot; . ($w ? $w - $first : 6) . &apos; days&apos;)); // 这周周一</span><br><span class="line">$last_start = date(&apos;Ymd&apos;, strtotime(&quot;$now_start - 7 days&quot;)); // 上周周一</span><br><span class="line">return $last_start;</span><br></pre></td></tr></table></figure>
-<p>时间格式转换：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;);      // Ymd格式</span><br><span class="line">$time = strtotime($date); // 转换为时间戳</span><br><span class="line">$date = date(&apos;Ymd H:m:s&apos;); // Ymd H:m:s格式</span><br></pre></td></tr></table></figure>
-<p>curl发送Get</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ch = curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $url);   //设置url</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);   // 不输出头部</span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 返回结果作为string</span><br><span class="line">$response = curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
-<p>Json解析</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$result = json_decode(&quot;&quot; . $response, true);  // true解析为数组</span><br><span class="line">$data = $result[&quot;data&quot;];</span><br></pre></td></tr></table></figure>
-<p>文件写入</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$fileName = &quot;puvLog.txt&quot;;</span><br><span class="line">$time = date(&quot;Y-m-d H:i:s&quot;, time());</span><br><span class="line">$log = $time . &quot;  &quot; . $log . &quot;\n&quot;;</span><br><span class="line">file_put_contents($fileName, $log, FILE_APPEND); // 尾部追加</span><br></pre></td></tr></table></figure>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/07/10/PHPNote/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -749,23 +614,20 @@
 
       
         
-          
-            <h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>Kafka是一种分布式的消息订阅发布系统。</p>
+          <h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>Kafka是一种分布式的消息订阅发布系统。</p>
 <h3 id="Kafka结构"><a href="#Kafka结构" class="headerlink" title="Kafka结构"></a>Kafka结构</h3><p>消息传递模型常见有</p>
 <ul>
 <li>基于缓存的生产者/消费者模型</li>
 <li>基于观察者的发布/订阅模型</li>
 </ul>
 <p>Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：</p>
-<img src="/2017/05/08/kafka/kafka.png" title="Kafka中消息模型">
-<p>Kafka中Consumer和Producer之间通过特定topic进行消息传递。</p>
-<h3 id="Kafka文件系统"><a href="#Kafka文件系统" class="headerlink" title="Kafka文件系统"></a>Kafka文件系统</h3><p>在Kafka中每个topic分配了单独的文件夹，topic下的每个partition也有其单独的文件夹，partition文件夹下即存放了对应的消息文件，随着Kafka中消息的增加，Kafka会将消息分段存储，每段称为segment。</p>
-<p>每个segment由.index文件和.log文件组成。</p>
-<p>segment文件命名：文件名为19位数字，初始文件为全零，后续文件为上一个文件中最后一条消息的offset，并用零高位补齐19位。这样此文件的起始offset便为文件名fileName + 1。</p>
-<p>.index文件为索引文件，其中存放了消息序号所对应的消息，其在.log数据文件中的偏移位置。</p>
-<p>segment文件虽然是持久化的，可以读取其中的历史消息，但其不是永久存在的，有其生命周期，具体生命周期由Kafka服务器的参数配置决定。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/05/08/kafka/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -904,8 +766,7 @@
 
       
         
-          
-            <h2 id="Java知识点总结，不定时更新……"><a href="#Java知识点总结，不定时更新……" class="headerlink" title="Java知识点总结，不定时更新……"></a>Java知识点总结，不定时更新……</h2><h3 id="1-Thread和Runnable区别"><a href="#1-Thread和Runnable区别" class="headerlink" title="1. Thread和Runnable区别"></a>1. Thread和Runnable区别</h3><p>Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。<br>一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。</p>
+          <h2 id="Java知识点总结，不定时更新……"><a href="#Java知识点总结，不定时更新……" class="headerlink" title="Java知识点总结，不定时更新……"></a>Java知识点总结，不定时更新……</h2><h3 id="1-Thread和Runnable区别"><a href="#1-Thread和Runnable区别" class="headerlink" title="1. Thread和Runnable区别"></a>1. Thread和Runnable区别</h3><p>Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。<br>一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。</p>
 <h3 id="2-HashMap和TreeMap"><a href="#2-HashMap和TreeMap" class="headerlink" title="2. HashMap和TreeMap"></a>2. HashMap和TreeMap</h3><p>两者都是Key-Value的形式来存储数据。</p>
 <h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap:"></a>HashMap:</h4><p>底层以散列表的形式实现，HashMap内部存储一个数组table，大小length为2的整数次幂。</p>
 <p>table数组用于存放链表节点，当插入或查找时，将key的hash和length-1进行与操作，得到在数组中索引位置index，从而得到对应的链表进行插入或者查找操作。</p>
@@ -913,33 +774,13 @@
 <p>链表节点以固定大小的数组来存储，当数据量不断变大时，必定会造成碰撞程度增大，链表长度变长，影响性能；当数据量大于数组大小的一定程度时(默认为75%)，数组会变为2倍来扩容，将根据hash值重新计算原先数据的位置。</p>
 <p>数组大小扩容为2倍，保证大小length为2的整数次幂。2倍的原因是：数组中索引位置index的计算方式为，key的hash值和length-1进行与操作，为了使index分布更加平均，充分利用hash中的各个比特位，使尽可能多的比特位对结果产生相等的影响；当length为2的整数次幂时，length-1比特位全为1，能充分利用hash值中的所有较低位比特。</p>
 <p>在JDK8中，当链表长度大于一定值时(默认为8)，链表会调整为红黑树来存储，来优化性能。</p>
-<h4 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h4><p>底层以红黑树的形式实现。</p>
-<p>在树节点中存储Key、Value值，红黑树是自平衡的二叉搜索树，在树的结构改变时会平衡树的高度，其性能为O(lg(n))。</p>
-<h4 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h4><ul>
-<li>HashMap的性能复杂度为O(1)，TreeMap的性能复杂度为O(lg(n))。</li>
-<li>HashMap在大小到达一定值时需要扩容，TreeMap不需要扩容。</li>
-<li>HashMap是无序的，TreeMap底层为二叉搜索树，保存有Key的大小顺序信息。</li>
-</ul>
-<h3 id="3-类的加载"><a href="#3-类的加载" class="headerlink" title="3. 类的加载"></a>3. 类的加载</h3><p>类的加载会经历三个步骤：</p>
-<ul>
-<li>加载</li>
-<li>链接（验证、准备、解析）</li>
-<li>初始化</li>
-</ul>
-<h4 id="加载："><a href="#加载：" class="headerlink" title="加载："></a>加载：</h4><p>将类的二进制class文件加载进虚拟机内存</p>
-<h4 id="链接："><a href="#链接：" class="headerlink" title="链接："></a>链接：</h4><p>验证：</p>
-<ol>
-<li>验证class文件的格式，比如开始字节为0xCAFFBABE等</li>
-<li>验证class文件的元数据，比如类的是否有父类（除了Object的所有类均有父类）等</li>
-<li>验证class文件的字节码，比如字节码不会跳转至方法外等</li>
-</ol>
-<p>准备：<br>为类中的static类变量分配空间，并初始化为初始默认值。这里的初始化为变量的默认值，如int为0，boolean为false等。除了一种情况，声明为final的static类变量，编译器在编译时会加入CONSTANT-VALUE属性，在准备阶段即初始化为对应值。</p>
-<p>解析：<br>将类中的字符引用转化为直接引用</p>
-<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>执行生成的cinit方法，来执行类中的static变量赋值语句和static语句块。</p>
-<p>如果继承了父类，会先进行父类的初始化，然后才进行本类的初始化</p>
-<p>如果实现了接口，不会初始化相应的接口，只会在接口使用到后才进行初始化。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/10/JavaTips/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1078,8 +919,7 @@
 
       
         
-          
-            <h3 id="关于TCP"><a href="#关于TCP" class="headerlink" title="关于TCP"></a>关于TCP</h3><p>TCP传输控制协议（Transmission Control Protocol）是面向连接的传输层协议，提供可靠的字节流传输。</p>
+          <h3 id="关于TCP"><a href="#关于TCP" class="headerlink" title="关于TCP"></a>关于TCP</h3><p>TCP传输控制协议（Transmission Control Protocol）是面向连接的传输层协议，提供可靠的字节流传输。</p>
 <p>TCP特点：</p>
 <ul>
 <li>面向连接的传输层协议</li>
@@ -1095,93 +935,13 @@
 <li>发送方超时重传。发送方发送一个分组不会立即删除而是缓存该分组，同时设置一个超时计时器，若在超时时间段内未收到接收方发送的确认报文，则会重传该分组；若在时间段内收到确认，则删除该分组缓存。</li>
 <li>接收方重复确认。接收方收到重复的报文时，说明确认报文由于丢失未到达发送方，需要重传确认报文，并丢弃该重复报文。确认按累计确认的方式，接收方收到连续的多个分组，只需要对最后一个分组进行确认即可，这样保证确认序号之前的所有数据均已接收。</li>
 </ol>
-<h3 id="TCP首部"><a href="#TCP首部" class="headerlink" title="TCP首部"></a>TCP首部</h3><table>
-<thead>
-<tr>
-<th style="text-align:center">2字节</th>
-<th style="text-align:center">2字节</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">源端口</td>
-<td style="text-align:center">目的端口</td>
-</tr>
-<tr>
-<td style="text-align:center">发送序号</td>
-<td style="text-align:center">发送序号</td>
-</tr>
-<tr>
-<td style="text-align:center">确认序号</td>
-<td style="text-align:center">确认序号</td>
-</tr>
-<tr>
-<td style="text-align:center">数据偏移、标志位</td>
-<td style="text-align:center">接受窗口</td>
-</tr>
-<tr>
-<td style="text-align:center">检验和</td>
-<td style="text-align:center">紧急指针</td>
-</tr>
-<tr>
-<td style="text-align:center">选项</td>
-<td style="text-align:center">填充</td>
-</tr>
-</tbody>
-</table>
-<p>前20字节（至紧急指针）为固定格式。</p>
-<p>数据偏移：TCP报文中数据在TCP报文的偏移位置，即使报文首部的长度。</p>
-<p>标志位：</p>
-<ul>
-<li>URG：紧急标志位，标志有紧急数据需要优先传输，紧急指针有效，紧急指针表示紧急数据的长度，紧急数据之后为普通数据。</li>
-<li>ACK：确认标志位，表示确认为有效。</li>
-<li>PSH：推送标志位，表示该报文需尽快推送给上传应用，不等待至缓存区满。</li>
-<li>RST：复位标志位，表示TCP连接出现严重错误，需重新连接。</li>
-<li>SYN：同步标志位，用于标志建立连接消息。</li>
-<li>FIN：终止标志位，用于标志释放连接消息。</li>
-</ul>
-<p>接受窗口：告诉发送方可以接受多长的数据。</p>
-<p>检验和：加上伪首部信息（IP源地址，IP目的地址，全零（1字节）+协议号（1字节）+TCP报文长度（2字节）），与整个TCP报文（补零对其）相与得到结果并取反。接收方检验：按相同方式计算结果应全为一。</p>
-<h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3><p>TCP发送方维护着一个发送窗口，发送窗口受到拥塞窗口和接收窗口大小的影响，位于发送窗口内的字节数据可以被发送，可包含多个分组，这样可以同时发送多个分组，不需要一个一个发送分组并等待确认，提高了发送效率。</p>
-<h3 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h3><p>TCP发送方维护一个拥塞窗口，会根据发送报文的重传情况来判断网络状态，并以此来动态调整拥塞窗口的大小。</p>
-<ul>
-<li>慢开始和拥塞避免</li>
-</ul>
-<p>慢开始算法和拥塞避免算法往往配合使用。</p>
-<p>慢开始：该算法有一个门限值，开始时拥塞窗口大小为1（单位为报文段个数），小于门限值时，若没有发生重传，则执行慢开始算法，以两倍的速率增大窗口。</p>
-<p>拥塞避免：当到达门限值时，执行拥塞避免算法，拥塞窗口大小增长速率变为每次增加1；若是发生了一次重传，则将门限值设为窗口大小的一半，拥塞窗口设为初始值1，重新开始执行慢开始算法。</p>
-<ul>
-<li>快重传和快开始</li>
-</ul>
-<p>快重传和快开始算法也往往配合使用。</p>
-<p>快重传：算法要求接收方每收到一个失序的报文时，如收到M1、M3、M4、M5，就立即向发送方发送之前收到的报文确认（确认M1），以通知发送方中间存在报文丢失。发送方在连续收到三个重复的确认之后，判断M2未送达，则重新发送M2分组。</p>
-<p>快开始：发送方连续收到三个确认报文，就将门限值设为窗口大小的一半，并认为网络很可能没有发送拥塞（连续收到三个报文），因此就将拥塞窗口大小直接设置为门限值，执行拥塞避免算法。</p>
-<h3 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h3><p>TCP连接的建立需要发送三次报文后确立，俗称三次握手。</p>
-<p>过程如下：</p>
-<ul>
-<li>客户端A主动发起连接，TCP进程首先创建传输控制模块TCB，然后想服务端B发出连接请求报文。报文中同步标志位SYN=1，同时选择一个初始序号seq=x，然后客户端A进入SYN_SENT状态。此报文需要消耗一个序号。</li>
-<li>服务端B起始处于LISTEN监听状态，收到请求报文后，同意则向A发送确认。确认报文中同步标志位SYN=1，同样选择一个初始序号seq=y；确认标志位ACK=1，确认序号ack=x+1，然后服务端B进入SYN_RCVD状态。此报文需要消耗一个序号。</li>
-<li>客户端A收到确认报文后，也需要给B发送一个确认报文。报文中ACK=1，ack=y+1，seq=x+1，然后进入ESTABLISHED状态。此报文若未携带数据，则不消耗序号（下个报文序号依然为x+1）。</li>
-<li>服务端B收到A的确认报文后，也进入ESTABLISHED状态。</li>
-</ul>
-<p>三次握手的好处：若只有两次发送报文，服务器只收到一次请求报文就进入连接建立状态；假如客户端的某次连接建立请求滞留在网络中延时到达，但是客户端在之前已经建立连接并交换完数据断开，这就会导致服务端收到延时的请求报文时，就进入ESTABLISHED状态，但客户端并未发起请求，导致资源的浪费。</p>
-<h3 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h3><p>TCP连接的断开需要发送四次报文后确立，俗称四次挥手。</p>
-<p>过程如下：</p>
-<ul>
-<li>客户端A发起断开连接，向服务端B发送释放连接报文。报文中终止标志位FIN=1，报文序号seq=u（接之前发送的字节序号），然后客户端A进入FIN-WAIT-1状态。此报文需要消耗一个序号。</li>
-<li>服务端B接受到终止报文后向A发送确认。确认报文中确认标志位ACK=1，确认序号ack=u+1，然后B进入CLOSE_WAIT状态。此时B还能够发送未发送完的数据，TCP连接处于半关闭状态。</li>
-<li>客户端A收到确认报文后，进入FIN-WAIT-2状态，可继续接受数据，并等待服务端B发送终止报文。</li>
-<li>服务端B发送完所有数据之后，向A发送一个终止报文。报文中FIN=1，seq=w（接之前发送的字节序号），ACK=1，确认序号ack=u+1，然后B进入LAST-ACK状态。</li>
-<li>客户端A收到终止报文后，再次发送确认。报文中ACK=1，seq=u+1，ack=w+1，然后进入TIME-WAIT状态，在此状态等待2MSL（最长报文段寿命）时间后，进入CLOSED状态。</li>
-<li>服务端B收到确认后，进入CLOSED状态。</li>
-</ul>
-<p>客户端A要在TIME-WAIT状态等待2MSL时间的意义是：</p>
-<p>若A发送完最后的确认就关闭，假如确认报文未到达服务端B，则B会一直处于LAST-ACK状态；而等待2MSL时，假如确认报文未到达B，B会认为之前的终止报文并未发送到达A，则重新发送该报文，在A重新收到终止报文后，会重传确认报文，使B按正常步骤进入CLOSED状态。</p>
-<h3 id="Java中TCP基本使用"><a href="#Java中TCP基本使用" class="headerlink" title="Java中TCP基本使用"></a>Java中TCP基本使用</h3><p>Java中服务端使用SocketServer，客户端使用Socket来建立连接通信。<br>客户端：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 通过IP和端口创建Socket对象</span><br><span class="line">Socket socket = new Socket(&quot;127.0.0.1&quot;, 9527)</span><br><span class="line">// 通过Socket对象获取输入输出流，进行输入输出字节操作</span><br><span class="line">InputStream in = socket.getInputStream();</span><br><span class="line">InputStream out = socket.getOutputStream();</span><br></pre></td></tr></table></figure>
-<p>服务端：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 通过监听的端口创建ServerSocket对象</span><br><span class="line">ServerSocket serverSocket = new ServerSocket(9527);</span><br><span class="line">// 通过accept()方法来获取一个Socket，获取Socket对象后就可以进行输入输出的字节操作了</span><br><span class="line">// accept()方法为阻塞方法，会阻塞直到某个Socket连接建立</span><br><span class="line">Socket socket = serverSocket.accept();</span><br></pre></td></tr></table></figure>
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/05/tcp/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1320,111 +1080,20 @@
 
       
         
-          
-            <h1 id="普通二叉搜索树删除"><a href="#普通二叉搜索树删除" class="headerlink" title="普通二叉搜索树删除"></a>普通二叉搜索树删除</h1><p>普通二叉树删除节点z有三种情况：</p>
+          <h1 id="普通二叉搜索树删除"><a href="#普通二叉搜索树删除" class="headerlink" title="普通二叉搜索树删除"></a>普通二叉搜索树删除</h1><p>普通二叉树删除节点z有三种情况：</p>
 <ul>
 <li>z的左子节点为空，即用z的右子节点（包括空的情况）取代z</li>
 <li>z的右子节点为空，即用z的左子节点取代z</li>
 <li>z的左子节点和右子节点均不为空，可在其左子树找最大节点或者在其右子树找最小节点y，将y的值赋予z，然后将y删除</li>
 </ul>
 <h1 id="红黑树删除"><a href="#红黑树删除" class="headerlink" title="红黑树删除"></a>红黑树删除</h1><p>红黑树删除节点的操作与普通二叉搜索树的删除节点一致，不同之处在于删除时可能会破坏红黑树的性质，需要后续的调整来恢复其红黑性质。</p>
-<h2 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h2><p>红黑树将节点删除后，首先是正常的二叉树删除操作，操作如下</p>
-<blockquote>
-<ul>
-<li>第一种情况，删除节点无左子树，用右子树上移替代当前节点</li>
-<li>第二种情况，删除节点无右子树，用左子树上移替代当前节点</li>
-<li>第三种情况，删除节点存在左右子树，找到当前节点的替代节点（左子树的最大节点或者右子树的最小节点），用替代节点值赋予删除节点（该节点不作物理删除），然后删除替代节点（物理删除）。ps：为什么这么操作？因为这种方式找到的替代节点，左右子树必有一个为空。物理删除时，直接用子树移植替换就可以了</li>
-</ul>
-</blockquote>
-<img src="/2017/04/04/deleteInRBTree/deleteNormal.png" title="二叉树删除">
-<p>删除最终的结果是对由于物理删除，移植替换的节点x所在的子树产生影响。</p>
-<h2 id="性质调整"><a href="#性质调整" class="headerlink" title="性质调整"></a>性质调整</h2><p>可以思考下红黑树的哪些性质可能被破坏？</p>
-<blockquote>
-<ul>
-<li>如果删除的节点是一个红色节点，显然红黑树的性质依然成立，无需调整。</li>
-<li>如果删除的节点是一个黑色节点，那么移植节点x所在的子树黑高将缺少1，红黑树的性质五被破坏。</li>
-</ul>
-</blockquote>
-<p><strong>性质五被破坏，x子树高比兄弟子树高缺1，如下图</strong> </p>
-<img src="/2017/04/04/deleteInRBTree/sample.jpg" title="黑高性质被破坏">
-<p><strong>调整的方法是从移植节点x开始，通过循环向上调整（联合父节点和兄弟子树进行旋转、修改颜色），使左右子树高相等，左右子树高相等后有三种情况</strong></p>
-<ul>
-<li>情况1：父子树整体黑高不变，此时调整完成</li>
-<li>情况2：父子树整体黑高-1，但是已经是根节点，调整完成（整颗树黑高-1）</li>
-<li>情况3：父子树整体黑高-1，还没到根节点，将x设置为父子树跟节点，继续向上调整，直到情况1或者情况2结束</li>
-</ul>
-<p>由此可以将调整循环结束条件设定为</p>
-<ol>
-<li>当前调整节点x为红色，针对以下情况<ol>
-<li>删除节点为红色，无需调整</li>
-<li>情况1，调整完成，将x设置为红色退出循环</li>
-</ol>
-</li>
-<li>当前调整节点x为根节点<ol>
-<li>情况2，已经到达根节点，调整完成</li>
-</ol>
-</li>
-</ol>
-<p>下面开始分情况讨论，以当前调整节点为父节点的作子节点为例（右子节点为对称情况）</p>
-<p>图例中调整节点为X，其父节点为XP，其右边兄弟节点为XR；蓝色表示即可以是红节点也可以是黑节点</p>
-<h3 id="情况1"><a href="#情况1" class="headerlink" title="情况1"></a>情况1</h3><p>调整节点为红</p>
-<img src="/2017/04/04/deleteInRBTree/s1.jpg" title="情况一">
-<ul>
-<li>将x置黑，调整完成！</li>
-</ul>
-<h3 id="情况2"><a href="#情况2" class="headerlink" title="情况2"></a>情况2</h3><p>调整节点X为黑，父节点XP为红，兄弟节点XR为黑，兄弟节点的左子节点A为黑，右子节点B无所谓</p>
-<img src="/2017/04/04/deleteInRBTree/s2.1.jpg" title="情况二">
-<ul>
-<li>将XP左旋，调整完成！</li>
-</ul>
-<h3 id="情况3"><a href="#情况3" class="headerlink" title="情况3"></a>情况3</h3><p>调整节点X为黑，父节点XP为红，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为红</p>
-<img src="/2017/04/04/deleteInRBTree/s3.1.jpg" title="情况三">
-<ul>
-<li>将XP左旋</li>
-<li>将XP置黑</li>
-<li>将XR置红</li>
-<li>将B置黑，调整完成！</li>
-</ul>
-<h3 id="情况4"><a href="#情况4" class="headerlink" title="情况4"></a>情况4</h3><p>调整节点X为黑，父节点XP为红，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为黑</p>
-<img src="/2017/04/04/deleteInRBTree/s4.jpg" title="情况四">
-<ul>
-<li>将XR右旋</li>
-<li>将A置黑</li>
-<li>将XR置红，此时切换至情况1，继续循环调整</li>
-</ul>
-<h3 id="情况5"><a href="#情况5" class="headerlink" title="情况5"></a>情况5</h3><p>调整节点X为黑，父节点XP为黑，兄弟节点XR为黑，兄弟节点的左子节点A为黑，右子节点B无所谓</p>
-<img src="/2017/04/04/deleteInRBTree/s5.jpg" title="情况五">
-<ul>
-<li>将XP左旋</li>
-<li>将XP置红，此时左右子树高相等，整体树高-1，将根节点置为X，继续循环调整</li>
-</ul>
-<h3 id="情况6"><a href="#情况6" class="headerlink" title="情况6"></a>情况6</h3><p>调整节点X为黑，父节点XP为黑，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为红</p>
-<img src="/2017/04/04/deleteInRBTree/s6.jpg" title="情况六">
-<ul>
-<li>将XP左旋</li>
-<li>将B置黑，调整完成！</li>
-</ul>
-<h3 id="情况7"><a href="#情况7" class="headerlink" title="情况7"></a>情况7</h3><p>调整节点X为黑，父节点XP为黑，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为黑</p>
-<img src="/2017/04/04/deleteInRBTree/s7.jpg" title="情况七">
-<ul>
-<li>将XR右旋</li>
-<li>将XR置红</li>
-<li>将A置黑，此时切换至情况5，继续循环调整</li>
-</ul>
-<h3 id="情况8"><a href="#情况8" class="headerlink" title="情况8"></a>情况8</h3><p>调整节点X为黑，父节点XP为黑，兄弟节点XR为红</p>
-<img src="/2017/04/04/deleteInRBTree/s8.jpg" title="情况八">
-<h3 id="所有调整情况"><a href="#所有调整情况" class="headerlink" title="所有调整情况"></a>所有调整情况</h3><img src="/2017/04/04/deleteInRBTree/rbt2.0.1.png" title="所有调整情况">
-<p>整体可以看到，有几组case的调整操作是类似一致的</p>
-<ul>
-<li>情况2和情况5，兄弟节点XR为黑，兄弟节点的左子节A点为黑</li>
-<li>情况3和情况6，兄弟节点XR为黑，兄弟节点的左右子节点AB都为红</li>
-<li>情况4和情况7，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为黑</li>
-</ul>
-<p><strong><em>父节点XP的颜色不影响操作，只影响调整后结果是否满足条件，是否需要继续调整</em></strong></p>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>删除调整的代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">private void deleteFixUp2(RBTreeNode x, RBTreeNode xp) &#123;</span><br><span class="line">    if (root == null || xp == null) return;</span><br><span class="line"></span><br><span class="line">    // 退出调整循环条件：当前x为红或者x调整至根节点</span><br><span class="line">    // 情况1：不进入循环</span><br><span class="line">    while ((x == null || x.color == RBTreeNode.Color.BLACK) &amp;&amp; x != root) &#123;</span><br><span class="line">        // x为作子节点</span><br><span class="line">        if (x == xp.left) &#123;</span><br><span class="line">            RBTreeNode xr = xp.right;</span><br><span class="line">            RBTreeNode a = xr.left;</span><br><span class="line">            RBTreeNode b = xr.right;</span><br><span class="line">            if (xr.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                // 兄弟节点为黑</span><br><span class="line">                // 情况2、情况3、情况4、情况5、情况6、情况7</span><br><span class="line">                if (a == null || a.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    // 情况2、情况5</span><br><span class="line">                    // xp左旋</span><br><span class="line">                    // 将x指向xr</span><br><span class="line">                    // 将xr(x)颜色设置为xp颜色</span><br><span class="line">                    // 情况2：xp为红，调整完成，x置为红退出循环</span><br><span class="line">                    // 情况5：xp为黑，需要继续下一轮调整</span><br><span class="line">                    rotateLeft(xp);</span><br><span class="line">                    x = xr;</span><br><span class="line">                    xr.color = xp.color;</span><br><span class="line">                &#125; else if (b != null &amp;&amp; b.color == RBTreeNode.Color.RED) &#123;</span><br><span class="line">                    // 情况3，情况6</span><br><span class="line">                    // xp左旋</span><br><span class="line">                    // 将xr颜色置为xp颜色（对应情况3、情况6）</span><br><span class="line">                    // xp颜色置黑</span><br><span class="line">                    // 两种情况均调整完成，x置红，退出循环</span><br><span class="line">                    rotateLeft(xp);</span><br><span class="line">                    xr.color = xp.color;</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    x.color = RBTreeNode.Color.RED;</span><br><span class="line">                &#125; else if (b == null || b.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    // 情况4，情况7</span><br><span class="line">                    // xr右旋</span><br><span class="line">                    // a红置黑</span><br><span class="line">                    // xr黑置红</span><br><span class="line">                    // 调整至情况2、情况5，继续下一轮调整</span><br><span class="line">                    rotateRight(xr);</span><br><span class="line">                    a.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xr.color = RBTreeNode.Color.RED;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 兄弟节点为红，父节点必为黑</span><br><span class="line">                // 情况8</span><br><span class="line">                // 左旋xp</span><br><span class="line">                // xp置红</span><br><span class="line">                // xr置黑</span><br><span class="line">                // 此时x的父节点xp变为红色，切换至情况2或情况3或情况4，继续下一轮调整</span><br><span class="line">                rotateLeft(xp);</span><br><span class="line">                xp.color = RBTreeNode.Color.RED;</span><br><span class="line">                xr.color = RBTreeNode.Color.BLACK;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 对称情况</span><br><span class="line">            RBTreeNode xl = xp.left;</span><br><span class="line">            RBTreeNode a = xl.left;</span><br><span class="line">            RBTreeNode b = xl.right;</span><br><span class="line">            if (xl.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                if (b == null || b.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    rotateRight(xp);</span><br><span class="line">                    x = xl;</span><br><span class="line">                    xl.color = xp.color;</span><br><span class="line">                &#125; else if (a != null &amp;&amp; a.color == RBTreeNode.Color.RED) &#123;</span><br><span class="line">                    rotateRight(xp);</span><br><span class="line">                    xl.color = xp.color;</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    x.color = RBTreeNode.Color.RED;</span><br><span class="line">                &#125; else if (a == null || a.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    rotateRight(xl);</span><br><span class="line">                    b.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xl.color = RBTreeNode.Color.RED;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                rotateRight(xp);</span><br><span class="line">                xp.color = RBTreeNode.Color.RED;</span><br><span class="line">                xl.color = RBTreeNode.Color.BLACK;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        // 如果x指向新节点，更新xp</span><br><span class="line">        xp = x != null ? x.parent : xp;</span><br><span class="line">    &#125;</span><br><span class="line">    x.color = RBTreeNode.Color.BLACK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/04/deleteInRBTree/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1563,8 +1232,7 @@
 
       
         
-          
-            <h3 id="关于红黑树"><a href="#关于红黑树" class="headerlink" title="关于红黑树"></a>关于红黑树</h3><p>红黑树是一颗自平衡的树，能在节点插入和删除时调整树的高度。</p>
+          <h3 id="关于红黑树"><a href="#关于红黑树" class="headerlink" title="关于红黑树"></a>关于红黑树</h3><p>红黑树是一颗自平衡的树，能在节点插入和删除时调整树的高度。</p>
 <p>红黑树本质上还是一颗二叉搜索树，与普通的二叉搜索树不一样的地方，是红黑树的节点赋予了红黑的颜色属性，用于在树的结构改变时调整树的失衡。</p>
 <p>普通的二叉搜索树在插入和删除时没有树结构的调整，尽管平均树高度为lg(n)，平均复杂度为O(lg(n))，但是高度取决于插入的数据顺序，不稳定；极端情况下，当数据以顺序或者倒序插入时，树结构就退化成了链表，复杂度退化成O(n)。</p>
 <h3 id="红黑树性质"><a href="#红黑树性质" class="headerlink" title="红黑树性质"></a>红黑树性质</h3><p>红黑树的定义有如下五条性质：</p>
@@ -1577,43 +1245,13 @@
 </ul>
 <p>由4和5两条性质可以推断出，从根节点到叶子节点的所有路径中，最长路径节点数最多是最短路径的2倍；最短路径为全黑节点构成的路径，最长路径为红黑节点交替构成的路径。因此红黑树的高度能够始终控制在2lg(n)数量级内，所有操作复杂度均为O(lg(n))。</p>
 <p>例如：<br><img src="/2017/04/03/insertInRBTree/p1.png" title="例子列出了黑高为2的红黑树的所有路径情况，各个路径节点数分别为4，3，3，2。"></p>
-<h3 id="牢记"><a href="#牢记" class="headerlink" title="牢记"></a>牢记</h3><p>红黑树在插入节点和删除节点之前，必定是满足红黑性质的！时刻牢记两个性质：</p>
-<ol>
-<li>没有连续的红节点</li>
-<li>黑高相等</li>
-</ol>
-<h3 id="红黑树插入"><a href="#红黑树插入" class="headerlink" title="红黑树插入"></a>红黑树插入</h3><p>红黑树插入节点的操作与普通二叉搜索树的插入操作一致，与普通搜索树不用的是，插入时可能会破坏红黑树的性质，这时就需要通过调整来恢复。</p>
-<p>红黑树将插入的节点设置为红色，可以思考下红黑树哪些性质可能会被破坏？</p>
-<ul>
-<li>因为插入的节点是红色的，不可能对路径的黑高产生影响，因此性质五不会被破坏。</li>
-<li>因为插入的节点是红色的，其父节点可能为红色，可能会产生连续的红节点，因此性质四可能会被破坏，这时候就需要判断调整结构。</li>
-</ul>
-<p>以当前节点x是其父节点xp的左子节点为例（右子节点为对称情况），插入需要调整的情况有三种。</p>
-<ul>
-<li>情况1： 当前节点x为红色，父节点xp为红色，父节点xp为祖父节点xgp的左子节点，并且父节点的兄弟节点xu为红色（图中Ax表示A子树的高黑为x）：</li>
-</ul>
-<img src="/2017/04/03/insertInRBTree/insert1.png" title="调整操作将xp，xu设置为黑色，将根节点xgp设置为红色，然后将根节点xgp设置为新的x。">
-<p>对与此子树，通过调整满足了红黑性质，调整前的黑高为x+1，调整后的黑高为x+1，因此对于上层而言，子树的黑高是没有变化的（性质五不会被破坏），唯一的变化是根节点的颜色由黑色变为红色，因此将x设置为根节点，当上层节点为红色时，可继续向上循环判断。</p>
-<ul>
-<li>情况2： 当前节点x为红色，父节点xp为红色，父节点xp为祖父节点xgp的左子节点，并且父节点的兄弟节点xu为黑色：</li>
-</ul>
-<img src="/2017/04/03/insertInRBTree/insert2.png" title="调整操作将xp设置为黑色，xgp设置为红色，然后将xgp右旋，将xp设置为新的x。">
-<p>对与此子树，通过调整满足了红黑性质，调整前的黑高为x+1，调整后的黑高为x+1，同时对于上层来说根节点的颜色均为黑色，此情况的红黑树形状恢复完毕，将x设置为黑色的xp节点，跳出循环条件。</p>
-<ul>
-<li>情况3： 当前节点x为红色，父节点xp为红色，父节点xp为祖父节点xgp的右子节点</li>
-</ul>
-<img src="/2017/04/03/insertInRBTree/insert3.png" title="调整操作将xp右旋，将xp设置为新的x。">
-<p>此操作可将情况3转化为情况1或者情况2（上述情况的对称情况），然后设置新的x循环判断调整。</p>
-<p>因此，x满足以下条件可终止循环（插入调整完毕）：</p>
-<ul>
-<li>x为黑节点（情况2）</li>
-<li>x为根节点（情况1，回溯到了根节点，整棵树黑高加1）</li>
-<li>x的父节点为黑节点（情况1）</li>
-</ul>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>插入调整的代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">private void insertFixUp(RBTreeNode x) &#123;</span><br><span class="line">    if (x == null) return;</span><br><span class="line"></span><br><span class="line">    while (x.color == RBTreeNode.Color.RED</span><br><span class="line">            &amp;&amp; x.parent != null &amp;&amp; x.parent.color == RBTreeNode.Color.RED) &#123;</span><br><span class="line">        RBTreeNode xp = x.parent;</span><br><span class="line"></span><br><span class="line">        RBTreeNode xpp = xp.parent;</span><br><span class="line">        if (x == xp.left) &#123;</span><br><span class="line">            if (xp == xpp.left) &#123;</span><br><span class="line">                if (xpp.right == null || xpp.right.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    // 情况2</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xpp.color = RBTreeNode.Color.RED;</span><br><span class="line">                    x = rotateRight(xpp);</span><br><span class="line">                    if (xpp == root) root = x; // 若旋转节点为根节点，则设置新的根节点</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    // 情况1</span><br><span class="line">                    xpp.color = RBTreeNode.Color.RED;</span><br><span class="line">                    xpp.right.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    x = xpp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 情况3</span><br><span class="line">                rotateRight(xp);</span><br><span class="line">                x = xp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            if (x == xp.right) &#123;</span><br><span class="line">                if (xpp.left == null || xpp.left.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    // 情况2</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xpp.color = RBTreeNode.Color.RED;</span><br><span class="line">                    x = rotateLeft(xpp);</span><br><span class="line">                    if (xpp == root) root = x;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    // 情况1</span><br><span class="line">                    xpp.color = RBTreeNode.Color.RED;</span><br><span class="line">                    xpp.left.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    x = xpp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 情况3</span><br><span class="line">                rotateLeft(xp);</span><br><span class="line">                x = xp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	 // 有可能情况2回溯到了根节点，需要将其颜色恢复</span><br><span class="line">    root.color = RBTreeNode.Color.BLACK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/03/insertInRBTree/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1730,25 +1368,19 @@
 
       
         
-          
-            <p>学习Tomcat源码，最好是将其导入IDE，并可以运行调试。Apache的方法是使用ant工具，还要添加各种Jar包依赖，比较繁琐。通过搜索，发现一种通过Maven导入IDE方法，期间也遇到了坑。</p>
+          <p>学习Tomcat源码，最好是将其导入IDE，并可以运行调试。Apache的方法是使用ant工具，还要添加各种Jar包依赖，比较繁琐。通过搜索，发现一种通过Maven导入IDE方法，期间也遇到了坑。</p>
 <h3 id="下载Tomcat源码"><a href="#下载Tomcat源码" class="headerlink" title="下载Tomcat源码"></a>下载Tomcat源码</h3><p>由于之前使用的是Tomcat8.5.11版本，通过官方的 <a href="http://svn.apache.org/repos/asf/tomcat/tc8.5.x/tags/TOMCAT_8_5_11/" target="_blank" rel="noopener">svn地址</a>下载Tomcat源码。</p>
-<h3 id="构建Maven工程"><a href="#构建Maven工程" class="headerlink" title="构建Maven工程"></a>构建Maven工程</h3><p>在下载的源码根目录新建pom.xml文件，输入以下内容：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;</span><br><span class="line">    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;Tomcat8.0&lt;/artifactId&gt;</span><br><span class="line">    &lt;name&gt;Tomcat8.0&lt;/name&gt;</span><br><span class="line">    &lt;version&gt;8.0&lt;/version&gt;</span><br><span class="line"></span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;finalName&gt;Tomcat8.0&lt;/finalName&gt;</span><br><span class="line">        &lt;sourceDirectory&gt;java&lt;/sourceDirectory&gt;</span><br><span class="line">        &lt;resources&gt;</span><br><span class="line">            &lt;resource&gt;</span><br><span class="line">                &lt;directory&gt;java&lt;/directory&gt;</span><br><span class="line">            &lt;/resource&gt;</span><br><span class="line">        &lt;/resources&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;2.3&lt;/version&gt;</span><br><span class="line">                &lt;configuration&gt;</span><br><span class="line">                    &lt;encoding&gt;UTF-8&lt;/encoding&gt;</span><br><span class="line">                    &lt;source&gt;1.8&lt;/source&gt;</span><br><span class="line">                    &lt;target&gt;1.8&lt;/target&gt;</span><br><span class="line">                &lt;/configuration&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;4.12&lt;/version&gt;</span><br><span class="line">            &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.easymock&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;easymock&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;3.4&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;ant&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;ant&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.7.0&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;wsdl4j&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;wsdl4j&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.6.2&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;javax.xml&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;jaxrpc&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.1&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.eclipse.jdt.core.compiler&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;ecj&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;4.5.1&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure>
-<p>然后在IDEA通过pom.xml导入工程，为了方便，可删除根目录下的test文件夹。</p>
-<h3 id="运行源代码"><a href="#运行源代码" class="headerlink" title="运行源代码"></a>运行源代码</h3><p>Tomcat的运行main方法位于org.apache.catalina.startup包下的BootStrap.java文件中，打开Run菜单下的Edit Configuration选项，新建Application项，Main class设置为org.apache.catalina.startup.Bootstrap，VM options中设置启动参数-Dcatalina.home=”xxx”，可为根目录也可自选，此处先设置为源码根目录。<br>设置完毕后就可以run启动了。<br>之前查阅的一篇文章到这里就结束了，导致了一个坑的出现。<br>代码可以run启动，但是会有异常出现，找不到一些目录文件夹。<br>当打开<a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a>的时候会出现以下异常：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">exception</span><br><span class="line"></span><br><span class="line">org.apache.jasper.JasperException: Unable to compile class for JSP</span><br><span class="line">	org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:601)</span><br><span class="line">	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:363)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:396)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:340)</span><br><span class="line">	javax.servlet.http.HttpServlet.service(HttpServlet.java:729)</span><br><span class="line">root cause</span><br><span class="line"></span><br><span class="line">java.lang.NullPointerException</span><br><span class="line">	org.apache.jasper.compiler.Validator$ValidateVisitor.&lt;init&gt;(Validator.java:516)</span><br><span class="line">	org.apache.jasper.compiler.Validator.validateExDirectives(Validator.java:1853)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:217)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:356)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:336)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:323)</span><br><span class="line">	org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:585)</span><br><span class="line">	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:363)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:396)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:340)</span><br><span class="line">	javax.servlet.http.HttpServlet.service(HttpServlet.java:729)</span><br></pre></td></tr></table></figure>
-<p>此时浏览器返回500的错误。</p>
-<p>搜索错误查阅了好久，并没有这些异常的说明，后来才发现这是由于缺少了lib文件夹下的某些包的缘故，而源码中是不带lib的。<br>原来源代码中并不包含这些依赖包，还是要到官网下载对应Tomcat版本的软件包，解压之后将以下文件夹复制到之前设置的Dcatalina.home目录中：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">bin</span><br><span class="line">conf</span><br><span class="line">lib</span><br><span class="line">logs</span><br><span class="line">temp</span><br><span class="line">webapps</span><br><span class="line">work</span><br></pre></td></tr></table></figure>
-<p>然后run就可以正常启动，打断点调试了。</p>
-<p>如果闲麻烦，配置好的项目托管在<a href="https://github.com/quekx/tomcat8" target="_blank" rel="noopener">Github仓库中</a>，可自行下载导入IDEA。</p>
-<p>参考：<a href="https://yq.aliyun.com/articles/61765" target="_blank" rel="noopener">https://yq.aliyun.com/articles/61765</a></p>
-
-          
+<h3 id="构建Maven工程"><a href="#构建Maven工程" class="headerlink" title="构建Maven工程"></a>构建Maven工程</h3><p>在下载的源码根目录新建pom.xml文件，输入以下内容：<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/28/Tomcat8/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
-    </div>
+    </p></div>
     
     
     
@@ -1825,7 +1457,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

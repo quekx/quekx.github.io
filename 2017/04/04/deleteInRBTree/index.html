@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2017/04/04/deleteInRBTree/s7.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/04/04/deleteInRBTree/s8.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/04/04/deleteInRBTree/rbt2.0.1.png">
-<meta property="og:updated_time" content="2020-09-04T06:36:29.000Z">
+<meta property="og:updated_time" content="2020-09-07T12:08:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习笔记(2):红黑树删除">
 <meta name="twitter:description" content="普通二叉搜索树删除普通二叉树删除节点z有三种情况：  z的左子节点为空，即用z的右子节点（包括空的情况）取代z z的右子节点为空，即用z的左子节点取代z z的左子节点和右子节点均不为空，可在其左子树找最大节点或者在其右子树找最小节点y，将y的值赋予z，然后将y删除  红黑树删除红黑树删除节点的操作与普通二叉搜索树的删除节点一致，不同之处在于删除时可能会破坏红黑树的性质，需要后续的调整来恢复其红黑性">
@@ -199,6 +199,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
           </a>
         </li>
       
@@ -341,6 +361,7 @@
 <li>z的左子节点和右子节点均不为空，可在其左子树找最大节点或者在其右子树找最小节点y，将y的值赋予z，然后将y删除</li>
 </ul>
 <h1 id="红黑树删除"><a href="#红黑树删除" class="headerlink" title="红黑树删除"></a>红黑树删除</h1><p>红黑树删除节点的操作与普通二叉搜索树的删除节点一致，不同之处在于删除时可能会破坏红黑树的性质，需要后续的调整来恢复其红黑性质。</p>
+<a id="more"></a>
 <h2 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h2><p>红黑树将节点删除后，首先是正常的二叉树删除操作，操作如下</p>
 <blockquote>
 <ul>
@@ -366,18 +387,6 @@
 <li>情况2：父子树整体黑高-1，但是已经是根节点，调整完成（整颗树黑高-1）</li>
 <li>情况3：父子树整体黑高-1，还没到根节点，将x设置为父子树跟节点，继续向上调整，直到情况1或者情况2结束</li>
 </ul>
-<p>由此可以将调整循环结束条件设定为</p>
-<ol>
-<li>当前调整节点x为红色，针对以下情况<ol>
-<li>删除节点为红色，无需调整</li>
-<li>情况1，调整完成，将x设置为红色退出循环</li>
-</ol>
-</li>
-<li>当前调整节点x为根节点<ol>
-<li>情况2，已经到达根节点，调整完成</li>
-</ol>
-</li>
-</ol>
 <p>下面开始分情况讨论，以当前调整节点为父节点的作子节点为例（右子节点为对称情况）</p>
 <p>图例中调整节点为X，其父节点为XP，其右边兄弟节点为XR；蓝色表示即可以是红节点也可以是黑节点</p>
 <h3 id="情况1"><a href="#情况1" class="headerlink" title="情况1"></a>情况1</h3><p>调整节点为红</p>
@@ -403,13 +412,13 @@
 <ul>
 <li>将XR右旋</li>
 <li>将A置黑</li>
-<li>将XR置红，此时切换至情况1，继续循环调整</li>
+<li>将XR置红，此时切换至情况2，继续循环调整</li>
 </ul>
 <h3 id="情况5"><a href="#情况5" class="headerlink" title="情况5"></a>情况5</h3><p>调整节点X为黑，父节点XP为黑，兄弟节点XR为黑，兄弟节点的左子节点A为黑，右子节点B无所谓</p>
 <img src="/2017/04/04/deleteInRBTree/s5.jpg" title="情况五">
 <ul>
 <li>将XP左旋</li>
-<li>将XP置红，此时左右子树高相等，整体树高-1，将根节点置为X，继续循环调整</li>
+<li>将XP置红，此时左右子树高相等，整体树高-1，将子树根节点置为X，继续循环调整</li>
 </ul>
 <h3 id="情况6"><a href="#情况6" class="headerlink" title="情况6"></a>情况6</h3><p>调整节点X为黑，父节点XP为黑，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为红</p>
 <img src="/2017/04/04/deleteInRBTree/s6.jpg" title="情况六">
@@ -557,7 +566,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="KafkaKafka是一种分布式的消息订阅发布系统。 Kafka结构消息传递模型常见有  基于缓存的生产者/消费者模型 基于观察者的发布/订阅模型  Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：  Kafka中Consumer和Producer之间通过特定topic进行消息传递。 Kafka文件系统在Kafka中每个topic分配了单独的文件夹，topic下的每个">
+<meta name="description" content="KafkaKafka是一种分布式的消息订阅发布系统。 Kafka结构消息传递模型常见有  基于缓存的生产者/消费者模型 基于观察者的发布/订阅模型  Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：">
 <meta name="keywords" content="Java,Kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="学习笔记(4):kafka">
 <meta property="og:url" content="http://yoursite.com/2017/05/08/kafka/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="KafkaKafka是一种分布式的消息订阅发布系统。 Kafka结构消息传递模型常见有  基于缓存的生产者/消费者模型 基于观察者的发布/订阅模型  Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：  Kafka中Consumer和Producer之间通过特定topic进行消息传递。 Kafka文件系统在Kafka中每个topic分配了单独的文件夹，topic下的每个">
+<meta property="og:description" content="KafkaKafka是一种分布式的消息订阅发布系统。 Kafka结构消息传递模型常见有  基于缓存的生产者/消费者模型 基于观察者的发布/订阅模型  Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://yoursite.com/2017/05/08/kafka/kafka.png">
-<meta property="og:updated_time" content="2020-01-06T03:06:30.000Z">
+<meta property="og:updated_time" content="2020-09-07T10:38:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习笔记(4):kafka">
-<meta name="twitter:description" content="KafkaKafka是一种分布式的消息订阅发布系统。 Kafka结构消息传递模型常见有  基于缓存的生产者/消费者模型 基于观察者的发布/订阅模型  Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：  Kafka中Consumer和Producer之间通过特定topic进行消息传递。 Kafka文件系统在Kafka中每个topic分配了单独的文件夹，topic下的每个">
+<meta name="twitter:description" content="KafkaKafka是一种分布式的消息订阅发布系统。 Kafka结构消息传递模型常见有  基于缓存的生产者/消费者模型 基于观察者的发布/订阅模型  Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：">
 <meta name="twitter:image" content="http://yoursite.com/2017/05/08/kafka/kafka.png">
 
 
@@ -189,6 +189,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
           </a>
         </li>
       
@@ -331,6 +351,7 @@
 <li>基于观察者的发布/订阅模型</li>
 </ul>
 <p>Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：</p>
+<a id="more"></a>
 <img src="/2017/05/08/kafka/kafka.png" title="Kafka中消息模型">
 <p>Kafka中Consumer和Producer之间通过特定topic进行消息传递。</p>
 <h3 id="Kafka文件系统"><a href="#Kafka文件系统" class="headerlink" title="Kafka文件系统"></a>Kafka文件系统</h3><p>在Kafka中每个topic分配了单独的文件夹，topic下的每个partition也有其单独的文件夹，partition文件夹下即存放了对应的消息文件，随着Kafka中消息的增加，Kafka会将消息分段存储，每段称为segment。</p>
@@ -459,7 +480,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

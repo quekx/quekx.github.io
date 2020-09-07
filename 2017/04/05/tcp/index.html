@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="关于TCPTCP传输控制协议（Transmission Control Protocol）是面向连接的传输层协议，提供可靠的字节流传输。 TCP特点：  面向连接的传输层协议 可靠传输 面向字节流传输 全双工通信  TCP把连接作为基本的抽象，每个连接两端为两个套接字socket，socket由IP地址+端口号组成。 TCP保证报文按顺序，不重复发送报文，则需要对分组进行编号，以字节为基准。 可靠">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-01-06T03:06:30.000Z">
+<meta property="og:updated_time" content="2020-09-07T10:39:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习笔记(3):TCP">
 <meta name="twitter:description" content="关于TCPTCP传输控制协议（Transmission Control Protocol）是面向连接的传输层协议，提供可靠的字节流传输。 TCP特点：  面向连接的传输层协议 可靠传输 面向字节流传输 全双工通信  TCP把连接作为基本的抽象，每个连接两端为两个套接字socket，socket由IP地址+端口号组成。 TCP保证报文按顺序，不重复发送报文，则需要对分组进行编号，以字节为基准。 可靠">
@@ -187,6 +187,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
           </a>
         </li>
       
@@ -338,6 +358,7 @@
 <li>发送方超时重传。发送方发送一个分组不会立即删除而是缓存该分组，同时设置一个超时计时器，若在超时时间段内未收到接收方发送的确认报文，则会重传该分组；若在时间段内收到确认，则删除该分组缓存。</li>
 <li>接收方重复确认。接收方收到重复的报文时，说明确认报文由于丢失未到达发送方，需要重传确认报文，并丢弃该重复报文。确认按累计确认的方式，接收方收到连续的多个分组，只需要对最后一个分组进行确认即可，这样保证确认序号之前的所有数据均已接收。</li>
 </ol>
+<a id="more"></a>
 <h3 id="TCP首部"><a href="#TCP首部" class="headerlink" title="TCP首部"></a>TCP首部</h3><table>
 <thead>
 <tr>
@@ -424,6 +445,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 通过IP和端口创建Socket对象</span><br><span class="line">Socket socket = new Socket(&quot;127.0.0.1&quot;, 9527)</span><br><span class="line">// 通过Socket对象获取输入输出流，进行输入输出字节操作</span><br><span class="line">InputStream in = socket.getInputStream();</span><br><span class="line">InputStream out = socket.getOutputStream();</span><br></pre></td></tr></table></figure>
 <p>服务端：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 通过监听的端口创建ServerSocket对象</span><br><span class="line">ServerSocket serverSocket = new ServerSocket(9527);</span><br><span class="line">// 通过accept()方法来获取一个Socket，获取Socket对象后就可以进行输入输出的字节操作了</span><br><span class="line">// accept()方法为阻塞方法，会阻塞直到某个Socket连接建立</span><br><span class="line">Socket socket = serverSocket.accept();</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -544,7 +566,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

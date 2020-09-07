@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Java知识点总结，不定时更新……1. Thread和Runnable区别Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。 2. HashMap和TreeMap两者都是Key-Value的形式来存储数据。 HashMap:底层以散列表">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-01-06T03:06:30.000Z">
+<meta property="og:updated_time" content="2020-09-07T10:37:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java知识点">
 <meta name="twitter:description" content="Java知识点总结，不定时更新……1. Thread和Runnable区别Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。 2. HashMap和TreeMap两者都是Key-Value的形式来存储数据。 HashMap:底层以散列表">
@@ -187,6 +187,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
           </a>
         </li>
       
@@ -330,6 +350,7 @@
 <p>链表节点以固定大小的数组来存储，当数据量不断变大时，必定会造成碰撞程度增大，链表长度变长，影响性能；当数据量大于数组大小的一定程度时(默认为75%)，数组会变为2倍来扩容，将根据hash值重新计算原先数据的位置。</p>
 <p>数组大小扩容为2倍，保证大小length为2的整数次幂。2倍的原因是：数组中索引位置index的计算方式为，key的hash值和length-1进行与操作，为了使index分布更加平均，充分利用hash中的各个比特位，使尽可能多的比特位对结果产生相等的影响；当length为2的整数次幂时，length-1比特位全为1，能充分利用hash值中的所有较低位比特。</p>
 <p>在JDK8中，当链表长度大于一定值时(默认为8)，链表会调整为红黑树来存储，来优化性能。</p>
+<a id="more"></a>
 <h4 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h4><p>底层以红黑树的形式实现。</p>
 <p>在树节点中存储Key、Value值，红黑树是自平衡的二叉搜索树，在树的结构改变时会平衡树的高度，其性能为O(lg(n))。</p>
 <h4 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h4><ul>
@@ -474,7 +495,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
