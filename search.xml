@@ -175,7 +175,7 @@
 <li>Client 访问 hbase:meta 表所在的 Region Server，获取 hbase:meta 数据，根据 table 表名和 rowKey 定位 Region，获取数据所在的 Region Server 地址</li>
 <li>Client 获取到数据所在的 Region Server 地址，和数据 Region Server 建立链接，进行数据读写操作</li>
 </ol>
-<h5 id="hbase-meta-表格式"><a href="#hbase-meta-表格式" class="headerlink" title="hbase:meta 表格式"></a>hbase:meta 表格式</h5><p>hbase:meta 本质上也是一张 HBase 表，存在某个 Region Server 上</p>
+<h5 id="hbase-meta-表格式"><a href="#hbase-meta-表格式" class="headerlink" title="hbase:meta 表格式"></a>hbase:meta 表格式</h5><p>hbase:meta 作为一张 HBase 表，存在某个 Region Server 上</p>
 <table>
 <thead>
 <tr>

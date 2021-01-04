@@ -89,7 +89,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/11/12/hbase/hbase.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/11/12/hbase/region.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/11/12/hbase/regionData.jpg">
-<meta property="og:updated_time" content="2021-01-04T16:45:55.000Z">
+<meta property="og:updated_time" content="2021-01-04T16:50:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习笔记(6):HBase">
 <meta name="twitter:description" content="HBase(hadoop database)是大数据处理中常见的存储，底层基于 HDFS，支持机器资源水平扩展，上百亿数据存储，可以作为学习分布式数据库的入门级数据库  使用HBase 的数据存储为 KV 结构  数据 rowKey 为主键，由使用者设计，rowKey 可以唯一确定到一条记录 记录的字段列可以水平扩展，一条记录的字段可以任意添加，不同的记录字段可以不一致（需要啥加啥），这和 HB">
@@ -440,7 +440,7 @@
 <li>Client 访问 hbase:meta 表所在的 Region Server，获取 hbase:meta 数据，根据 table 表名和 rowKey 定位 Region，获取数据所在的 Region Server 地址</li>
 <li>Client 获取到数据所在的 Region Server 地址，和数据 Region Server 建立链接，进行数据读写操作</li>
 </ol>
-<h5 id="hbase-meta-表格式"><a href="#hbase-meta-表格式" class="headerlink" title="hbase:meta 表格式"></a>hbase:meta 表格式</h5><p>hbase:meta 本质上也是一张 HBase 表，存在某个 Region Server 上</p>
+<h5 id="hbase-meta-表格式"><a href="#hbase-meta-表格式" class="headerlink" title="hbase:meta 表格式"></a>hbase:meta 表格式</h5><p>hbase:meta 作为一张 HBase 表，存在某个 Region Server 上</p>
 <table>
 <thead>
 <tr>
