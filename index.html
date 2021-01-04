@@ -281,6 +281,144 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/12/hbase/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Quekx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/11/12/hbase/" itemprop="url">学习笔记(6):HBase</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-12T16:01:31+08:00">
+                2020-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>HBase(hadoop database)是大数据处理中常见的存储，底层基于 HDFS，支持机器资源水平扩展，上百亿数据存储，可以作为学习分布式数据库的入门级数据库</p>
+</blockquote>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>HBase 的数据存储为 KV 结构</p>
+<ul>
+<li>数据 rowKey 为主键，由使用者设计，rowKey 可以唯一确定到一条记录</li>
+<li>记录的字段列可以水平扩展，一条记录的字段可以任意添加，不同的记录字段可以不一致（需要啥加啥），这和 HBase 的设计和列存储方式有关。和关系型数据库不同，关系型数据库所有数据都有统一确定的 schema，HBase 无强 schema 约束，对于 HBase 一条记录，列字段可以任务扩展，只会存储存在的列字段。</li>
+</ul>
+<h4 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h4><p>HBase 整体上由以下四部分组成：</p>
+<ul>
+<li>Zookeeper：负责整个集群的高可用，选举 Master 节点；保存集群信息</li>
+<li>Master：HBase 管理节点，管理 Region Server 分配 Region，数据 Region 切分；均衡负载；创建表DDL；存储 hbase:meta 信息等</li>
+<li>Region Server：管理 Region，负责实际的数据操作读写，Region 是 HBase 中的数据存储单元。Client 直接和 Region Server 直连进行交互</li>
+<li>HDFS：实际底层的数据物理存储</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/11/12/hbase/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/04/tools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1489,7 +1627,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1548,7 +1686,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

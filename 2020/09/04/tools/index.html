@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="常用工具tail1tail -300f shopbase.log #倒数300行并进入实时监听文件写入模式 grep123456789101112grep forest f.txt   #文件查找grep forest f.txt cpf.txt #多文件查找grep &amp;apos;log&amp;apos; /home/admin -r -n #目录下查找所有符合关键字的文件cat f.txt | gre">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-09-07T10:39:21.000Z">
+<meta property="og:updated_time" content="2020-11-27T10:10:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="常用工具">
 <meta name="twitter:description" content="常用工具tail1tail -300f shopbase.log #倒数300行并进入实时监听文件写入模式 grep123456789101112grep forest f.txt   #文件查找grep forest f.txt cpf.txt #多文件查找grep &amp;apos;log&amp;apos; /home/admin -r -n #目录下查找所有符合关键字的文件cat f.txt | gre">
@@ -359,7 +359,8 @@
 <h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 查找</span><br><span class="line">find . -name &quot;*option*&quot;</span><br><span class="line"></span><br><span class="line"># 将目前目录其其下子目录中所有一般文件列出</span><br><span class="line">find . -type f/d</span><br><span class="line"></span><br><span class="line"># 将目前目录及其子目录下所有最近 20 天内更新过的文件列出</span><br><span class="line">find . -ctime -20</span><br></pre></td></tr></table></figure>
 <h3 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -nat | awk  &apos;&#123;print $6&#125;&apos; | sort | uniq -c | sort -rn </span><br><span class="line">#查看当前连接，注意close_wait偏高的情况</span><br></pre></td></tr></table></figure>
 <h3 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 替换</span><br><span class="line">:%s/vivian/sky/g</span><br></pre></td></tr></table></figure>
-<p>###du/df<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">du -sh ./* #列出当前目录文件占用</span><br><span class="line">df -h #磁盘占用</span><br></pre></td></tr></table></figure></p>
+<h3 id="du-df"><a href="#du-df" class="headerlink" title="du/df"></a>du/df</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">du -sh ./* #列出当前目录文件占用</span><br><span class="line">df -h #磁盘占用</span><br></pre></td></tr></table></figure>
+<h3 id="od"><a href="#od" class="headerlink" title="od"></a>od</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 查看文件字节</span><br><span class="line">od flie</span><br><span class="line"></span><br><span class="line"># 以ACSII码显示</span><br><span class="line">od -c flie</span><br><span class="line"></span><br><span class="line"># 以字符显示</span><br><span class="line">od –S1 file</span><br></pre></td></tr></table></figure>
 <h3 id="jsp"><a href="#jsp" class="headerlink" title="jsp"></a>jsp</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jps -mlvV xxx</span><br></pre></td></tr></table></figure>
 <ul>
 <li>-m 输出main方案参数</li>
@@ -415,6 +416,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/11/12/hbase/" rel="prev" title="学习笔记(6):HBase">
+                学习笔记(6):HBase <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -491,7 +496,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -546,7 +551,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用工具"><span class="nav-number">1.</span> <span class="nav-text">常用工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tail"><span class="nav-number">1.1.</span> <span class="nav-text">tail</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grep"><span class="nav-number">1.2.</span> <span class="nav-text">grep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#awk"><span class="nav-number">1.3.</span> <span class="nav-text">awk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nslookup"><span class="nav-number">1.4.</span> <span class="nav-text">nslookup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find"><span class="nav-number">1.5.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netstat"><span class="nav-number">1.6.</span> <span class="nav-text">netstat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim"><span class="nav-number">1.7.</span> <span class="nav-text">vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jsp"><span class="nav-number">1.8.</span> <span class="nav-text">jsp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack"><span class="nav-number">1.9.</span> <span class="nav-text">jstack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#idea插件"><span class="nav-number">1.10.</span> <span class="nav-text">idea插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VM参数"><span class="nav-number">1.11.</span> <span class="nav-text">VM参数</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用工具"><span class="nav-number">1.</span> <span class="nav-text">常用工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tail"><span class="nav-number">1.1.</span> <span class="nav-text">tail</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grep"><span class="nav-number">1.2.</span> <span class="nav-text">grep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#awk"><span class="nav-number">1.3.</span> <span class="nav-text">awk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nslookup"><span class="nav-number">1.4.</span> <span class="nav-text">nslookup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find"><span class="nav-number">1.5.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netstat"><span class="nav-number">1.6.</span> <span class="nav-text">netstat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim"><span class="nav-number">1.7.</span> <span class="nav-text">vim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#du-df"><span class="nav-number">1.8.</span> <span class="nav-text">du/df</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#od"><span class="nav-number">1.9.</span> <span class="nav-text">od</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jsp"><span class="nav-number">1.10.</span> <span class="nav-text">jsp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jstack"><span class="nav-number">1.11.</span> <span class="nav-text">jstack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#idea插件"><span class="nav-number">1.12.</span> <span class="nav-text">idea插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VM参数"><span class="nav-number">1.13.</span> <span class="nav-text">VM参数</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -566,7 +571,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
