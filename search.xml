@@ -162,6 +162,7 @@
 <li>在大数据分析场景，很多数据都是append-only，不需要对数据进行修改；同时数据的处理更多的是进行聚合、排序、分组的操作，其中只依赖某些列字段，列存储优势在于高效读取需要的列字段数据，不需要整行读取，在这种情况下行存需要全表扫描。</li>
 <li>更新：大数据分析中，往往需要聚合很多业务多维度的数据，这些数据往往是独立的，如果要作宽表数据的聚合操作，比如商品价格和商品库存，由多个业务方来维护时，数据相对独立。如果使用行存储的话，部分的数据更新需要整行记录，涉及到另一部分不相关的数据</li>
 <li>列扩展性强，物理上只会存储存在的列字段，利于存储稀疏数据，列字段可以任意水平扩展。行存无法动态扩展</li>
+<li>相同数据类型列字段存储在一起，可以更好地进行数据压缩</li>
 </ul>
 </li>
 <li>缺点<ul>
@@ -175,32 +176,47 @@
 <li>Client 访问 hbase:meta 表所在的 Region Server，获取 hbase:meta 数据，根据 table 表名和 rowKey 定位 Region，获取数据所在的 Region Server 地址</li>
 <li>Client 获取到数据所在的 Region Server 地址，和数据 Region Server 建立链接，进行数据读写操作</li>
 </ol>
-<h5 id="hbase-meta-表格式"><a href="#hbase-meta-表格式" class="headerlink" title="hbase:meta 表格式"></a>hbase:meta 表格式</h5><p>hbase:meta 作为一张 HBase 表，存在某个 Region Server 上</p>
+<h5 id="hbase-meta-表格式"><a href="#hbase-meta-表格式" class="headerlink" title="hbase:meta 表格式"></a>hbase:meta 表格式</h5><p>hbase:meta 作为一张 HBase 表，存在某个 Region Server 上，主要有以下字段</p>
 <table>
 <thead>
 <tr>
 <th>rowKey</th>
 <th>regioninfo</th>
+<th>seqnumDuringOpen</th>
 <th>server</th>
 <th>serverstartcode</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>[table, region_start_key, region_id]</td>
-<td></td>
-<td></td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li>table: 表名</li>
+<li><p>rowKey：由 [table, region_start_key, region_id, encodeValue] 构成</p>
+<ul>
 <li>region_start_key: 这个 Region rowKey 区间的第一个 key，如果为空则是第一个 Region</li>
 <li>region_id: 该 Region 的 id，通常为创建时的时间戳</li>
-<li>regioninfo: 该 Region 相关 info 的序列化值</li>
-<li>server: 该 Region 所在 Region Server 的地址</li>
-<li>serverstartcode：该 Region 所在 Region Server 的启动时间</li>
+<li>encodeValue 值，由 table + region_start_key + timestamp 的 MD5 产生，HBase 在 HDFS 上实际存储 Region 的路径使用的是此 MD5 值</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例：test,,1611232663206.6956c3fdf27be740b3fd2bf8a2b07fd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>regioninfo: 该 Region 相关 info 信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">示例：&#123;ENCODED =&gt; 6956c3fdf27be740b3fd2bf8a2b07fdb, NAME =&gt; &apos;test,,1611232663206.6956c3fdf27be740b3fd2bf8a2b07fdb.&apos;, STARTKEY =&gt; &apos;&apos;, ENDKEY =&gt; &apos;&apos;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>seqnumDuringOpen: Region 序列号</p>
+</li>
+<li><p>server: 该 Region 所在 Region Server 的地址</p>
+</li>
+<li><p>serverstartcode：该 Region 所在 Region Server 的启动时间</p>
+</li>
+</ul>
+<img src="/2020/11/12/hbase/meta.jpg" title="meta 示例">
 <h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
 <li><a href="https://developer.ibm.com/zh/articles/ba-cn-bigdata-hbase/" target="_blank" rel="noopener">https://developer.ibm.com/zh/articles/ba-cn-bigdata-hbase/</a></li>
 </ul>
