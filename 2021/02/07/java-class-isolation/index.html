@@ -87,7 +87,7 @@
 <meta property="og:description" content="Java 依赖类冲突是比较常见的问题，简单介绍使用 Java 类隔离机制解决类冲突问题  类冲突问题类冲突本质上是由于相同名称的类，同时存在多个版本，并且多个版本之间并不兼容 由于 JVM 的类加载特性，即使依赖的 Jar 里存在多个版本，一个类只会会被加载一次，运行使用的类和预期类不一致时候可能出现问题。比如：  A 组件使用了某个只有高版本类中存在的方法，实际加载类为 B 组件引入的低版本，">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://yoursite.com/2021/02/07/java-class-isolation/class-conlict.jpg">
-<meta property="og:updated_time" content="2021-02-07T10:27:57.000Z">
+<meta property="og:updated_time" content="2021-02-07T10:32:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习笔记(7):Java 类加载隔离">
 <meta name="twitter:description" content="Java 依赖类冲突是比较常见的问题，简单介绍使用 Java 类隔离机制解决类冲突问题  类冲突问题类冲突本质上是由于相同名称的类，同时存在多个版本，并且多个版本之间并不兼容 由于 JVM 的类加载特性，即使依赖的 Jar 里存在多个版本，一个类只会会被加载一次，运行使用的类和预期类不一致时候可能出现问题。比如：  A 组件使用了某个只有高版本类中存在的方法，实际加载类为 B 组件引入的低版本，">
@@ -372,9 +372,9 @@
 <ul>
 <li><p>首先，编译后的 class 文件或者 Jar 包，启动时会通过 -classpath 参数传入，并传入启动主类 Main。-classpath 路径下的类文件由系统类加载器 AppClassLoader 进行加载，主类由 AppClassLoader 加载</p>
 </li>
-<li><p>Men 类如何加载？以上的调用中，Men 类是通过隐式加载的。在某个类中 new 对象，会默认使用该类（示例中为主类 Main）的类加载器进行加载。因此 Men 也是由 AppClassLoader 加载的。</p>
+<li><p>Player 类如何加载？以上的调用中，Player 类是通过隐式加载的。在某个类中 new 对象，会默认使用该类（示例中为主类 Main）的类加载器进行加载。因此 Player 也是由 AppClassLoader 加载的。</p>
 <p>使用该隐式默认加载行为还包括以下等操作，没有显式指定 ClassLoader：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 获取 class 对象，获取前会触发加载</span><br><span class="line">Class&lt;?&gt; clazz = Men.class;</span><br><span class="line">// 显式加载, 等值于 Main.class.getClassLoader.loadClass(&quot;Men&quot;);</span><br><span class="line">Class.forName(&quot;Men&quot;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 获取 class 对象，获取前会触发加载</span><br><span class="line">Class&lt;?&gt; clazz = Player.class;</span><br><span class="line">// 显式加载, 等值于 Main.class.getClassLoader.loadClass(&quot;Player&quot;);</span><br><span class="line">Class.forName(&quot;Player&quot;);</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h4 id="2-类冲突场景"><a href="#2-类冲突场景" class="headerlink" title="2. 类冲突场景"></a>2. 类冲突场景</h4><p>假设存在以下类冲突场景</p>
