@@ -281,6 +281,139 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/07/java-class-isolation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Quekx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/02/07/java-class-isolation/" itemprop="url">学习笔记(7):Java 类加载隔离</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-02-07T16:04:50+08:00">
+                2021-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>Java 依赖类冲突是比较常见的问题，简单介绍使用 Java 类隔离机制解决类冲突问题</p>
+</blockquote>
+<h3 id="类冲突问题"><a href="#类冲突问题" class="headerlink" title="类冲突问题"></a>类冲突问题</h3><p>类冲突本质上是由于相同名称的类，同时存在多个版本，并且多个版本之间并不兼容</p>
+<p>由于 JVM 的类加载特性，即使依赖的 Jar 里存在多个版本，一个类只会会被加载一次，运行使用的类和预期类不一致时候可能出现问题。比如：</p>
+<ol>
+<li>A 组件使用了某个只有高版本类中存在的方法，实际加载类为 B 组件引入的低版本，在调用方法时，会抛出 NoSuchMethodError</li>
+<li>A 组件某个类和 B 组件某个类重名，两个类没有任何关系，实际加载类为 B 组件中的类。第二种这是少数情况</li>
+</ol>
+<p>PS：JVM 加载类的顺序由对应的 ClassLoader 决定，一般默认的系统类加载器 AppClassLoader 就按照 -classpath 下的文件列表顺序进行加载。当有类冲突发生时，类版本来自于先加载的 Jar 包</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2021/02/07/java-class-isolation/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/12/hbase/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -545,7 +678,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/10/PHPNote/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/10/php-note/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Quekx">
@@ -564,7 +697,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/10/PHPNote/" itemprop="url">学习笔记(5):PHP</a></h1>
+                <a class="post-title-link" href="/2017/07/10/php-note/" itemprop="url">学习笔记(5):PHP</a></h1>
         
 
         <div class="post-meta">
@@ -641,7 +774,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;); // &apos;Y-m-d H:m:s&apos;</span><br><span class="line">$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期</span><br><span class="line">$w = date(&apos;w&apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6</span><br><span class="line">$now_start = date(&apos;Ymd&apos;, strtotime(&quot;$date -&quot; . ($w ? $w - $first : 6) . &apos; days&apos;)); // 这周周一</span><br><span class="line">$last_start = date(&apos;Ymd&apos;, strtotime(&quot;$now_start - 7 days&quot;)); // 上周周一</span><br><span class="line">return $last_start;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/10/PHPNote/#more" rel="contents">
+            <a class="btn" href="/2017/07/10/php-note/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -844,7 +977,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/10/JavaTips/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/10/java-tips/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Quekx">
@@ -863,7 +996,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/04/10/JavaTips/" itemprop="url">Java知识点</a></h1>
+                <a class="post-title-link" href="/2017/04/10/java-tips/" itemprop="url">Java 知识点</a></h1>
         
 
         <div class="post-meta">
@@ -946,7 +1079,7 @@
 <p>在JDK8中，当链表长度大于一定值时(默认为8)，链表会调整为红黑树来存储，来优化性能。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/10/JavaTips/#more" rel="contents">
+            <a class="btn" href="/2017/04/10/java-tips/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1158,7 +1291,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/04/deleteInRBTree/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/04/delete-in-rbtree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Quekx">
@@ -1177,7 +1310,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/04/04/deleteInRBTree/" itemprop="url">学习笔记(2):红黑树删除</a></h1>
+                <a class="post-title-link" href="/2017/04/04/delete-in-rbtree/" itemprop="url">学习笔记(2):红黑树删除</a></h1>
         
 
         <div class="post-meta">
@@ -1259,7 +1392,7 @@
 <h1 id="红黑树删除"><a href="#红黑树删除" class="headerlink" title="红黑树删除"></a>红黑树删除</h1><p>红黑树删除节点的操作与普通二叉搜索树的删除节点一致，不同之处在于删除时可能会破坏红黑树的性质，需要后续的调整来恢复其红黑性质。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/04/deleteInRBTree/#more" rel="contents">
+            <a class="btn" href="/2017/04/04/delete-in-rbtree/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1310,7 +1443,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/03/insertInRBTree/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/03/insert-in-rbtree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Quekx">
@@ -1329,7 +1462,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/04/03/insertInRBTree/" itemprop="url">学习笔记(1):红黑树插入</a></h1>
+                <a class="post-title-link" href="/2017/04/03/insert-in-rbtree/" itemprop="url">学习笔记(1):红黑树插入</a></h1>
         
 
         <div class="post-meta">
@@ -1414,10 +1547,10 @@
 <li>从根节点开始，到叶子节点的所有路径中，包含的黑色节点个数（黑高）相等</li>
 </ul>
 <p>由4和5两条性质可以推断出，从根节点到叶子节点的所有路径中，最长路径节点数最多是最短路径的2倍；最短路径为全黑节点构成的路径，最长路径为红黑节点交替构成的路径。因此红黑树的高度能够始终控制在2lg(n)数量级内，所有操作复杂度均为O(lg(n))。</p>
-<p>例如：<br><img src="/2017/04/03/insertInRBTree/p1.png" title="例子列出了黑高为2的红黑树的所有路径情况，各个路径节点数分别为4，3，3，2。"></p>
+<p>例如：<br><img src="/2017/04/03/insert-in-rbtree/p1.png" title="例子列出了黑高为2的红黑树的所有路径情况，各个路径节点数分别为4，3，3，2。"></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/04/03/insertInRBTree/#more" rel="contents">
+            <a class="btn" href="/2017/04/03/insert-in-rbtree/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1468,7 +1601,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/28/Tomcat8/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/28/tomcat8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Quekx">
@@ -1487,7 +1620,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/03/28/Tomcat8/" itemprop="url">Tomcat8源码导入IDEA</a></h1>
+                <a class="post-title-link" href="/2017/03/28/tomcat8/" itemprop="url">Tomcat8 源码导入 IDEA</a></h1>
         
 
         <div class="post-meta">
@@ -1543,7 +1676,7 @@
 <h3 id="构建Maven工程"><a href="#构建Maven工程" class="headerlink" title="构建Maven工程"></a>构建Maven工程</h3><p>在下载的源码根目录新建pom.xml文件，输入以下内容：<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/28/Tomcat8/#more" rel="contents">
+            <a class="btn" href="/2017/03/28/tomcat8/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1627,7 +1760,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
