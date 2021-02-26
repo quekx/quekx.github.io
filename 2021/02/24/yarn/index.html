@@ -79,13 +79,21 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/tags/Kafka/index.html">
+<meta name="description" content="大数据处理中，会使用到大规模的集群，如何管理庞大的集群资源，由此诞生了 hadoop YARN  YARN 架构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记(8):YARN">
+<meta property="og:url" content="http://yoursite.com/2021/02/24/yarn/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="大数据处理中，会使用到大规模的集群，如何管理庞大的集群资源，由此诞生了 hadoop YARN  YARN 架构">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2021/02/24/yarn/yarn.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/02/24/yarn/communication.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/02/24/yarn/step.jpg">
+<meta property="og:updated_time" content="2021-02-25T10:09:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="学习笔记(8):YARN">
+<meta name="twitter:description" content="大数据处理中，会使用到大规模的集群，如何管理庞大的集群资源，由此诞生了 hadoop YARN  YARN 架构">
+<meta name="twitter:image" content="http://yoursite.com/2021/02/24/yarn/yarn.jpg">
 
 
 
@@ -115,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/Kafka/">
+  <link rel="canonical" href="http://yoursite.com/2021/02/24/yarn/">
 
 
 
 
 
-  <title>Tag: Kafka | Hexo</title>
+  <title>学习笔记(8):YARN | Hexo</title>
   
 
 
@@ -140,7 +148,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -266,52 +274,181 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Kafka<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/24/yarn/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Quekx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/05/08/kafka/" itemprop="url">
-              
-                <span itemprop="name">学习笔记(4):kafka</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">学习笔记(8):YARN</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-05-08T23:51:55+08:00" content="2017-05-08">
-          05-08
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-02-24T19:48:10+08:00">
+                2021-02-24
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>大数据处理中，会使用到大规模的集群，如何管理庞大的集群资源，由此诞生了 hadoop YARN</p>
+</blockquote>
+<h2 id="YARN-架构"><a href="#YARN-架构" class="headerlink" title="YARN 架构"></a>YARN 架构</h2><img src="/2021/02/24/yarn/yarn.jpg" title="yarn 架构">
+<a id="more"></a>
+<p>YARN 主要由以下几部分构成</p>
+<ul>
+<li>ResourceManager，RM 负责整个集群的资源管理与调度<ul>
+<li>与客户端交互，接受应用程序提交、状态查询等</li>
+<li>启动和管理各个应用程序 ApplicationMaster；为任务申请第一个 Container 资源来启动 ApplicationMaster，AM 失败时重启</li>
+<li>管理 NodeManager，接受 NM 的资源和健康情况，下达资源管理指令</li>
+<li>应用程序资源管理和调度，接受来自应用程序 AM 的资源申请，为程序分配资源</li>
+</ul>
+</li>
+<li>NodeManager，执行节点上的资源管理器<ul>
+<li>定期向 RM 汇报资源和健康情况</li>
+<li>执行 Container，运行应用程序</li>
+</ul>
+</li>
+<li>ApplicationMaster，为应用程序管理器，负责程序运行期间的生命周期管理，由用户来实现，每个提交到 YARN 上的应用必须包含<ul>
+<li>被 RM 启动后，AM 负责和 RM 协调资源（用于运行的 Container）</li>
+<li>从 RM 得到资源后，将资源分配给内部的任务</li>
+<li>运行期间和 RM 进行通信</li>
+<li>监控任务内部的运行状态，并进行内部任务管理</li>
+</ul>
+</li>
+<li>Container，是 YARN 中的资源抽象，封装了节点的运行资源（CPU/内存），用于运行程序。不同的 Container 之间资源隔离，使用 CGroup 实现</li>
+</ul>
+<h2 id="YARN-组件通信"><a href="#YARN-组件通信" class="headerlink" title="YARN 组件通信"></a>YARN 组件通信</h2><img src="/2021/02/24/yarn/communication.jpg" title="组件间通信">
+<p>各个组件之间的通信，由客户端主要轮询发起</p>
+<h2 id="YARN-工作流程"><a href="#YARN-工作流程" class="headerlink" title="YARN 工作流程"></a>YARN 工作流程</h2><img src="/2021/02/24/yarn/step.jpg" title="工作流程">
+<ol>
+<li>用户使用客户端向 ResourceManager 提交任务，包含 ApplicationMaster 程序，ApplicationMaster 启动命令，实际的任务应用 Task</li>
+<li>RM 为此应用程序分配第一个 Container，用来启动 AM。RM 与对应的 NM 进行通信，要求启动 AM</li>
+<li>AM 启动后，向 RM 注册和汇报。这样用户可以通过 RM 来查看任务状态</li>
+<li>AM 向 RM 轮询申请资源，用于运行内部任务</li>
+<li>AM 申请到 Container 后，与对应的 NodeManager 进行通讯，要求启动任务</li>
+<li>NM 为每个任务准备好运行环境（环境变量、JAR 包等），将任务命令写到一个脚本中，运行脚本启动任务</li>
+<li>Task 任务启动后，向 AM 注册和汇报，AM 可以掌握各个任务的运行状态和处理</li>
+<li>当 AM 检测到 Task 都运行结束后，向 RM 注销并关闭自己</li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/07/java-class-isolation/" rel="next" title="学习笔记(7):Java 类加载隔离">
+                <i class="fa fa-chevron-left"></i> 学习笔记(7):Java 类加载隔离
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -319,6 +456,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -339,8 +480,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -400,6 +550,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#YARN-架构"><span class="nav-number">1.</span> <span class="nav-text">YARN 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YARN-组件通信"><span class="nav-number">2.</span> <span class="nav-text">YARN 组件通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YARN-工作流程"><span class="nav-number">3.</span> <span class="nav-text">YARN 工作流程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -533,6 +699,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
