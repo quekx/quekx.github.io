@@ -79,14 +79,19 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+<meta name="description" content="在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要  hadoop shuffle 流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记(9):hadoop shuffle">
+<meta property="og:url" content="http://yoursite.com/2021/03/04/hadoop-shuffle/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要  hadoop shuffle 流程">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-01-06T03:06:30.000Z">
+<meta property="og:image" content="http://yoursite.com/2021/03/04/hadoop-shuffle/hadoop-shuffle.png">
+<meta property="og:updated_time" content="2021-03-05T13:13:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
+<meta name="twitter:title" content="学习笔记(9):hadoop shuffle">
+<meta name="twitter:description" content="在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要  hadoop shuffle 流程">
+<meta name="twitter:image" content="http://yoursite.com/2021/03/04/hadoop-shuffle/hadoop-shuffle.png">
 
 
 
@@ -116,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/">
+  <link rel="canonical" href="http://yoursite.com/2021/03/04/hadoop-shuffle/">
 
 
 
 
 
-  <title>tags | Hexo</title>
+  <title>学习笔记(9):hadoop shuffle | Hexo</title>
   
 
 
@@ -269,40 +274,158 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/04/hadoop-shuffle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Quekx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">tags</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-                5 tags in total
-            </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/Java/" style="font-size: 30px; color: #111">Java</a> <a href="/tags/Kafka/" style="font-size: 12px; color: #ccc">Kafka</a> <a href="/tags/PHP/" style="font-size: 12px; color: #ccc">PHP</a> <a href="/tags/Red-Black-Tree/" style="font-size: 21px; color: #6f6f6f">Red Black Tree</a> <a href="/tags/TCP/" style="font-size: 12px; color: #ccc">TCP</a>
-            </div>
-          </div>
+          <h1 class="post-title" itemprop="name headline">学习笔记(9):hadoop shuffle</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-04T17:47:40+08:00">
+                2021-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <blockquote>
+<p>在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要</p>
+</blockquote>
+<h2 id="hadoop-shuffle-流程"><a href="#hadoop-shuffle-流程" class="headerlink" title="hadoop shuffle 流程"></a>hadoop shuffle 流程</h2><img src="/2021/03/04/hadoop-shuffle/hadoop-shuffle.png" title="hadoop shuffle">
+<a id="more"></a>
+<p>整个数据 shuffle 流程分为两个阶段</p>
+<ol>
+<li>map shuffle，即数据从 Map 端输出的过程</li>
+<li>reduce shuffle，即数据输入到 Reduce 端的过程</li>
+</ol>
+<h3 id="map-shuffle"><a href="#map-shuffle" class="headerlink" title="map shuffle"></a>map shuffle</h3><p>数据在 Map Task 端处理完毕后，会经过以下流程：</p>
+<ol>
+<li>Map 首先将数据写入内存中的环形缓冲区，缓冲区数据写满后，批量写出到磁盘上，这样 Map 处理结果会分散在很多小文件中，写出的文件前数据会在内存中进行排序并且分区 partition，不同的 partition 文件对应下游不同的 Reduce Task。如果此时设置了 Combiner，会将内存中的分区排序结果进行 combine 操作后写出。</li>
+<li>Map 端写出分区小文件完成后，会进行数据文件合并，为了提高传输效率，相同 partition 的文件数据会合并成一个大文件，合并后大文件中的数据也是有序的。</li>
+</ol>
+<h3 id="reduce-shuffle"><a href="#reduce-shuffle" class="headerlink" title="reduce shuffle"></a>reduce shuffle</h3><p>Map 端数据写出完成后，Reduce 端处理流程开始：</p>
+<ol>
+<li>Reduce 启动复制线程开始复制 Map 写出的合并文件，此时也会先写入内存中，内存满写出到磁盘，形成小文件。如果此时设置了 Combiner，也会在内存对数据进行 combine 之后写出</li>
+<li>Map 端的数据读取完毕后，Reduce 工作，开始工作之前，Reduce 端也会进行小文件合并，形成一个大文件</li>
+<li>文件合并完成后，作为 Reduce 的输入，进行处理</li>
+</ol>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/24/yarn/" rel="next" title="学习笔记(8):YARN">
+                <i class="fa fa-chevron-left"></i> 学习笔记(8):YARN
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -335,8 +458,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -396,6 +528,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#hadoop-shuffle-流程"><span class="nav-number">1.</span> <span class="nav-text">hadoop shuffle 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#map-shuffle"><span class="nav-number">1.1.</span> <span class="nav-text">map shuffle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reduce-shuffle"><span class="nav-number">1.2.</span> <span class="nav-text">reduce shuffle</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
