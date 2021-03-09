@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java,Kafka,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -79,20 +79,19 @@
 
 
 
-<meta name="description" content="KafkaKafka是一种分布式的消息订阅发布系统。 Kafka结构消息传递模型常见有  基于缓存的生产者/消费者模型 基于观察者的发布/订阅模型  Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：">
-<meta name="keywords" content="Java,Kafka">
+<meta name="description" content="与批处理 MapReduce 过程类似，flink 实时流处理中，数据在处理节点中的 shuffle 传输，也是至关重要的过程  整体结构">
 <meta property="og:type" content="article">
-<meta property="og:title" content="学习笔记(4):kafka">
-<meta property="og:url" content="http://yoursite.com/2017/05/08/kafka/index.html">
+<meta property="og:title" content="学习笔记(10):flink shuffle">
+<meta property="og:url" content="http://yoursite.com/2021/03/09/flink-shuffle/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="KafkaKafka是一种分布式的消息订阅发布系统。 Kafka结构消息传递模型常见有  基于缓存的生产者/消费者模型 基于观察者的发布/订阅模型  Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：">
+<meta property="og:description" content="与批处理 MapReduce 过程类似，flink 实时流处理中，数据在处理节点中的 shuffle 传输，也是至关重要的过程  整体结构">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://yoursite.com/2017/05/08/kafka/kafka.png">
-<meta property="og:updated_time" content="2021-02-07T08:10:34.000Z">
+<meta property="og:image" content="http://yoursite.com/2021/03/09/flink-shuffle/flink-shuffle.png">
+<meta property="og:updated_time" content="2021-03-09T13:15:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="学习笔记(4):kafka">
-<meta name="twitter:description" content="KafkaKafka是一种分布式的消息订阅发布系统。 Kafka结构消息传递模型常见有  基于缓存的生产者/消费者模型 基于观察者的发布/订阅模型  Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：">
-<meta name="twitter:image" content="http://yoursite.com/2017/05/08/kafka/kafka.png">
+<meta name="twitter:title" content="学习笔记(10):flink shuffle">
+<meta name="twitter:description" content="与批处理 MapReduce 过程类似，flink 实时流处理中，数据在处理节点中的 shuffle 传输，也是至关重要的过程  整体结构">
+<meta name="twitter:image" content="http://yoursite.com/2021/03/09/flink-shuffle/flink-shuffle.png">
 
 
 
@@ -122,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/05/08/kafka/">
+  <link rel="canonical" href="http://yoursite.com/2021/03/09/flink-shuffle/">
 
 
 
 
 
-  <title>学习笔记(4):kafka | Hexo</title>
+  <title>学习笔记(10):flink shuffle | Hexo</title>
   
 
 
@@ -287,7 +286,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/08/kafka/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/09/flink-shuffle/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Quekx">
@@ -304,7 +303,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">学习笔记(4):kafka</h1>
+          <h1 class="post-title" itemprop="name headline">学习笔记(10):flink shuffle</h1>
         
 
         <div class="post-meta">
@@ -316,8 +315,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-08T23:51:55+08:00">
-                2017-05-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-09T15:51:17+08:00">
+                2021-03-09
               </time>
             
 
@@ -326,28 +325,6 @@
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/framwork/" itemprop="url" rel="index">
-                    <span itemprop="name">framwork</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -376,21 +353,29 @@
       
 
       
-        <h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>Kafka是一种分布式的消息订阅发布系统。</p>
-<h3 id="Kafka结构"><a href="#Kafka结构" class="headerlink" title="Kafka结构"></a>Kafka结构</h3><p>消息传递模型常见有</p>
-<ul>
-<li>基于缓存的生产者/消费者模型</li>
-<li>基于观察者的发布/订阅模型</li>
-</ul>
-<p>Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：</p>
+        <blockquote>
+<p>与批处理 MapReduce 过程类似，flink 实时流处理中，数据在处理节点中的 shuffle 传输，也是至关重要的过程</p>
+</blockquote>
+<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><img src="/2021/03/09/flink-shuffle/flink-shuffle.png" title="flink shuffle">
 <a id="more"></a>
-<img src="/2017/05/08/kafka/kafka.png" title="Kafka中消息模型">
-<p>Kafka中Consumer和Producer之间通过特定topic进行消息传递。</p>
-<h3 id="Kafka文件系统"><a href="#Kafka文件系统" class="headerlink" title="Kafka文件系统"></a>Kafka文件系统</h3><p>在Kafka中每个topic分配了单独的文件夹，topic下的每个partition也有其单独的文件夹，partition文件夹下即存放了对应的消息文件，随着Kafka中消息的增加，Kafka会将消息分段存储，每段称为segment。</p>
-<p>每个segment由.index文件和.log文件组成。</p>
-<p>segment文件命名：文件名为19位数字，初始文件为全零，后续文件为上一个文件中最后一条消息的offset，并用零高位补齐19位。这样此文件的起始offset便为文件名fileName + 1。</p>
-<p>.index文件为索引文件，其中存放了消息序号所对应的消息，其在.log数据文件中的偏移位置。</p>
-<p>segment文件虽然是持久化的，可以读取其中的历史消息，但其不是永久存在的，有其生命周期，具体生命周期由Kafka服务器的参数配置决定。</p>
+<h2 id="shuffle-流程"><a href="#shuffle-流程" class="headerlink" title="shuffle 流程"></a>shuffle 流程</h2><p>在 hadoop 批处理中，节点之间的数据传递是先将数据写入磁盘，通过磁盘作为媒介来进行数据传输</p>
+<p>在 flink 流处理中，节点之间的数据传递是通过网络来进行</p>
+<h3 id="上游算子-shuffle"><a href="#上游算子-shuffle" class="headerlink" title="上游算子 shuffle"></a>上游算子 shuffle</h3><ol>
+<li>当一条记录被上游算子处理完毕后，通过 emitRecord() 方法处理提交，数据会被序列化后写入 buffer，直到遇到以下情况后被写出：<ol>
+<li>buffer 区被写满</li>
+<li>buffer 未写满，但是超过时间限制</li>
+<li>遇到特殊 Event，触发 Checkpoint 的 Barrier 数据</li>
+</ol>
+</li>
+<li>buffer 首先会被写出到本地 buffer pool 中，然后 buffer pool 的数据会在 result partition 中，被 partition 到不同的 subPartition，每个 subPartition 对应下游算子的一个 subTask 实例，subPartition 中的数据会发送到对应的下游 subTask 中</li>
+<li>下游 netty server 端线程会从 subPartition queue 中取走 buffer，通过网络传输至下游</li>
+</ol>
+<h3 id="下游算子-shuffle"><a href="#下游算子-shuffle" class="headerlink" title="下游算子 shuffle"></a>下游算子 shuffle</h3><ol>
+<li>上游 netty client 端接受到从 server 端发送来的数据后，会将 buffer 插入到数据 parition 对应 subTask 的 input channel 中</li>
+<li>input channel 中的 buffer 数据会被拷贝到本地 buffer pool，然后经过反序列后，作为下游算子的输入</li>
+</ol>
+<p>同一个 TaskManager 内的多个 subTask 实例会公用一个 netty 组件进行通信，对同一个 TCP channel 进行复用，这样可以减少大规模下进程之间的网络连接。</p>
+<p>但由于复用连接进行数据传输，当某一个 subTask 实例出现了反压时，buffer pool 或者 channel 资源被沾满，其他 subTask 无法接受输入 buffer，运行停止</p>
 
       
     </div>
@@ -406,14 +391,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Java/" rel="tag"># Java</a>
-          
-            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
-          
-        </div>
-      
 
       
       
@@ -423,8 +400,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/10/java-tips/" rel="next" title="Java 知识点">
-                <i class="fa fa-chevron-left"></i> Java 知识点
+              <a href="/2021/03/04/hadoop-shuffle/" rel="next" title="学习笔记(9):hadoop shuffle">
+                <i class="fa fa-chevron-left"></i> 学习笔记(9):hadoop shuffle
               </a>
             
           </div>
@@ -432,10 +409,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/07/10/php-note/" rel="prev" title="学习笔记(5):PHP">
-                学习笔记(5):PHP <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -567,7 +540,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka"><span class="nav-number">1.</span> <span class="nav-text">Kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kafka结构"><span class="nav-number">1.1.</span> <span class="nav-text">Kafka结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kafka文件系统"><span class="nav-number">1.2.</span> <span class="nav-text">Kafka文件系统</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#整体结构"><span class="nav-number">1.</span> <span class="nav-text">整体结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shuffle-流程"><span class="nav-number">2.</span> <span class="nav-text">shuffle 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#上游算子-shuffle"><span class="nav-number">2.1.</span> <span class="nav-text">上游算子 shuffle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下游算子-shuffle"><span class="nav-number">2.2.</span> <span class="nav-text">下游算子 shuffle</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要  hadoop shuffle 流程">
+<meta name="description" content="在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要  整体结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="学习笔记(9):hadoop shuffle">
 <meta property="og:url" content="http://yoursite.com/2021/03/04/hadoop-shuffle/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要  hadoop shuffle 流程">
+<meta property="og:description" content="在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要  整体结构">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://yoursite.com/2021/03/04/hadoop-shuffle/hadoop-shuffle.png">
-<meta property="og:updated_time" content="2021-03-05T13:13:15.000Z">
+<meta property="og:updated_time" content="2021-03-09T09:33:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习笔记(9):hadoop shuffle">
-<meta name="twitter:description" content="在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要  hadoop shuffle 流程">
+<meta name="twitter:description" content="在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要  整体结构">
 <meta name="twitter:image" content="http://yoursite.com/2021/03/04/hadoop-shuffle/hadoop-shuffle.png">
 
 
@@ -356,9 +356,9 @@
         <blockquote>
 <p>在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要</p>
 </blockquote>
-<h2 id="hadoop-shuffle-流程"><a href="#hadoop-shuffle-流程" class="headerlink" title="hadoop shuffle 流程"></a>hadoop shuffle 流程</h2><img src="/2021/03/04/hadoop-shuffle/hadoop-shuffle.png" title="hadoop shuffle">
+<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><img src="/2021/03/04/hadoop-shuffle/hadoop-shuffle.png" title="hadoop shuffle">
 <a id="more"></a>
-<p>整个数据 shuffle 流程分为两个阶段</p>
+<h2 id="shuffle-流程"><a href="#shuffle-流程" class="headerlink" title="shuffle 流程"></a>shuffle 流程</h2><p>整个数据 shuffle 流程分为两个阶段</p>
 <ol>
 <li>map shuffle，即数据从 Map 端输出的过程</li>
 <li>reduce shuffle，即数据输入到 Reduce 端的过程</li>
@@ -407,6 +407,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/09/flink-shuffle/" rel="prev" title="学习笔记(10):flink shuffle">
+                学习笔记(10):flink shuffle <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -483,7 +487,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -538,7 +542,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#hadoop-shuffle-流程"><span class="nav-number">1.</span> <span class="nav-text">hadoop shuffle 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#map-shuffle"><span class="nav-number">1.1.</span> <span class="nav-text">map shuffle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reduce-shuffle"><span class="nav-number">1.2.</span> <span class="nav-text">reduce shuffle</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#整体结构"><span class="nav-number">1.</span> <span class="nav-text">整体结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shuffle-流程"><span class="nav-number">2.</span> <span class="nav-text">shuffle 流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#map-shuffle"><span class="nav-number">2.1.</span> <span class="nav-text">map shuffle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reduce-shuffle"><span class="nav-number">2.2.</span> <span class="nav-text">reduce shuffle</span></a></li></ol></li></ol></div>
             
 
           </div>
