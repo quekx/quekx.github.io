@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="1. Thread和Runnable区别Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。 2. HashMap和TreeMap两者都是Key-Value的形式来存储数据。 HashMap:底层以散列表的形式实现，HashMap内部存储">
+<meta name="description" content="Thread和Runnable区别Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。 HashMap和TreeMap两者都是Key-Value的形式来存储数据。 HashMap:底层以散列表的形式实现，HashMap内部存储一个数组ta">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 知识点">
 <meta property="og:url" content="http://yoursite.com/2017/04/10/java-tips/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="1. Thread和Runnable区别Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。 2. HashMap和TreeMap两者都是Key-Value的形式来存储数据。 HashMap:底层以散列表的形式实现，HashMap内部存储">
+<meta property="og:description" content="Thread和Runnable区别Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。 HashMap和TreeMap两者都是Key-Value的形式来存储数据。 HashMap:底层以散列表的形式实现，HashMap内部存储一个数组ta">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2021-03-10T12:27:24.000Z">
+<meta property="og:updated_time" content="2021-03-11T03:47:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 知识点">
-<meta name="twitter:description" content="1. Thread和Runnable区别Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。 2. HashMap和TreeMap两者都是Key-Value的形式来存储数据。 HashMap:底层以散列表的形式实现，HashMap内部存储">
+<meta name="twitter:description" content="Thread和Runnable区别Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。 HashMap和TreeMap两者都是Key-Value的形式来存储数据。 HashMap:底层以散列表的形式实现，HashMap内部存储一个数组ta">
 
 
 
@@ -374,8 +374,8 @@
       
 
       
-        <h3 id="1-Thread和Runnable区别"><a href="#1-Thread和Runnable区别" class="headerlink" title="1. Thread和Runnable区别"></a>1. Thread和Runnable区别</h3><p>Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。<br>一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。</p>
-<h3 id="2-HashMap和TreeMap"><a href="#2-HashMap和TreeMap" class="headerlink" title="2. HashMap和TreeMap"></a>2. HashMap和TreeMap</h3><p>两者都是Key-Value的形式来存储数据。</p>
+        <h3 id="Thread和Runnable区别"><a href="#Thread和Runnable区别" class="headerlink" title="Thread和Runnable区别"></a>Thread和Runnable区别</h3><p>Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。<br>一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。</p>
+<h3 id="HashMap和TreeMap"><a href="#HashMap和TreeMap" class="headerlink" title="HashMap和TreeMap"></a>HashMap和TreeMap</h3><p>两者都是Key-Value的形式来存储数据。</p>
 <h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap:"></a>HashMap:</h4><p>底层以散列表的形式实现，HashMap内部存储一个数组table，大小length为2的整数次幂。</p>
 <p>table数组用于存放链表节点，当插入或查找时，将key的hash和length-1进行与操作，得到在数组中索引位置index，从而得到对应的链表进行插入或者查找操作。</p>
 <p>以链表来存储，可以防止hash碰撞造成的冲突。碰撞程度受到hash函数的分散程度影响。平均来说链表长度不会太长，平均性能为O(1)。</p>
@@ -390,7 +390,7 @@
 <li>HashMap在大小到达一定值时需要扩容，TreeMap不需要扩容。</li>
 <li>HashMap是无序的，TreeMap底层为二叉搜索树，保存有Key的大小顺序信息。</li>
 </ul>
-<h3 id="3-类的加载"><a href="#3-类的加载" class="headerlink" title="3. 类的加载"></a>3. 类的加载</h3><p>类的加载会经历三个步骤：</p>
+<h3 id="类的加载"><a href="#类的加载" class="headerlink" title="类的加载"></a>类的加载</h3><p>类的加载会经历三个步骤：</p>
 <ul>
 <li>加载</li>
 <li>链接（验证、准备、解析）</li>
@@ -427,6 +427,8 @@
 <li>数据内的对象列表</li>
 <li>对齐空间占用，长度补全对齐 8 的整数倍</li>
 </ol>
+<h3 id="乐观锁-vs-悲观锁"><a href="#乐观锁-vs-悲观锁" class="headerlink" title="乐观锁 vs 悲观锁"></a>乐观锁 vs 悲观锁</h3><h4 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h4><p>悲观锁认为锁的竞争是比较悲观的，锁一旦被某个线程获取会长期持有，其他线程不容易获取到锁，因此线程在获取锁失败后，会考虑释放 CPU 资源进行等待，而不是通过自旋来不停尝试获取锁。<br>Java 中 Syncronize 与 ReetrantLock 都是悲观锁</p>
+<h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><p>乐观认为锁的竞争是比较乐观的，锁被获取后，同步操作较少很快就可以释放，其他线程认为可以在短时间内重新获取锁，因此通过自旋的方式不停尝试获取锁<br>Java 中 Atomic 原子类都过 CAS 自旋方式进行多线程下的原子操作</p>
 
       
     </div>
@@ -546,7 +548,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -601,7 +603,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Thread和Runnable区别"><span class="nav-number">1.</span> <span class="nav-text">1. Thread和Runnable区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-HashMap和TreeMap"><span class="nav-number">2.</span> <span class="nav-text">2. HashMap和TreeMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HashMap"><span class="nav-number">2.1.</span> <span class="nav-text">HashMap:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TreeMap"><span class="nav-number">2.2.</span> <span class="nav-text">TreeMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#区别："><span class="nav-number">2.3.</span> <span class="nav-text">区别：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-类的加载"><span class="nav-number">3.</span> <span class="nav-text">3. 类的加载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#加载："><span class="nav-number">3.1.</span> <span class="nav-text">加载：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链接："><span class="nav-number">3.2.</span> <span class="nav-text">链接：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化"><span class="nav-number">3.3.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象大小"><span class="nav-number">4.</span> <span class="nav-text">对象大小</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Thread和Runnable区别"><span class="nav-number">1.</span> <span class="nav-text">Thread和Runnable区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap和TreeMap"><span class="nav-number">2.</span> <span class="nav-text">HashMap和TreeMap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HashMap"><span class="nav-number">2.1.</span> <span class="nav-text">HashMap:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TreeMap"><span class="nav-number">2.2.</span> <span class="nav-text">TreeMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#区别："><span class="nav-number">2.3.</span> <span class="nav-text">区别：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类的加载"><span class="nav-number">3.</span> <span class="nav-text">类的加载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#加载："><span class="nav-number">3.1.</span> <span class="nav-text">加载：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#链接："><span class="nav-number">3.2.</span> <span class="nav-text">链接：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化"><span class="nav-number">3.3.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象大小"><span class="nav-number">4.</span> <span class="nav-text">对象大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乐观锁-vs-悲观锁"><span class="nav-number">5.</span> <span class="nav-text">乐观锁 vs 悲观锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#悲观锁"><span class="nav-number">5.1.</span> <span class="nav-text">悲观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#乐观锁"><span class="nav-number">5.2.</span> <span class="nav-text">乐观锁</span></a></li></ol></li></ol></div>
             
 
           </div>

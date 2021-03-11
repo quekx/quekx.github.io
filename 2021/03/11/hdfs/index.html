@@ -79,13 +79,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/categories/algorithm/index.html">
+<meta name="description" content="HDFS 写流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记(11):hdfs">
+<meta property="og:url" content="http://yoursite.com/2021/03/11/hdfs/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="HDFS 写流程">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2021/03/11/hdfs/hdfs-write.png">
+<meta property="og:image" content="http://yoursite.com/2021/03/11/hdfs/hdfs-read.png">
+<meta property="og:updated_time" content="2021-03-11T07:49:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="学习笔记(11):hdfs">
+<meta name="twitter:description" content="HDFS 写流程">
+<meta name="twitter:image" content="http://yoursite.com/2021/03/11/hdfs/hdfs-write.png">
 
 
 
@@ -115,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/algorithm/">
+  <link rel="canonical" href="http://yoursite.com/2021/03/11/hdfs/">
 
 
 
 
 
-  <title>Category: algorithm | Hexo</title>
+  <title>学习笔记(11):hdfs | Hexo</title>
   
 
 
@@ -140,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -266,79 +273,162 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>algorithm<small>Category</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/11/hdfs/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Quekx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/04/04/delete-in-rbtree/" itemprop="url">
-              
-                <span itemprop="name">学习笔记(2):红黑树删除</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">学习笔记(11):hdfs</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-04-04T11:29:39+08:00" content="2017-04-04">
-          04-04
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-03-11T14:55:02+08:00">
+                2021-03-11
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/04/03/insert-in-rbtree/" itemprop="url">
-              
-                <span itemprop="name">学习笔记(1):红黑树插入</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2017-04-03T19:34:40+08:00" content="2017-04-03">
-          04-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
+        <h3 id="HDFS-写流程"><a href="#HDFS-写流程" class="headerlink" title="HDFS 写流程"></a>HDFS 写流程</h3><img src="/2021/03/11/hdfs/hdfs-write.png" title="hdfs write">
+<a id="more"></a>
+<p>写步骤：</p>
+<ol>
+<li>HDFS client 调用 DistributedFileSystem 的 create 方法，创建 FSDataOutputStream 文件输出流对象</li>
+<li>通过 RPC 与 NameNode 进行通信，NameNode 在 HDFS Namespace 中创建一个文件条目，用于记录文件的 block 信息，初始为空；然后 NameNode 会返回文件每个数据块 block 需要拷贝的 DataNode 地址。这些步骤封装在 FSDataOutputStream 内部</li>
+<li>获取数据 block 需要拷贝的 DataNode 地址后，client 从 NameNode 返回的 DataNode 列表中，获取最近的第一个 DataNode 节点，将 DataNode 列表和数据发送至此节点中</li>
+<li>第一个 DataNode 节点接受到 packet 数据，先存储下来，然后向第二个 DataNode 发送；第二个 DataNode 操作以此类推</li>
+<li>每个 DataNode 节点完成数据拷贝后，向前一个节点发送 ACK 确认</li>
+<li>最后 client 收到写入完成的 ACK 通知，调用 FSDataOutputStream 的 close 方法，关闭文件流写入</li>
+<li>client 最后调用 DistributedFileSystem 对象的 complete 方法，通知 NameNode 文件写入成功，NameNode 会将相关结果记录到 editlog 中</li>
+</ol>
+<p>文件数据写完后，每一份 block 数据会在多个 DataNode 上存在多个副本</p>
+<h3 id="HDFS-读流程"><a href="#HDFS-读流程" class="headerlink" title="HDFS 读流程"></a>HDFS 读流程</h3><img src="/2021/03/11/hdfs/hdfs-read.png" title="hdfs read">
+<p>读步骤</p>
+<ol>
+<li>HDFS client 调用 DistributedFileSystem 的 open 方法，创建 FSDataInputStream 文件输入流对象</li>
+<li>通过 RPC 与 NameNode 进行通信，从NameNode 获取文件每个数据块 block 以及数据块所在的 DataNode 地址</li>
+<li>client 与 DataNode 信息通信，读取 block 数据</li>
+<li>client 读完所有的 block 后，合并成一个大文件</li>
+<li>关闭文件流读取</li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/09/flink-shuffle/" rel="next" title="学习笔记(10):flink shuffle">
+                <i class="fa fa-chevron-left"></i> 学习笔记(10):flink shuffle
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -346,6 +436,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -366,8 +460,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -427,6 +530,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HDFS-写流程"><span class="nav-number">1.</span> <span class="nav-text">HDFS 写流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HDFS-读流程"><span class="nav-number">2.</span> <span class="nav-text">HDFS 读流程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -560,6 +679,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

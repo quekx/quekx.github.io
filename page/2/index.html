@@ -281,6 +281,167 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/05/tcp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Quekx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/05/tcp/" itemprop="url">学习笔记(3):TCP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-05T23:12:47+08:00">
+                2017-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Network</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="关于TCP"><a href="#关于TCP" class="headerlink" title="关于TCP"></a>关于TCP</h3><p>TCP传输控制协议（Transmission Control Protocol）是面向连接的传输层协议，提供可靠的字节流传输。</p>
+<p>TCP特点：</p>
+<ul>
+<li>面向连接的传输层协议</li>
+<li>可靠传输</li>
+<li>面向字节流传输</li>
+<li>全双工通信</li>
+</ul>
+<p>TCP把连接作为基本的抽象，每个连接两端为两个套接字socket，socket由IP地址+端口号组成。</p>
+<p>TCP保证报文按顺序，不重复发送报文，则需要对分组进行编号，以字节为基准。</p>
+<p>可靠传输原理</p>
+<ol>
+<li>报文确认机制。发送方发送一个报文，接收方在成功接收后会向发送方发送一个确认报文，确认的序号为期望的下一步接收的起始字节编号。接收方接收后便确认该序号之前的字节分组均成功送达。</li>
+<li>发送方超时重传。发送方发送一个分组不会立即删除而是缓存该分组，同时设置一个超时计时器，若在超时时间段内未收到接收方发送的确认报文，则会重传该分组；若在时间段内收到确认，则删除该分组缓存。</li>
+<li>接收方重复确认。接收方收到重复的报文时，说明确认报文由于丢失未到达发送方，需要重传确认报文，并丢弃该重复报文。确认按累计确认的方式，接收方收到连续的多个分组，只需要对最后一个分组进行确认即可，这样保证确认序号之前的所有数据均已接收。</li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/05/tcp/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/04/delete-in-rbtree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -754,7 +915,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

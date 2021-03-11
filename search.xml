@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>学习笔记(10):flink shuffle</title>
+    <url>/2021/03/09/flink-shuffle/</url>
+    <content><![CDATA[<blockquote>
+<p>与批处理 MapReduce 过程类似，flink 实时流处理中，数据在处理节点中的 shuffle 传输，也是至关重要的过程</p>
+</blockquote>
+<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><img src="/2021/03/09/flink-shuffle/flink-shuffle.png" title="flink shuffle">
+<a id="more"></a>
+<h2 id="shuffle-流程"><a href="#shuffle-流程" class="headerlink" title="shuffle 流程"></a>shuffle 流程</h2><p>在 hadoop 批处理中，节点之间的数据传递是先将数据写入磁盘，通过磁盘作为媒介来进行数据传输</p>
+<p>在 flink 流处理中，节点之间的数据传递是通过网络来进行</p>
+<h3 id="上游算子-shuffle"><a href="#上游算子-shuffle" class="headerlink" title="上游算子 shuffle"></a>上游算子 shuffle</h3><ol>
+<li>当一条记录被上游算子处理完毕后，通过 emitRecord() 方法处理提交，数据会被序列化后写入 buffer，直到遇到以下情况后被写出：<ol>
+<li>buffer 区被写满</li>
+<li>buffer 未写满，但是超过时间限制</li>
+<li>遇到特殊 Event，触发 Checkpoint 的 Barrier 数据</li>
+</ol>
+</li>
+<li>buffer 首先会被写出到本地 buffer pool 中，然后 buffer pool 的数据会在 result partition 中，被 partition 到不同的 subPartition，每个 subPartition 对应下游算子的一个 subTask 实例，subPartition 中的数据会发送到对应的下游 subTask 中</li>
+<li>下游 netty server 端线程会从 subPartition queue 中取走 buffer，通过网络传输至下游</li>
+</ol>
+<h3 id="下游算子-shuffle"><a href="#下游算子-shuffle" class="headerlink" title="下游算子 shuffle"></a>下游算子 shuffle</h3><ol>
+<li>上游 netty client 端接受到从 server 端发送来的数据后，会将 buffer 插入到数据 parition 对应 subTask 的 input channel 中</li>
+<li>input channel 中的 buffer 数据会被拷贝到本地 buffer pool，然后经过反序列后，作为下游算子的输入</li>
+</ol>
+<p>同一个 TaskManager 内的多个 subTask 实例会公用一个 netty 组件进行通信，对同一个 TCP channel 进行复用，这样可以减少大规模下进程之间的网络连接。</p>
+<p>但由于复用连接进行数据传输，当某一个 subTask 实例出现了反压时，buffer pool 或者 channel 资源被沾满，其他 subTask 无法接受输入 buffer，运行停止</p>
+]]></content>
+  </entry>
+  <entry>
     <title>学习笔记(2):红黑树删除</title>
     <url>/2017/04/04/delete-in-rbtree/</url>
     <content><![CDATA[<h1 id="普通二叉搜索树删除"><a href="#普通二叉搜索树删除" class="headerlink" title="普通二叉搜索树删除"></a>普通二叉搜索树删除</h1><p>普通二叉树删除节点z有三种情况：</p>
@@ -104,31 +132,30 @@
       </tags>
   </entry>
   <entry>
-    <title>学习笔记(10):flink shuffle</title>
-    <url>/2021/03/09/flink-shuffle/</url>
-    <content><![CDATA[<blockquote>
-<p>与批处理 MapReduce 过程类似，flink 实时流处理中，数据在处理节点中的 shuffle 传输，也是至关重要的过程</p>
-</blockquote>
-<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><img src="/2021/03/09/flink-shuffle/flink-shuffle.png" title="flink shuffle">
+    <title>学习笔记(11):hdfs</title>
+    <url>/2021/03/11/hdfs/</url>
+    <content><![CDATA[<h3 id="HDFS-写流程"><a href="#HDFS-写流程" class="headerlink" title="HDFS 写流程"></a>HDFS 写流程</h3><img src="/2021/03/11/hdfs/hdfs-write.png" title="hdfs write">
 <a id="more"></a>
-<h2 id="shuffle-流程"><a href="#shuffle-流程" class="headerlink" title="shuffle 流程"></a>shuffle 流程</h2><p>在 hadoop 批处理中，节点之间的数据传递是先将数据写入磁盘，通过磁盘作为媒介来进行数据传输</p>
-<p>在 flink 流处理中，节点之间的数据传递是通过网络来进行</p>
-<h3 id="上游算子-shuffle"><a href="#上游算子-shuffle" class="headerlink" title="上游算子 shuffle"></a>上游算子 shuffle</h3><ol>
-<li>当一条记录被上游算子处理完毕后，通过 emitRecord() 方法处理提交，数据会被序列化后写入 buffer，直到遇到以下情况后被写出：<ol>
-<li>buffer 区被写满</li>
-<li>buffer 未写满，但是超过时间限制</li>
-<li>遇到特殊 Event，触发 Checkpoint 的 Barrier 数据</li>
+<p>写步骤：</p>
+<ol>
+<li>HDFS client 调用 DistributedFileSystem 的 create 方法，创建 FSDataOutputStream 文件输出流对象</li>
+<li>通过 RPC 与 NameNode 进行通信，NameNode 在 HDFS Namespace 中创建一个文件条目，用于记录文件的 block 信息，初始为空；然后 NameNode 会返回文件每个数据块 block 需要拷贝的 DataNode 地址。这些步骤封装在 FSDataOutputStream 内部</li>
+<li>获取数据 block 需要拷贝的 DataNode 地址后，client 从 NameNode 返回的 DataNode 列表中，获取最近的第一个 DataNode 节点，将 DataNode 列表和数据发送至此节点中</li>
+<li>第一个 DataNode 节点接受到 packet 数据，先存储下来，然后向第二个 DataNode 发送；第二个 DataNode 操作以此类推</li>
+<li>每个 DataNode 节点完成数据拷贝后，向前一个节点发送 ACK 确认</li>
+<li>最后 client 收到写入完成的 ACK 通知，调用 FSDataOutputStream 的 close 方法，关闭文件流写入</li>
+<li>client 最后调用 DistributedFileSystem 对象的 complete 方法，通知 NameNode 文件写入成功，NameNode 会将相关结果记录到 editlog 中</li>
 </ol>
-</li>
-<li>buffer 首先会被写出到本地 buffer pool 中，然后 buffer pool 的数据会在 result partition 中，被 partition 到不同的 subPartition，每个 subPartition 对应下游算子的一个 subTask 实例，subPartition 中的数据会发送到对应的下游 subTask 中</li>
-<li>下游 netty server 端线程会从 subPartition queue 中取走 buffer，通过网络传输至下游</li>
+<p>文件数据写完后，每一份 block 数据会在多个 DataNode 上存在多个副本</p>
+<h3 id="HDFS-读流程"><a href="#HDFS-读流程" class="headerlink" title="HDFS 读流程"></a>HDFS 读流程</h3><img src="/2021/03/11/hdfs/hdfs-read.png" title="hdfs read">
+<p>读步骤</p>
+<ol>
+<li>HDFS client 调用 DistributedFileSystem 的 open 方法，创建 FSDataInputStream 文件输入流对象</li>
+<li>通过 RPC 与 NameNode 进行通信，从NameNode 获取文件每个数据块 block 以及数据块所在的 DataNode 地址</li>
+<li>client 与 DataNode 信息通信，读取 block 数据</li>
+<li>client 读完所有的 block 后，合并成一个大文件</li>
+<li>关闭文件流读取</li>
 </ol>
-<h3 id="下游算子-shuffle"><a href="#下游算子-shuffle" class="headerlink" title="下游算子 shuffle"></a>下游算子 shuffle</h3><ol>
-<li>上游 netty client 端接受到从 server 端发送来的数据后，会将 buffer 插入到数据 parition 对应 subTask 的 input channel 中</li>
-<li>input channel 中的 buffer 数据会被拷贝到本地 buffer pool，然后经过反序列后，作为下游算子的输入</li>
-</ol>
-<p>同一个 TaskManager 内的多个 subTask 实例会公用一个 netty 组件进行通信，对同一个 TCP channel 进行复用，这样可以减少大规模下进程之间的网络连接。</p>
-<p>但由于复用连接进行数据传输，当某一个 subTask 实例出现了反压时，buffer pool 或者 channel 资源被沾满，其他 subTask 无法接受输入 buffer，运行停止</p>
 ]]></content>
   </entry>
   <entry>
@@ -354,6 +381,72 @@
       </tags>
   </entry>
   <entry>
+    <title>Java 知识点</title>
+    <url>/2017/04/10/java-tips/</url>
+    <content><![CDATA[<h3 id="Thread和Runnable区别"><a href="#Thread和Runnable区别" class="headerlink" title="Thread和Runnable区别"></a>Thread和Runnable区别</h3><p>Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。<br>一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。</p>
+<h3 id="HashMap和TreeMap"><a href="#HashMap和TreeMap" class="headerlink" title="HashMap和TreeMap"></a>HashMap和TreeMap</h3><p>两者都是Key-Value的形式来存储数据。</p>
+<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap:"></a>HashMap:</h4><p>底层以散列表的形式实现，HashMap内部存储一个数组table，大小length为2的整数次幂。</p>
+<p>table数组用于存放链表节点，当插入或查找时，将key的hash和length-1进行与操作，得到在数组中索引位置index，从而得到对应的链表进行插入或者查找操作。</p>
+<p>以链表来存储，可以防止hash碰撞造成的冲突。碰撞程度受到hash函数的分散程度影响。平均来说链表长度不会太长，平均性能为O(1)。</p>
+<p>链表节点以固定大小的数组来存储，当数据量不断变大时，必定会造成碰撞程度增大，链表长度变长，影响性能；当数据量大于数组大小的一定程度时(默认为75%)，数组会变为2倍来扩容，将根据hash值重新计算原先数据的位置。</p>
+<p>数组大小扩容为2倍，保证大小length为2的整数次幂。2倍的原因是：数组中索引位置index的计算方式为，key的hash值和length-1进行与操作，为了使index分布更加平均，充分利用hash中的各个比特位，使尽可能多的比特位对结果产生相等的影响；当length为2的整数次幂时，length-1比特位全为1，能充分利用hash值中的所有较低位比特。</p>
+<p>在JDK8中，当链表长度大于一定值时(默认为8)，链表会调整为红黑树来存储，来优化性能。</p>
+<a id="more"></a>
+<h4 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h4><p>底层以红黑树的形式实现。</p>
+<p>在树节点中存储Key、Value值，红黑树是自平衡的二叉搜索树，在树的结构改变时会平衡树的高度，其性能为O(lg(n))。</p>
+<h4 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h4><ul>
+<li>HashMap的性能复杂度为O(1)，TreeMap的性能复杂度为O(lg(n))。</li>
+<li>HashMap在大小到达一定值时需要扩容，TreeMap不需要扩容。</li>
+<li>HashMap是无序的，TreeMap底层为二叉搜索树，保存有Key的大小顺序信息。</li>
+</ul>
+<h3 id="类的加载"><a href="#类的加载" class="headerlink" title="类的加载"></a>类的加载</h3><p>类的加载会经历三个步骤：</p>
+<ul>
+<li>加载</li>
+<li>链接（验证、准备、解析）</li>
+<li>初始化</li>
+</ul>
+<h4 id="加载："><a href="#加载：" class="headerlink" title="加载："></a>加载：</h4><p>将类的二进制class文件加载进虚拟机内存</p>
+<h4 id="链接："><a href="#链接：" class="headerlink" title="链接："></a>链接：</h4><p>验证：</p>
+<ol>
+<li>验证class文件的格式，比如开始字节为0xCAFFBABE等</li>
+<li>验证class文件的元数据，比如类的是否有父类（除了Object的所有类均有父类）等</li>
+<li>验证class文件的字节码，比如字节码不会跳转至方法外等</li>
+</ol>
+<p>准备：<br>为类中的static类变量分配空间，并初始化为初始默认值。这里的初始化为变量的默认值，如int为0，boolean为false等。除了一种情况，声明为final的static类变量，编译器在编译时会加入CONSTANT-VALUE属性，在准备阶段即初始化为对应值。</p>
+<p>解析：<br>将类中的字符引用转化为直接引用</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>执行生成的cinit方法，来执行类中的static变量赋值语句和static语句块。</p>
+<p>如果继承了父类，会先进行父类的初始化，然后才进行本类的初始化</p>
+<p>如果实现了接口，不会初始化相应的接口，只会在接口使用到后才进行初始化。</p>
+<h3 id="对象大小"><a href="#对象大小" class="headerlink" title="对象大小"></a>对象大小</h3><p>普通对象占用的空间包含以下部分：</p>
+<ol>
+<li>对象头，固定 8 字节</li>
+<li>指向类对象的指针，正常 8 字节；如果 JVM 开启类指针压缩，为 4 字节</li>
+<li>成员变量占用<ol>
+<li>基本数据类型</li>
+<li>普通对象指针，正常 8 字节；如果 JVM 开启对象指针压缩，为 4 字节</li>
+</ol>
+</li>
+<li>对齐空间占用，长度补全对齐 8 的整数倍</li>
+</ol>
+<p>数组对象占用空间包含以下部分：</p>
+<ol>
+<li>对象头，固定 8 字节</li>
+<li>指向数组内容类对象的指针，正常 8 字节；如果 JVM 开启类指针压缩，为 4 字节</li>
+<li>数据长度，固定 4 字节</li>
+<li>数据内的对象列表</li>
+<li>对齐空间占用，长度补全对齐 8 的整数倍</li>
+</ol>
+<h3 id="乐观锁-vs-悲观锁"><a href="#乐观锁-vs-悲观锁" class="headerlink" title="乐观锁 vs 悲观锁"></a>乐观锁 vs 悲观锁</h3><h4 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h4><p>悲观锁认为锁的竞争是比较悲观的，锁一旦被某个线程获取会长期持有，其他线程不容易获取到锁，因此线程在获取锁失败后，会考虑释放 CPU 资源进行等待，而不是通过自旋来不停尝试获取锁。<br>Java 中 Syncronize 与 ReetrantLock 都是悲观锁</p>
+<h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><p>乐观认为锁的竞争是比较乐观的，锁被获取后，同步操作较少很快就可以释放，其他线程认为可以在短时间内重新获取锁，因此通过自旋的方式不停尝试获取锁<br>Java 中 Atomic 原子类都过 CAS 自旋方式进行多线程下的原子操作</p>
+]]></content>
+      <categories>
+        <category>tips</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>学习笔记(7):Java 类加载隔离</title>
     <url>/2021/02/07/java-class-isolation/</url>
     <content><![CDATA[<blockquote>
@@ -417,70 +510,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Java 知识点</title>
-    <url>/2017/04/10/java-tips/</url>
-    <content><![CDATA[<h3 id="1-Thread和Runnable区别"><a href="#1-Thread和Runnable区别" class="headerlink" title="1. Thread和Runnable区别"></a>1. Thread和Runnable区别</h3><p>Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。<br>一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。</p>
-<h3 id="2-HashMap和TreeMap"><a href="#2-HashMap和TreeMap" class="headerlink" title="2. HashMap和TreeMap"></a>2. HashMap和TreeMap</h3><p>两者都是Key-Value的形式来存储数据。</p>
-<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap:"></a>HashMap:</h4><p>底层以散列表的形式实现，HashMap内部存储一个数组table，大小length为2的整数次幂。</p>
-<p>table数组用于存放链表节点，当插入或查找时，将key的hash和length-1进行与操作，得到在数组中索引位置index，从而得到对应的链表进行插入或者查找操作。</p>
-<p>以链表来存储，可以防止hash碰撞造成的冲突。碰撞程度受到hash函数的分散程度影响。平均来说链表长度不会太长，平均性能为O(1)。</p>
-<p>链表节点以固定大小的数组来存储，当数据量不断变大时，必定会造成碰撞程度增大，链表长度变长，影响性能；当数据量大于数组大小的一定程度时(默认为75%)，数组会变为2倍来扩容，将根据hash值重新计算原先数据的位置。</p>
-<p>数组大小扩容为2倍，保证大小length为2的整数次幂。2倍的原因是：数组中索引位置index的计算方式为，key的hash值和length-1进行与操作，为了使index分布更加平均，充分利用hash中的各个比特位，使尽可能多的比特位对结果产生相等的影响；当length为2的整数次幂时，length-1比特位全为1，能充分利用hash值中的所有较低位比特。</p>
-<p>在JDK8中，当链表长度大于一定值时(默认为8)，链表会调整为红黑树来存储，来优化性能。</p>
-<a id="more"></a>
-<h4 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h4><p>底层以红黑树的形式实现。</p>
-<p>在树节点中存储Key、Value值，红黑树是自平衡的二叉搜索树，在树的结构改变时会平衡树的高度，其性能为O(lg(n))。</p>
-<h4 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h4><ul>
-<li>HashMap的性能复杂度为O(1)，TreeMap的性能复杂度为O(lg(n))。</li>
-<li>HashMap在大小到达一定值时需要扩容，TreeMap不需要扩容。</li>
-<li>HashMap是无序的，TreeMap底层为二叉搜索树，保存有Key的大小顺序信息。</li>
-</ul>
-<h3 id="3-类的加载"><a href="#3-类的加载" class="headerlink" title="3. 类的加载"></a>3. 类的加载</h3><p>类的加载会经历三个步骤：</p>
-<ul>
-<li>加载</li>
-<li>链接（验证、准备、解析）</li>
-<li>初始化</li>
-</ul>
-<h4 id="加载："><a href="#加载：" class="headerlink" title="加载："></a>加载：</h4><p>将类的二进制class文件加载进虚拟机内存</p>
-<h4 id="链接："><a href="#链接：" class="headerlink" title="链接："></a>链接：</h4><p>验证：</p>
-<ol>
-<li>验证class文件的格式，比如开始字节为0xCAFFBABE等</li>
-<li>验证class文件的元数据，比如类的是否有父类（除了Object的所有类均有父类）等</li>
-<li>验证class文件的字节码，比如字节码不会跳转至方法外等</li>
-</ol>
-<p>准备：<br>为类中的static类变量分配空间，并初始化为初始默认值。这里的初始化为变量的默认值，如int为0，boolean为false等。除了一种情况，声明为final的static类变量，编译器在编译时会加入CONSTANT-VALUE属性，在准备阶段即初始化为对应值。</p>
-<p>解析：<br>将类中的字符引用转化为直接引用</p>
-<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>执行生成的cinit方法，来执行类中的static变量赋值语句和static语句块。</p>
-<p>如果继承了父类，会先进行父类的初始化，然后才进行本类的初始化</p>
-<p>如果实现了接口，不会初始化相应的接口，只会在接口使用到后才进行初始化。</p>
-<h3 id="对象大小"><a href="#对象大小" class="headerlink" title="对象大小"></a>对象大小</h3><p>普通对象占用的空间包含以下部分：</p>
-<ol>
-<li>对象头，固定 8 字节</li>
-<li>指向类对象的指针，正常 8 字节；如果 JVM 开启类指针压缩，为 4 字节</li>
-<li>成员变量占用<ol>
-<li>基本数据类型</li>
-<li>普通对象指针，正常 8 字节；如果 JVM 开启对象指针压缩，为 4 字节</li>
-</ol>
-</li>
-<li>对齐空间占用，长度补全对齐 8 的整数倍</li>
-</ol>
-<p>数组对象占用空间包含以下部分：</p>
-<ol>
-<li>对象头，固定 8 字节</li>
-<li>指向数组内容类对象的指针，正常 8 字节；如果 JVM 开启类指针压缩，为 4 字节</li>
-<li>数据长度，固定 4 字节</li>
-<li>数据内的对象列表</li>
-<li>对齐空间占用，长度补全对齐 8 的整数倍</li>
-</ol>
-]]></content>
-      <categories>
-        <category>tips</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>学习笔记(4):kafka</title>
     <url>/2017/05/08/kafka/</url>
     <content><![CDATA[<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>Kafka是一种分布式的消息订阅发布系统。</p>
@@ -505,28 +534,6 @@
       <tags>
         <tag>Java</tag>
         <tag>Kafka</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>学习笔记(5):PHP</title>
-    <url>/2017/07/10/php-note/</url>
-    <content><![CDATA[<p>时间函数：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;); // &apos;Y-m-d H:m:s&apos;</span><br><span class="line">$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期</span><br><span class="line">$w = date(&apos;w&apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6</span><br><span class="line">$now_start = date(&apos;Ymd&apos;, strtotime(&quot;$date -&quot; . ($w ? $w - $first : 6) . &apos; days&apos;)); // 这周周一</span><br><span class="line">$last_start = date(&apos;Ymd&apos;, strtotime(&quot;$now_start - 7 days&quot;)); // 上周周一</span><br><span class="line">return $last_start;</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>时间格式转换：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;);      // Ymd格式</span><br><span class="line">$time = strtotime($date); // 转换为时间戳</span><br><span class="line">$date = date(&apos;Ymd H:m:s&apos;); // Ymd H:m:s格式</span><br></pre></td></tr></table></figure>
-<p>curl发送Get</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ch = curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $url);   //设置url</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);   // 不输出头部</span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 返回结果作为string</span><br><span class="line">$response = curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
-<p>Json解析</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$result = json_decode(&quot;&quot; . $response, true);  // true解析为数组</span><br><span class="line">$data = $result[&quot;data&quot;];</span><br></pre></td></tr></table></figure>
-<p>文件写入</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$fileName = &quot;puvLog.txt&quot;;</span><br><span class="line">$time = date(&quot;Y-m-d H:i:s&quot;, time());</span><br><span class="line">$log = $time . &quot;  &quot; . $log . &quot;\n&quot;;</span><br><span class="line">file_put_contents($fileName, $log, FILE_APPEND); // 尾部追加</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>tips</category>
-      </categories>
-      <tags>
-        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -645,23 +652,25 @@
       </tags>
   </entry>
   <entry>
-    <title>Tomcat8 源码导入 IDEA</title>
-    <url>/2017/03/28/tomcat8/</url>
-    <content><![CDATA[<p>学习Tomcat源码，最好是将其导入IDE，并可以运行调试。Apache的方法是使用ant工具，还要添加各种Jar包依赖，比较繁琐。通过搜索，发现一种通过Maven导入IDE方法，期间也遇到了坑。</p>
-<h3 id="下载Tomcat源码"><a href="#下载Tomcat源码" class="headerlink" title="下载Tomcat源码"></a>下载Tomcat源码</h3><p>由于之前使用的是Tomcat8.5.11版本，通过官方的 <a href="http://svn.apache.org/repos/asf/tomcat/tc8.5.x/tags/TOMCAT_8_5_11/" target="_blank" rel="noopener">svn地址</a>下载Tomcat源码。</p>
-<h3 id="构建Maven工程"><a href="#构建Maven工程" class="headerlink" title="构建Maven工程"></a>构建Maven工程</h3><p>在下载的源码根目录新建pom.xml文件，输入以下内容：<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;</span><br><span class="line">    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;Tomcat8.0&lt;/artifactId&gt;</span><br><span class="line">    &lt;name&gt;Tomcat8.0&lt;/name&gt;</span><br><span class="line">    &lt;version&gt;8.0&lt;/version&gt;</span><br><span class="line"></span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;finalName&gt;Tomcat8.0&lt;/finalName&gt;</span><br><span class="line">        &lt;sourceDirectory&gt;java&lt;/sourceDirectory&gt;</span><br><span class="line">        &lt;resources&gt;</span><br><span class="line">            &lt;resource&gt;</span><br><span class="line">                &lt;directory&gt;java&lt;/directory&gt;</span><br><span class="line">            &lt;/resource&gt;</span><br><span class="line">        &lt;/resources&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;2.3&lt;/version&gt;</span><br><span class="line">                &lt;configuration&gt;</span><br><span class="line">                    &lt;encoding&gt;UTF-8&lt;/encoding&gt;</span><br><span class="line">                    &lt;source&gt;1.8&lt;/source&gt;</span><br><span class="line">                    &lt;target&gt;1.8&lt;/target&gt;</span><br><span class="line">                &lt;/configuration&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;4.12&lt;/version&gt;</span><br><span class="line">            &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.easymock&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;easymock&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;3.4&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;ant&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;ant&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.7.0&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;wsdl4j&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;wsdl4j&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.6.2&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;javax.xml&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;jaxrpc&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.1&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.eclipse.jdt.core.compiler&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;ecj&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;4.5.1&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
-<p>然后在IDEA通过pom.xml导入工程，为了方便，可删除根目录下的test文件夹。</p>
-<h3 id="运行源代码"><a href="#运行源代码" class="headerlink" title="运行源代码"></a>运行源代码</h3><p>Tomcat的运行main方法位于org.apache.catalina.startup包下的BootStrap.java文件中，打开Run菜单下的Edit Configuration选项，新建Application项，Main class设置为org.apache.catalina.startup.Bootstrap，VM options中设置启动参数-Dcatalina.home=”xxx”，可为根目录也可自选，此处先设置为源码根目录。<br>设置完毕后就可以run启动了。<br>之前查阅的一篇文章到这里就结束了，导致了一个坑的出现。<br>代码可以run启动，但是会有异常出现，找不到一些目录文件夹。<br>当打开<a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a>的时候会出现以下异常：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">exception</span><br><span class="line"></span><br><span class="line">org.apache.jasper.JasperException: Unable to compile class for JSP</span><br><span class="line">	org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:601)</span><br><span class="line">	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:363)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:396)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:340)</span><br><span class="line">	javax.servlet.http.HttpServlet.service(HttpServlet.java:729)</span><br><span class="line">root cause</span><br><span class="line"></span><br><span class="line">java.lang.NullPointerException</span><br><span class="line">	org.apache.jasper.compiler.Validator$ValidateVisitor.&lt;init&gt;(Validator.java:516)</span><br><span class="line">	org.apache.jasper.compiler.Validator.validateExDirectives(Validator.java:1853)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:217)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:356)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:336)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:323)</span><br><span class="line">	org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:585)</span><br><span class="line">	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:363)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:396)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:340)</span><br><span class="line">	javax.servlet.http.HttpServlet.service(HttpServlet.java:729)</span><br></pre></td></tr></table></figure>
-<p>此时浏览器返回500的错误。</p>
-<p>搜索错误查阅了好久，并没有这些异常的说明，后来才发现这是由于缺少了lib文件夹下的某些包的缘故，而源码中是不带lib的。<br>原来源代码中并不包含这些依赖包，还是要到官网下载对应Tomcat版本的软件包，解压之后将以下文件夹复制到之前设置的Dcatalina.home目录中：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bin</span><br><span class="line">conf</span><br><span class="line">lib</span><br><span class="line">logs</span><br><span class="line">temp</span><br><span class="line">webapps</span><br><span class="line">work</span><br></pre></td></tr></table></figure>
-<p>然后run就可以正常启动，打断点调试了。</p>
-<p>如果闲麻烦，配置好的项目托管在<a href="https://github.com/quekx/tomcat8" target="_blank" rel="noopener">Github仓库中</a>，可自行下载导入IDEA。</p>
-<p>参考：<a href="https://yq.aliyun.com/articles/61765" target="_blank" rel="noopener">https://yq.aliyun.com/articles/61765</a></p>
+    <title>学习笔记(5):PHP</title>
+    <url>/2017/07/10/php-note/</url>
+    <content><![CDATA[<p>时间函数：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;); // &apos;Y-m-d H:m:s&apos;</span><br><span class="line">$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期</span><br><span class="line">$w = date(&apos;w&apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6</span><br><span class="line">$now_start = date(&apos;Ymd&apos;, strtotime(&quot;$date -&quot; . ($w ? $w - $first : 6) . &apos; days&apos;)); // 这周周一</span><br><span class="line">$last_start = date(&apos;Ymd&apos;, strtotime(&quot;$now_start - 7 days&quot;)); // 上周周一</span><br><span class="line">return $last_start;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>时间格式转换：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;);      // Ymd格式</span><br><span class="line">$time = strtotime($date); // 转换为时间戳</span><br><span class="line">$date = date(&apos;Ymd H:m:s&apos;); // Ymd H:m:s格式</span><br></pre></td></tr></table></figure>
+<p>curl发送Get</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ch = curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $url);   //设置url</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);   // 不输出头部</span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 返回结果作为string</span><br><span class="line">$response = curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
+<p>Json解析</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$result = json_decode(&quot;&quot; . $response, true);  // true解析为数组</span><br><span class="line">$data = $result[&quot;data&quot;];</span><br></pre></td></tr></table></figure>
+<p>文件写入</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$fileName = &quot;puvLog.txt&quot;;</span><br><span class="line">$time = date(&quot;Y-m-d H:i:s&quot;, time());</span><br><span class="line">$log = $time . &quot;  &quot; . $log . &quot;\n&quot;;</span><br><span class="line">file_put_contents($fileName, $log, FILE_APPEND); // 尾部追加</span><br></pre></td></tr></table></figure>
 ]]></content>
+      <categories>
+        <category>tips</category>
+      </categories>
       <tags>
-        <tag>Java</tag>
+        <tag>PHP</tag>
       </tags>
   </entry>
   <entry>
@@ -700,6 +709,26 @@
 </li>
 </ul>
 ]]></content>
+  </entry>
+  <entry>
+    <title>Tomcat8 源码导入 IDEA</title>
+    <url>/2017/03/28/tomcat8/</url>
+    <content><![CDATA[<p>学习Tomcat源码，最好是将其导入IDE，并可以运行调试。Apache的方法是使用ant工具，还要添加各种Jar包依赖，比较繁琐。通过搜索，发现一种通过Maven导入IDE方法，期间也遇到了坑。</p>
+<h3 id="下载Tomcat源码"><a href="#下载Tomcat源码" class="headerlink" title="下载Tomcat源码"></a>下载Tomcat源码</h3><p>由于之前使用的是Tomcat8.5.11版本，通过官方的 <a href="http://svn.apache.org/repos/asf/tomcat/tc8.5.x/tags/TOMCAT_8_5_11/" target="_blank" rel="noopener">svn地址</a>下载Tomcat源码。</p>
+<h3 id="构建Maven工程"><a href="#构建Maven工程" class="headerlink" title="构建Maven工程"></a>构建Maven工程</h3><p>在下载的源码根目录新建pom.xml文件，输入以下内容：<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;</span><br><span class="line">    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;Tomcat8.0&lt;/artifactId&gt;</span><br><span class="line">    &lt;name&gt;Tomcat8.0&lt;/name&gt;</span><br><span class="line">    &lt;version&gt;8.0&lt;/version&gt;</span><br><span class="line"></span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;finalName&gt;Tomcat8.0&lt;/finalName&gt;</span><br><span class="line">        &lt;sourceDirectory&gt;java&lt;/sourceDirectory&gt;</span><br><span class="line">        &lt;resources&gt;</span><br><span class="line">            &lt;resource&gt;</span><br><span class="line">                &lt;directory&gt;java&lt;/directory&gt;</span><br><span class="line">            &lt;/resource&gt;</span><br><span class="line">        &lt;/resources&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;2.3&lt;/version&gt;</span><br><span class="line">                &lt;configuration&gt;</span><br><span class="line">                    &lt;encoding&gt;UTF-8&lt;/encoding&gt;</span><br><span class="line">                    &lt;source&gt;1.8&lt;/source&gt;</span><br><span class="line">                    &lt;target&gt;1.8&lt;/target&gt;</span><br><span class="line">                &lt;/configuration&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;4.12&lt;/version&gt;</span><br><span class="line">            &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.easymock&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;easymock&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;3.4&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;ant&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;ant&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.7.0&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;wsdl4j&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;wsdl4j&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.6.2&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;javax.xml&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;jaxrpc&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.1&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.eclipse.jdt.core.compiler&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;ecj&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;4.5.1&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
+<p>然后在IDEA通过pom.xml导入工程，为了方便，可删除根目录下的test文件夹。</p>
+<h3 id="运行源代码"><a href="#运行源代码" class="headerlink" title="运行源代码"></a>运行源代码</h3><p>Tomcat的运行main方法位于org.apache.catalina.startup包下的BootStrap.java文件中，打开Run菜单下的Edit Configuration选项，新建Application项，Main class设置为org.apache.catalina.startup.Bootstrap，VM options中设置启动参数-Dcatalina.home=”xxx”，可为根目录也可自选，此处先设置为源码根目录。<br>设置完毕后就可以run启动了。<br>之前查阅的一篇文章到这里就结束了，导致了一个坑的出现。<br>代码可以run启动，但是会有异常出现，找不到一些目录文件夹。<br>当打开<a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a>的时候会出现以下异常：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">exception</span><br><span class="line"></span><br><span class="line">org.apache.jasper.JasperException: Unable to compile class for JSP</span><br><span class="line">	org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:601)</span><br><span class="line">	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:363)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:396)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:340)</span><br><span class="line">	javax.servlet.http.HttpServlet.service(HttpServlet.java:729)</span><br><span class="line">root cause</span><br><span class="line"></span><br><span class="line">java.lang.NullPointerException</span><br><span class="line">	org.apache.jasper.compiler.Validator$ValidateVisitor.&lt;init&gt;(Validator.java:516)</span><br><span class="line">	org.apache.jasper.compiler.Validator.validateExDirectives(Validator.java:1853)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:217)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:356)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:336)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:323)</span><br><span class="line">	org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:585)</span><br><span class="line">	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:363)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:396)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:340)</span><br><span class="line">	javax.servlet.http.HttpServlet.service(HttpServlet.java:729)</span><br></pre></td></tr></table></figure>
+<p>此时浏览器返回500的错误。</p>
+<p>搜索错误查阅了好久，并没有这些异常的说明，后来才发现这是由于缺少了lib文件夹下的某些包的缘故，而源码中是不带lib的。<br>原来源代码中并不包含这些依赖包，还是要到官网下载对应Tomcat版本的软件包，解压之后将以下文件夹复制到之前设置的Dcatalina.home目录中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bin</span><br><span class="line">conf</span><br><span class="line">lib</span><br><span class="line">logs</span><br><span class="line">temp</span><br><span class="line">webapps</span><br><span class="line">work</span><br></pre></td></tr></table></figure>
+<p>然后run就可以正常启动，打断点调试了。</p>
+<p>如果闲麻烦，配置好的项目托管在<a href="https://github.com/quekx/tomcat8" target="_blank" rel="noopener">Github仓库中</a>，可自行下载导入IDEA。</p>
+<p>参考：<a href="https://yq.aliyun.com/articles/61765" target="_blank" rel="noopener">https://yq.aliyun.com/articles/61765</a></p>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
   </entry>
   <entry>
     <title>学习笔记(8):YARN</title>
