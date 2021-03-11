@@ -1450,7 +1450,7 @@
 
       
         
-          <h2 id="Java知识点总结，不定时更新……"><a href="#Java知识点总结，不定时更新……" class="headerlink" title="Java知识点总结，不定时更新……"></a>Java知识点总结，不定时更新……</h2><h3 id="1-Thread和Runnable区别"><a href="#1-Thread和Runnable区别" class="headerlink" title="1. Thread和Runnable区别"></a>1. Thread和Runnable区别</h3><p>Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。<br>一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。</p>
+          <h3 id="1-Thread和Runnable区别"><a href="#1-Thread和Runnable区别" class="headerlink" title="1. Thread和Runnable区别"></a>1. Thread和Runnable区别</h3><p>Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。<br>一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。</p>
 <h3 id="2-HashMap和TreeMap"><a href="#2-HashMap和TreeMap" class="headerlink" title="2. HashMap和TreeMap"></a>2. HashMap和TreeMap</h3><p>两者都是Key-Value的形式来存储数据。</p>
 <h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap:"></a>HashMap:</h4><p>底层以散列表的形式实现，HashMap内部存储一个数组table，大小length为2的整数次幂。</p>
 <p>table数组用于存放链表节点，当插入或查找时，将key的hash和length-1进行与操作，得到在数组中索引位置index，从而得到对应的链表进行插入或者查找操作。</p>
