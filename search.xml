@@ -124,32 +124,6 @@
       </tags>
   </entry>
   <entry>
-    <title>学习笔记(9):hadoop shuffle</title>
-    <url>/2021/03/04/hadoop-shuffle/</url>
-    <content><![CDATA[<blockquote>
-<p>在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要</p>
-</blockquote>
-<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><img src="/2021/03/04/hadoop-shuffle/hadoop-shuffle.png" title="hadoop shuffle">
-<a id="more"></a>
-<h2 id="shuffle-流程"><a href="#shuffle-流程" class="headerlink" title="shuffle 流程"></a>shuffle 流程</h2><p>整个数据 shuffle 流程分为两个阶段</p>
-<ol>
-<li>map shuffle，即数据从 Map 端输出的过程</li>
-<li>reduce shuffle，即数据输入到 Reduce 端的过程</li>
-</ol>
-<h3 id="map-shuffle"><a href="#map-shuffle" class="headerlink" title="map shuffle"></a>map shuffle</h3><p>数据在 Map Task 端处理完毕后，会经过以下流程：</p>
-<ol>
-<li>Map 首先将数据写入内存中的环形缓冲区，缓冲区数据写满后，批量写出到磁盘上，这样 Map 处理结果会分散在很多小文件中，写出的文件前数据会在内存中进行排序并且分区 partition，不同的 partition 文件对应下游不同的 Reduce Task。如果此时设置了 Combiner，会将内存中的分区排序结果进行 combine 操作后写出。</li>
-<li>Map 端写出分区小文件完成后，会进行数据文件合并，为了提高传输效率，相同 partition 的文件数据会合并成一个大文件，合并后大文件中的数据也是有序的。</li>
-</ol>
-<h3 id="reduce-shuffle"><a href="#reduce-shuffle" class="headerlink" title="reduce shuffle"></a>reduce shuffle</h3><p>Map 端数据写出完成后，Reduce 端处理流程开始：</p>
-<ol>
-<li>Reduce 启动复制线程开始复制 Map 写出的合并文件，此时也会先写入内存中，内存满写出到磁盘，形成小文件。如果此时设置了 Combiner，也会在内存对数据进行 combine 之后写出</li>
-<li>Map 端的数据读取完毕后，Reduce 工作，开始工作之前，Reduce 端也会进行小文件合并，形成一个大文件</li>
-<li>文件合并完成后，作为 Reduce 的输入，进行处理</li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
     <title>学习笔记(10):flink shuffle</title>
     <url>/2021/03/09/flink-shuffle/</url>
     <content><![CDATA[<blockquote>
@@ -175,6 +149,32 @@
 </ol>
 <p>同一个 TaskManager 内的多个 subTask 实例会公用一个 netty 组件进行通信，对同一个 TCP channel 进行复用，这样可以减少大规模下进程之间的网络连接。</p>
 <p>但由于复用连接进行数据传输，当某一个 subTask 实例出现了反压时，buffer pool 或者 channel 资源被沾满，其他 subTask 无法接受输入 buffer，运行停止</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>学习笔记(9):hadoop shuffle</title>
+    <url>/2021/03/04/hadoop-shuffle/</url>
+    <content><![CDATA[<blockquote>
+<p>在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要</p>
+</blockquote>
+<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><img src="/2021/03/04/hadoop-shuffle/hadoop-shuffle.png" title="hadoop shuffle">
+<a id="more"></a>
+<h2 id="shuffle-流程"><a href="#shuffle-流程" class="headerlink" title="shuffle 流程"></a>shuffle 流程</h2><p>整个数据 shuffle 流程分为两个阶段</p>
+<ol>
+<li>map shuffle，即数据从 Map 端输出的过程</li>
+<li>reduce shuffle，即数据输入到 Reduce 端的过程</li>
+</ol>
+<h3 id="map-shuffle"><a href="#map-shuffle" class="headerlink" title="map shuffle"></a>map shuffle</h3><p>数据在 Map Task 端处理完毕后，会经过以下流程：</p>
+<ol>
+<li>Map 首先将数据写入内存中的环形缓冲区，缓冲区数据写满后，批量写出到磁盘上，这样 Map 处理结果会分散在很多小文件中，写出的文件前数据会在内存中进行排序并且分区 partition，不同的 partition 文件对应下游不同的 Reduce Task。如果此时设置了 Combiner，会将内存中的分区排序结果进行 combine 操作后写出。</li>
+<li>Map 端写出分区小文件完成后，会进行数据文件合并，为了提高传输效率，相同 partition 的文件数据会合并成一个大文件，合并后大文件中的数据也是有序的。</li>
+</ol>
+<h3 id="reduce-shuffle"><a href="#reduce-shuffle" class="headerlink" title="reduce shuffle"></a>reduce shuffle</h3><p>Map 端数据写出完成后，Reduce 端处理流程开始：</p>
+<ol>
+<li>Reduce 启动复制线程开始复制 Map 写出的合并文件，此时也会先写入内存中，内存满写出到磁盘，形成小文件。如果此时设置了 Combiner，也会在内存对数据进行 combine 之后写出</li>
+<li>Map 端的数据读取完毕后，Reduce 工作，开始工作之前，Reduce 端也会进行小文件合并，形成一个大文件</li>
+<li>文件合并完成后，作为 Reduce 的输入，进行处理</li>
+</ol>
 ]]></content>
   </entry>
   <entry>
@@ -313,6 +313,33 @@
 ]]></content>
   </entry>
   <entry>
+    <title>学习笔记(11):hdfs</title>
+    <url>/2021/03/11/hdfs/</url>
+    <content><![CDATA[<h3 id="HDFS-写流程"><a href="#HDFS-写流程" class="headerlink" title="HDFS 写流程"></a>HDFS 写流程</h3><img src="/2021/03/11/hdfs/hdfs-write.png" title="hdfs write">
+<a id="more"></a>
+<p>写步骤：</p>
+<ol>
+<li>HDFS client 调用 DistributedFileSystem 的 <code>create</code> 方法，创建 FSDataOutputStream 文件输出流对象</li>
+<li>通过 RPC 与 NameNode 进行通信，NameNode 在 HDFS Namespace 中创建一个文件条目，用于记录文件的 block 信息，初始为空；然后 NameNode 会返回文件每个数据块 block 需要拷贝的 DataNode 地址。这些步骤封装在 FSDataOutputStream 内部</li>
+<li>获取数据 block 需要拷贝的 DataNode 地址后，client 从 NameNode 返回的 DataNode 列表中，获取最近的第一个 DataNode 节点，将 DataNode 列表和数据发送至此节点中</li>
+<li>第一个 DataNode 节点接受到 packet 数据，先存储下来，然后向第二个 DataNode 发送；第二个 DataNode 操作以此类推</li>
+<li>每个 DataNode 节点完成数据拷贝后，向前一个节点发送 ACK 确认</li>
+<li>最后 client 收到写入完成的 ACK 通知，调用 FSDataOutputStream 的 <code>close</code> 方法，关闭文件流写入</li>
+<li>client 最后调用 DistributedFileSystem 对象的 <code>complete</code> 方法，通知 NameNode 文件写入成功，NameNode 会将相关结果记录到 editlog 中</li>
+</ol>
+<p>文件数据写完后，每一份 block 数据会在多个 DataNode 上存在多个副本，默认情况下为 3 个</p>
+<h3 id="HDFS-读流程"><a href="#HDFS-读流程" class="headerlink" title="HDFS 读流程"></a>HDFS 读流程</h3><img src="/2021/03/11/hdfs/hdfs-read.png" title="hdfs read">
+<p>读步骤</p>
+<ol>
+<li>HDFS client 调用 DistributedFileSystem 的 <code>open</code> 方法，创建 FSDataInputStream 文件输入流对象</li>
+<li>通过 RPC 与 NameNode 进行通信，从NameNode 获取文件每个数据块 block 以及数据块所在的 DataNode 地址</li>
+<li>client 与 DataNode 信息通信，读取 block 数据</li>
+<li>client 读完所有的 block 后，合并成一个大文件</li>
+<li>关闭文件流读取</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
     <title>学习笔记(1):红黑树插入</title>
     <url>/2017/04/03/insert-in-rbtree/</url>
     <content><![CDATA[<h3 id="关于红黑树"><a href="#关于红黑树" class="headerlink" title="关于红黑树"></a>关于红黑树</h3><p>红黑树是一颗自平衡的树，能在节点插入和删除时调整树的高度。</p>
@@ -437,120 +464,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>学习笔记(12):netlogo</title>
-    <url>/2023/04/21/netlogo/</url>
-    <content><![CDATA[<blockquote>
-<p>百科定义：Netlogo 是一个用来对自然和社会现象进行仿真的可编程建模环境。</p>
-</blockquote>
-<h2 id="软件使用"><a href="#软件使用" class="headerlink" title="软件使用"></a>软件使用</h2><h3 id="模型使用"><a href="#模型使用" class="headerlink" title="模型使用"></a>模型使用</h3><p>下载：<a href="https://ccl.northwestern.edu/netlogo/" target="_blank" rel="noopener">https://ccl.northwestern.edu/netlogo/</a></p>
-<h4 id="狼羊捕食模型"><a href="#狼羊捕食模型" class="headerlink" title="狼羊捕食模型"></a>狼羊捕食模型</h4><p>打开模型</p>
-<blockquote>
-<p>文件 -&gt; 模型库 -&gt; Sample Model -&gt; Biology -&gt; Wolf Sheep Predation</p>
-</blockquote>
-<p>运行模型</p>
-<ol>
-<li><p>点击 setup 初始化</p>
-</li>
-<li><p>点击 go 运行</p>
-</li>
-</ol>
-<p>观察模型和统计数据随时间变化</p>
-<img src="/2023/04/21/netlogo/wolf_sheep.png" title="捕食模型">
-<a id="more"></a>
-<h3 id="编程模型"><a href="#编程模型" class="headerlink" title="编程模型"></a>编程模型</h3><p>整个空间叫 world</p>
-<p>world 内的角色</p>
-<ul>
-<li>turtle: 模型上可以移动的元素 </li>
-<li>patch: 元素后面背景中的每个二维网格单位</li>
-<li>link: 元素之间的连接      </li>
-<li>observer: 监控所有事物</li>
-</ul>
-<p>refer to the NetLogo Programming Guide. ：<a href="https://ccl.northwestern.edu/netlogo/docs/programming.html" target="_blank" rel="noopener">https://ccl.northwestern.edu/netlogo/docs/programming.html</a></p>
-<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><p>命令作用</p>
-<ul>
-<li>控制 world 内的各个角色，修改属性、新建/销毁等等</li>
-<li>统计数据</li>
-</ul>
-<p>observer 全局修改属性</p>
-<ul>
-<li>修改 turtle 属性</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ask turtles [ set color red ] ;; 修改所有turtle</span><br><span class="line">ask turtle idx [ set color red ] ;; 修改某个turtle</span><br></pre></td></tr></table></figure>
-<ul>
-<li>修改 patch 属性</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ask patches [ set pcolor green ] ;; 修改所有patche</span><br><span class="line">ask patch x y [ set pcolor green ] ;; 修改某个坐标的patch</span><br></pre></td></tr></table></figure>
-<ul>
-<li>统计数据</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">count turtles ;; 对所有turtle计数</span><br></pre></td></tr></table></figure>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>代码本质上是一些列命令行的集合</p>
-<h4 id="变量定义"><a href="#变量定义" class="headerlink" title="变量定义"></a>变量定义</h4><ul>
-<li>定义全局变量，声明后要在代码中初始化</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">global [rate-limit]</span><br></pre></td></tr></table></figure>
-<ul>
-<li>定义 turtle 成员变量<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">turtles-own [energy]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">to 方法名</span><br><span class="line">	;; 命令内容</span><br><span class="line">	;; 方法之间可以相互调用</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-<ul>
-<li>turtle 操作</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">to move-turtles</span><br><span class="line">  ask turtles [</span><br><span class="line">    right random 360 ;; 设置转向角度</span><br><span class="line">    forward 1 ;; 向前移动 1 格</span><br><span class="line">    set energy energy - 1 ;; 修改成员变量 </span><br><span class="line">  ]</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-<ul>
-<li>逻辑时钟操作</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">reset-ticks ;; 重置时钟</span><br><span class="line">tick ;; 时钟 + 1</span><br></pre></td></tr></table></figure>
-<ul>
-<li>清理元素</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">clear-all</span><br></pre></td></tr></table></figure>
-<h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><ul>
-<li>按钮</li>
-</ul>
-<p>用于执行方法，点击即执行对应名称的方法代码</p>
-<ul>
-<li>监视器</li>
-</ul>
-<p>展示当前统计值</p>
-<ul>
-<li>图 plot</li>
-</ul>
-<p>用于统计数值随时间变化曲线</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plot count turtles ;; 展示计数</span><br><span class="line">plot count patches[with pcolor = green]</span><br><span class="line">plot [speed] of turtle 0 ;; 展示成员变量</span><br><span class="line">plot [speed] of sample-car ;; 展示成员变量</span><br><span class="line">plot min[speed] of turtle 0 ;; 展示成员变量</span><br></pre></td></tr></table></figure>
-<ul>
-<li>选择器/滑块…</li>
-</ul>
-<p>组件直接定义全局变量，值为组件内选取的值</p>
-<h2 id="软件架构"><a href="#软件架构" class="headerlink" title="软件架构"></a>软件架构</h2><blockquote>
-<p>Netlogo 主要由 Scala 语言编写，少量 Java<br>基于 Swing 框架编写 GUI 界面的客户端架构</p>
-</blockquote>
-<p>主要由 GUI 和后台事件处理两部分组成</p>
-<h3 id="GUI-界面"><a href="#GUI-界面" class="headerlink" title="GUI 界面"></a>GUI 界面</h3><p>基于 Swing 框架实现</p>
-<p>主要入口：org.nlogo.app.App</p>
-<img src="/2023/04/21/netlogo/GUI.png" title="主要GUI部分">
-<p>GUI 页面主要收集用户行为</p>
-<ul>
-<li>前台 Widget 组件的添加、编辑、修改</li>
-<li>后台 Event 操作事件发送如点击运行命令</li>
-</ul>
-<h3 id="事件处理"><a href="#事件处理" class="headerlink" title="事件处理"></a>事件处理</h3><p>总体事件处理流程</p>
-<img src="/2023/04/21/netlogo/event.png" title="事件处理流程">
-<p>以点击 Button 按钮运行方法为例</p>
-<p>时序调用</p>
-<img src="/2023/04/21/netlogo/buttonClick.png" title="button点击">
-<p>调用完成后一个新 Job 会进入 JobTread 线程的处理队列</p>
-<p>JobTread 工作线程会不断从队列中取出 job，并执行 job</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// org.nlogo.job.JobThread</span><br><span class="line">...</span><br><span class="line">override def run() &#123;</span><br><span class="line">  handling(classOf[RuntimeException]) &#123;</span><br><span class="line">    while (!dying) &#123;</span><br><span class="line">      compact(primaryJobs)</span><br><span class="line">      runPrimaryJobs()</span><br><span class="line">      maybeRunSecondaryJobs()</span><br><span class="line">      // Note that we must synchronize on newJobsCondition before calling isEmpty, since</span><br><span class="line">      // otherwise a job could get added after the empty check but before we sleep - ST 8/11/03</span><br><span class="line">      newJobsCondition.synchronized &#123;</span><br><span class="line">        if (primaryJobs.isEmpty)</span><br><span class="line">          ignoring(classOf[InterruptedException]) &#123;</span><br><span class="line">            // only sleep for a short time, since there may still</span><br><span class="line">            // be secondary jobs that need attention - ST 8/10/03</span><br><span class="line">            newJobsCondition.wait(PeriodicUpdateDelay.DelayInMilliseconds)</span><br><span class="line">          &#125; &#125; &#125; &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<p>执行过程即取出 commond，对相关的 Agent 对象进行操作</p>
-<img src="/2023/04/21/netlogo/run.png" title="线程处理">
-]]></content>
-      <tags>
-        <tag>netlogo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Java 知识点</title>
     <url>/2017/04/10/java-tips/</url>
     <content><![CDATA[<h3 id="Thread和Runnable区别"><a href="#Thread和Runnable区别" class="headerlink" title="Thread和Runnable区别"></a>Thread和Runnable区别</h3><p>Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。<br>一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。</p>
@@ -614,60 +527,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>学习笔记(11):hdfs</title>
-    <url>/2021/03/11/hdfs/</url>
-    <content><![CDATA[<h3 id="HDFS-写流程"><a href="#HDFS-写流程" class="headerlink" title="HDFS 写流程"></a>HDFS 写流程</h3><img src="/2021/03/11/hdfs/hdfs-write.png" title="hdfs write">
-<a id="more"></a>
-<p>写步骤：</p>
-<ol>
-<li>HDFS client 调用 DistributedFileSystem 的 <code>create</code> 方法，创建 FSDataOutputStream 文件输出流对象</li>
-<li>通过 RPC 与 NameNode 进行通信，NameNode 在 HDFS Namespace 中创建一个文件条目，用于记录文件的 block 信息，初始为空；然后 NameNode 会返回文件每个数据块 block 需要拷贝的 DataNode 地址。这些步骤封装在 FSDataOutputStream 内部</li>
-<li>获取数据 block 需要拷贝的 DataNode 地址后，client 从 NameNode 返回的 DataNode 列表中，获取最近的第一个 DataNode 节点，将 DataNode 列表和数据发送至此节点中</li>
-<li>第一个 DataNode 节点接受到 packet 数据，先存储下来，然后向第二个 DataNode 发送；第二个 DataNode 操作以此类推</li>
-<li>每个 DataNode 节点完成数据拷贝后，向前一个节点发送 ACK 确认</li>
-<li>最后 client 收到写入完成的 ACK 通知，调用 FSDataOutputStream 的 <code>close</code> 方法，关闭文件流写入</li>
-<li>client 最后调用 DistributedFileSystem 对象的 <code>complete</code> 方法，通知 NameNode 文件写入成功，NameNode 会将相关结果记录到 editlog 中</li>
-</ol>
-<p>文件数据写完后，每一份 block 数据会在多个 DataNode 上存在多个副本，默认情况下为 3 个</p>
-<h3 id="HDFS-读流程"><a href="#HDFS-读流程" class="headerlink" title="HDFS 读流程"></a>HDFS 读流程</h3><img src="/2021/03/11/hdfs/hdfs-read.png" title="hdfs read">
-<p>读步骤</p>
-<ol>
-<li>HDFS client 调用 DistributedFileSystem 的 <code>open</code> 方法，创建 FSDataInputStream 文件输入流对象</li>
-<li>通过 RPC 与 NameNode 进行通信，从NameNode 获取文件每个数据块 block 以及数据块所在的 DataNode 地址</li>
-<li>client 与 DataNode 信息通信，读取 block 数据</li>
-<li>client 读完所有的 block 后，合并成一个大文件</li>
-<li>关闭文件流读取</li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
-    <title>学习笔记(4):kafka</title>
-    <url>/2017/05/08/kafka/</url>
-    <content><![CDATA[<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>Kafka是一种分布式的消息订阅发布系统。</p>
-<h3 id="Kafka结构"><a href="#Kafka结构" class="headerlink" title="Kafka结构"></a>Kafka结构</h3><p>消息传递模型常见有</p>
-<ul>
-<li>基于缓存的生产者/消费者模型</li>
-<li>基于观察者的发布/订阅模型</li>
-</ul>
-<p>Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：</p>
-<a id="more"></a>
-<img src="/2017/05/08/kafka/kafka.png" title="Kafka中消息模型">
-<p>Kafka中Consumer和Producer之间通过特定topic进行消息传递。</p>
-<h3 id="Kafka文件系统"><a href="#Kafka文件系统" class="headerlink" title="Kafka文件系统"></a>Kafka文件系统</h3><p>在Kafka中每个topic分配了单独的文件夹，topic下的每个partition也有其单独的文件夹，partition文件夹下即存放了对应的消息文件，随着Kafka中消息的增加，Kafka会将消息分段存储，每段称为segment。</p>
-<p>每个segment由.index文件和.log文件组成。</p>
-<p>segment文件命名：文件名为19位数字，初始文件为全零，后续文件为上一个文件中最后一条消息的offset，并用零高位补齐19位。这样此文件的起始offset便为文件名fileName + 1。</p>
-<p>.index文件为索引文件，其中存放了消息序号所对应的消息，其在.log数据文件中的偏移位置。</p>
-<p>segment文件虽然是持久化的，可以读取其中的历史消息，但其不是永久存在的，有其生命周期，具体生命周期由Kafka服务器的参数配置决定。</p>
-]]></content>
-      <categories>
-        <category>framwork</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>Kafka</tag>
       </tags>
   </entry>
   <entry>
@@ -786,6 +645,55 @@
       </tags>
   </entry>
   <entry>
+    <title>学习笔记(4):kafka</title>
+    <url>/2017/05/08/kafka/</url>
+    <content><![CDATA[<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>Kafka是一种分布式的消息订阅发布系统。</p>
+<h3 id="Kafka结构"><a href="#Kafka结构" class="headerlink" title="Kafka结构"></a>Kafka结构</h3><p>消息传递模型常见有</p>
+<ul>
+<li>基于缓存的生产者/消费者模型</li>
+<li>基于观察者的发布/订阅模型</li>
+</ul>
+<p>Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：</p>
+<a id="more"></a>
+<img src="/2017/05/08/kafka/kafka.png" title="Kafka中消息模型">
+<p>Kafka中Consumer和Producer之间通过特定topic进行消息传递。</p>
+<h3 id="Kafka文件系统"><a href="#Kafka文件系统" class="headerlink" title="Kafka文件系统"></a>Kafka文件系统</h3><p>在Kafka中每个topic分配了单独的文件夹，topic下的每个partition也有其单独的文件夹，partition文件夹下即存放了对应的消息文件，随着Kafka中消息的增加，Kafka会将消息分段存储，每段称为segment。</p>
+<p>每个segment由.index文件和.log文件组成。</p>
+<p>segment文件命名：文件名为19位数字，初始文件为全零，后续文件为上一个文件中最后一条消息的offset，并用零高位补齐19位。这样此文件的起始offset便为文件名fileName + 1。</p>
+<p>.index文件为索引文件，其中存放了消息序号所对应的消息，其在.log数据文件中的偏移位置。</p>
+<p>segment文件虽然是持久化的，可以读取其中的历史消息，但其不是永久存在的，有其生命周期，具体生命周期由Kafka服务器的参数配置决定。</p>
+]]></content>
+      <categories>
+        <category>framwork</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Kafka</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习笔记(5):PHP</title>
+    <url>/2017/07/10/php-note/</url>
+    <content><![CDATA[<p>时间函数：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;); // &apos;Y-m-d H:m:s&apos;</span><br><span class="line">$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期</span><br><span class="line">$w = date(&apos;w&apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6</span><br><span class="line">$now_start = date(&apos;Ymd&apos;, strtotime(&quot;$date -&quot; . ($w ? $w - $first : 6) . &apos; days&apos;)); // 这周周一</span><br><span class="line">$last_start = date(&apos;Ymd&apos;, strtotime(&quot;$now_start - 7 days&quot;)); // 上周周一</span><br><span class="line">return $last_start;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>时间格式转换：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;);      // Ymd格式</span><br><span class="line">$time = strtotime($date); // 转换为时间戳</span><br><span class="line">$date = date(&apos;Ymd H:m:s&apos;); // Ymd H:m:s格式</span><br></pre></td></tr></table></figure>
+<p>curl发送Get</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ch = curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $url);   //设置url</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);   // 不输出头部</span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 返回结果作为string</span><br><span class="line">$response = curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
+<p>Json解析</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$result = json_decode(&quot;&quot; . $response, true);  // true解析为数组</span><br><span class="line">$data = $result[&quot;data&quot;];</span><br></pre></td></tr></table></figure>
+<p>文件写入</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$fileName = &quot;puvLog.txt&quot;;</span><br><span class="line">$time = date(&quot;Y-m-d H:i:s&quot;, time());</span><br><span class="line">$log = $time . &quot;  &quot; . $log . &quot;\n&quot;;</span><br><span class="line">file_put_contents($fileName, $log, FILE_APPEND); // 尾部追加</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>tips</category>
+      </categories>
+      <tags>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>常用工具</title>
     <url>/2020/09/04/tools/</url>
     <content><![CDATA[<h2 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h2><h3 id="tail"><a href="#tail" class="headerlink" title="tail"></a>tail</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tail -300f shopbase.log #倒数300行并进入实时监听文件写入模式</span><br></pre></td></tr></table></figure>
@@ -823,25 +731,117 @@
 ]]></content>
   </entry>
   <entry>
-    <title>学习笔记(5):PHP</title>
-    <url>/2017/07/10/php-note/</url>
-    <content><![CDATA[<p>时间函数：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;); // &apos;Y-m-d H:m:s&apos;</span><br><span class="line">$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期</span><br><span class="line">$w = date(&apos;w&apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6</span><br><span class="line">$now_start = date(&apos;Ymd&apos;, strtotime(&quot;$date -&quot; . ($w ? $w - $first : 6) . &apos; days&apos;)); // 这周周一</span><br><span class="line">$last_start = date(&apos;Ymd&apos;, strtotime(&quot;$now_start - 7 days&quot;)); // 上周周一</span><br><span class="line">return $last_start;</span><br></pre></td></tr></table></figure>
+    <title>学习笔记(12):netlogo</title>
+    <url>/2023/04/21/netlogo/</url>
+    <content><![CDATA[<blockquote>
+<p>百科定义：Netlogo 是一个用来对自然和社会现象进行仿真的可编程建模环境。</p>
+</blockquote>
+<h2 id="软件使用"><a href="#软件使用" class="headerlink" title="软件使用"></a>软件使用</h2><h3 id="模型使用"><a href="#模型使用" class="headerlink" title="模型使用"></a>模型使用</h3><p>下载：<a href="https://ccl.northwestern.edu/netlogo/" target="_blank" rel="noopener">https://ccl.northwestern.edu/netlogo/</a></p>
+<h4 id="狼羊捕食模型"><a href="#狼羊捕食模型" class="headerlink" title="狼羊捕食模型"></a>狼羊捕食模型</h4><p>打开模型</p>
+<blockquote>
+<p>文件 -&gt; 模型库 -&gt; Sample Model -&gt; Biology -&gt; Wolf Sheep Predation</p>
+</blockquote>
+<p>运行模型</p>
+<ol>
+<li><p>点击 setup 初始化</p>
+</li>
+<li><p>点击 go 运行</p>
+</li>
+</ol>
+<p>观察模型和统计数据随时间变化</p>
+<img src="/2023/04/21/netlogo/wolf_sheep.png" title="捕食模型">
 <a id="more"></a>
-<p>时间格式转换：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;);      // Ymd格式</span><br><span class="line">$time = strtotime($date); // 转换为时间戳</span><br><span class="line">$date = date(&apos;Ymd H:m:s&apos;); // Ymd H:m:s格式</span><br></pre></td></tr></table></figure>
-<p>curl发送Get</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ch = curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $url);   //设置url</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);   // 不输出头部</span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 返回结果作为string</span><br><span class="line">$response = curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
-<p>Json解析</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$result = json_decode(&quot;&quot; . $response, true);  // true解析为数组</span><br><span class="line">$data = $result[&quot;data&quot;];</span><br></pre></td></tr></table></figure>
-<p>文件写入</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$fileName = &quot;puvLog.txt&quot;;</span><br><span class="line">$time = date(&quot;Y-m-d H:i:s&quot;, time());</span><br><span class="line">$log = $time . &quot;  &quot; . $log . &quot;\n&quot;;</span><br><span class="line">file_put_contents($fileName, $log, FILE_APPEND); // 尾部追加</span><br></pre></td></tr></table></figure>
+<h3 id="编程模型"><a href="#编程模型" class="headerlink" title="编程模型"></a>编程模型</h3><p>整个空间叫 world</p>
+<p>world 内的角色</p>
+<ul>
+<li>turtle: 模型上可以移动的元素 </li>
+<li>patch: 元素后面背景中的每个二维网格单位</li>
+<li>link: 元素之间的连接      </li>
+<li>observer: 监控所有事物</li>
+</ul>
+<p>refer to the NetLogo Programming Guide. ：<a href="https://ccl.northwestern.edu/netlogo/docs/programming.html" target="_blank" rel="noopener">https://ccl.northwestern.edu/netlogo/docs/programming.html</a></p>
+<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><p>命令作用</p>
+<ul>
+<li>控制 world 内的各个角色，修改属性、新建/销毁等等</li>
+<li>统计数据</li>
+</ul>
+<p>observer 全局修改属性</p>
+<ul>
+<li>修改 turtle 属性</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ask turtles [ set color red ] ;; 修改所有turtle</span><br><span class="line">ask turtle idx [ set color red ] ;; 修改某个turtle</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改 patch 属性</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ask patches [ set pcolor green ] ;; 修改所有patche</span><br><span class="line">ask patch x y [ set pcolor green ] ;; 修改某个坐标的patch</span><br></pre></td></tr></table></figure>
+<ul>
+<li>统计数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">count turtles ;; 对所有turtle计数</span><br></pre></td></tr></table></figure>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>代码本质上是一系列命令行的集合</p>
+<h4 id="变量定义"><a href="#变量定义" class="headerlink" title="变量定义"></a>变量定义</h4><ul>
+<li>定义全局变量，声明后要在代码中初始化</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">global [rate-limit]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>定义 turtle 成员变量<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">turtles-own [energy]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">to 方法名</span><br><span class="line">	;; 命令内容</span><br><span class="line">	;; 方法之间可以相互调用</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<ul>
+<li>turtle 操作</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">to move-turtles</span><br><span class="line">  ask turtles [</span><br><span class="line">    right random 360 ;; 设置转向角度</span><br><span class="line">    forward 1 ;; 向前移动 1 格</span><br><span class="line">    set energy energy - 1 ;; 修改成员变量 </span><br><span class="line">  ]</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<ul>
+<li>逻辑时钟操作</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">reset-ticks ;; 重置时钟</span><br><span class="line">tick ;; 时钟 + 1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>清理元素</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">clear-all</span><br></pre></td></tr></table></figure>
+<h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><ul>
+<li>按钮</li>
+</ul>
+<p>用于执行方法，点击即执行对应名称的方法代码</p>
+<ul>
+<li>监视器</li>
+</ul>
+<p>展示当前统计值</p>
+<ul>
+<li>图 plot</li>
+</ul>
+<p>用于统计数值随时间变化曲线</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plot count turtles ;; 展示计数</span><br><span class="line">plot count patches[with pcolor = green]</span><br><span class="line">plot [speed] of turtle 0 ;; 展示成员变量</span><br><span class="line">plot [speed] of sample-car ;; 展示成员变量</span><br><span class="line">plot min[speed] of turtle 0 ;; 展示成员变量</span><br></pre></td></tr></table></figure>
+<ul>
+<li>选择器/滑块…</li>
+</ul>
+<p>组件直接定义全局变量，值为组件内选取的值</p>
+<h2 id="软件架构"><a href="#软件架构" class="headerlink" title="软件架构"></a>软件架构</h2><blockquote>
+<p>Netlogo 主要由 Scala 语言编写，少量 Java<br>基于 Swing 框架编写 GUI 界面的客户端架构</p>
+</blockquote>
+<p>主要由 GUI 和后台事件处理两部分组成</p>
+<h3 id="GUI-界面"><a href="#GUI-界面" class="headerlink" title="GUI 界面"></a>GUI 界面</h3><p>基于 Swing 框架实现</p>
+<p>主要入口：org.nlogo.app.App</p>
+<img src="/2023/04/21/netlogo/GUI.png" title="主要GUI部分">
+<p>GUI 页面主要收集用户行为</p>
+<ul>
+<li>前台 Widget 组件的添加、编辑、修改</li>
+<li>后台 Event 操作事件发送如点击运行命令</li>
+</ul>
+<h3 id="事件处理"><a href="#事件处理" class="headerlink" title="事件处理"></a>事件处理</h3><p>总体事件处理流程</p>
+<img src="/2023/04/21/netlogo/event.png" title="事件处理流程">
+<p>以点击 Button 按钮运行方法为例</p>
+<p>时序调用</p>
+<img src="/2023/04/21/netlogo/buttonClick.png" title="button点击">
+<p>调用完成后一个新 Job 会进入 JobTread 线程的处理队列</p>
+<p>JobTread 工作线程会不断从队列中取出 job，并执行 job</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// org.nlogo.job.JobThread</span><br><span class="line">...</span><br><span class="line">override def run() &#123;</span><br><span class="line">  handling(classOf[RuntimeException]) &#123;</span><br><span class="line">    while (!dying) &#123;</span><br><span class="line">      compact(primaryJobs)</span><br><span class="line">      runPrimaryJobs()</span><br><span class="line">      maybeRunSecondaryJobs()</span><br><span class="line">      // Note that we must synchronize on newJobsCondition before calling isEmpty, since</span><br><span class="line">      // otherwise a job could get added after the empty check but before we sleep - ST 8/11/03</span><br><span class="line">      newJobsCondition.synchronized &#123;</span><br><span class="line">        if (primaryJobs.isEmpty)</span><br><span class="line">          ignoring(classOf[InterruptedException]) &#123;</span><br><span class="line">            // only sleep for a short time, since there may still</span><br><span class="line">            // be secondary jobs that need attention - ST 8/10/03</span><br><span class="line">            newJobsCondition.wait(PeriodicUpdateDelay.DelayInMilliseconds)</span><br><span class="line">          &#125; &#125; &#125; &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>执行过程即取出 commond，对相关的 Agent 对象进行操作</p>
+<img src="/2023/04/21/netlogo/run.png" title="线程处理">
 ]]></content>
-      <categories>
-        <category>tips</category>
-      </categories>
       <tags>
-        <tag>PHP</tag>
+        <tag>netlogo</tag>
       </tags>
   </entry>
   <entry>
