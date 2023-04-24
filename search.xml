@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Tomcat8 源码导入 IDEA</title>
+    <url>/2017/03/28/Tomcat8/</url>
+    <content><![CDATA[<p>学习Tomcat源码，最好是将其导入IDE，并可以运行调试。Apache的方法是使用ant工具，还要添加各种Jar包依赖，比较繁琐。通过搜索，发现一种通过Maven导入IDE方法，期间也遇到了坑。</p>
+<h3 id="下载Tomcat源码"><a href="#下载Tomcat源码" class="headerlink" title="下载Tomcat源码"></a>下载Tomcat源码</h3><p>由于之前使用的是Tomcat8.5.11版本，通过官方的 <a href="http://svn.apache.org/repos/asf/tomcat/tc8.5.x/tags/TOMCAT_8_5_11/" target="_blank" rel="noopener">svn地址</a>下载Tomcat源码。</p>
+<h3 id="构建Maven工程"><a href="#构建Maven工程" class="headerlink" title="构建Maven工程"></a>构建Maven工程</h3><p>在下载的源码根目录新建pom.xml文件，输入以下内容：<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;</span><br><span class="line">    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;Tomcat8.0&lt;/artifactId&gt;</span><br><span class="line">    &lt;name&gt;Tomcat8.0&lt;/name&gt;</span><br><span class="line">    &lt;version&gt;8.0&lt;/version&gt;</span><br><span class="line"></span><br><span class="line">    &lt;build&gt;</span><br><span class="line">        &lt;finalName&gt;Tomcat8.0&lt;/finalName&gt;</span><br><span class="line">        &lt;sourceDirectory&gt;java&lt;/sourceDirectory&gt;</span><br><span class="line">        &lt;resources&gt;</span><br><span class="line">            &lt;resource&gt;</span><br><span class="line">                &lt;directory&gt;java&lt;/directory&gt;</span><br><span class="line">            &lt;/resource&gt;</span><br><span class="line">        &lt;/resources&gt;</span><br><span class="line">        &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;2.3&lt;/version&gt;</span><br><span class="line">                &lt;configuration&gt;</span><br><span class="line">                    &lt;encoding&gt;UTF-8&lt;/encoding&gt;</span><br><span class="line">                    &lt;source&gt;1.8&lt;/source&gt;</span><br><span class="line">                    &lt;target&gt;1.8&lt;/target&gt;</span><br><span class="line">                &lt;/configuration&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">    &lt;/build&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;4.12&lt;/version&gt;</span><br><span class="line">            &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.easymock&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;easymock&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;3.4&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;ant&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;ant&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.7.0&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;wsdl4j&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;wsdl4j&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.6.2&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;javax.xml&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;jaxrpc&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;1.1&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.eclipse.jdt.core.compiler&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;ecj&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;4.5.1&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
+<p>然后在IDEA通过pom.xml导入工程，为了方便，可删除根目录下的test文件夹。</p>
+<h3 id="运行源代码"><a href="#运行源代码" class="headerlink" title="运行源代码"></a>运行源代码</h3><p>Tomcat的运行main方法位于org.apache.catalina.startup包下的BootStrap.java文件中，打开Run菜单下的Edit Configuration选项，新建Application项，Main class设置为org.apache.catalina.startup.Bootstrap，VM options中设置启动参数-Dcatalina.home=”xxx”，可为根目录也可自选，此处先设置为源码根目录。<br>设置完毕后就可以run启动了。<br>之前查阅的一篇文章到这里就结束了，导致了一个坑的出现。<br>代码可以run启动，但是会有异常出现，找不到一些目录文件夹。<br>当打开<a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a>的时候会出现以下异常：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">exception</span><br><span class="line"></span><br><span class="line">org.apache.jasper.JasperException: Unable to compile class for JSP</span><br><span class="line">	org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:601)</span><br><span class="line">	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:363)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:396)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:340)</span><br><span class="line">	javax.servlet.http.HttpServlet.service(HttpServlet.java:729)</span><br><span class="line">root cause</span><br><span class="line"></span><br><span class="line">java.lang.NullPointerException</span><br><span class="line">	org.apache.jasper.compiler.Validator$ValidateVisitor.&lt;init&gt;(Validator.java:516)</span><br><span class="line">	org.apache.jasper.compiler.Validator.validateExDirectives(Validator.java:1853)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:217)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:356)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:336)</span><br><span class="line">	org.apache.jasper.compiler.Compiler.compile(Compiler.java:323)</span><br><span class="line">	org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:585)</span><br><span class="line">	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:363)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:396)</span><br><span class="line">	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:340)</span><br><span class="line">	javax.servlet.http.HttpServlet.service(HttpServlet.java:729)</span><br></pre></td></tr></table></figure>
+<p>此时浏览器返回500的错误。</p>
+<p>搜索错误查阅了好久，并没有这些异常的说明，后来才发现这是由于缺少了lib文件夹下的某些包的缘故，而源码中是不带lib的。<br>原来源代码中并不包含这些依赖包，还是要到官网下载对应Tomcat版本的软件包，解压之后将以下文件夹复制到之前设置的Dcatalina.home目录中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bin</span><br><span class="line">conf</span><br><span class="line">lib</span><br><span class="line">logs</span><br><span class="line">temp</span><br><span class="line">webapps</span><br><span class="line">work</span><br></pre></td></tr></table></figure>
+<p>然后run就可以正常启动，打断点调试了。</p>
+<p>如果闲麻烦，配置好的项目托管在<a href="https://github.com/quekx/tomcat8" target="_blank" rel="noopener">Github仓库中</a>，可自行下载导入IDEA。</p>
+<p>参考：<a href="https://yq.aliyun.com/articles/61765" target="_blank" rel="noopener">https://yq.aliyun.com/articles/61765</a></p>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习笔记(2):红黑树删除</title>
+    <url>/2017/04/04/delete-in-rbtree/</url>
+    <content><![CDATA[<h1 id="普通二叉搜索树删除"><a href="#普通二叉搜索树删除" class="headerlink" title="普通二叉搜索树删除"></a>普通二叉搜索树删除</h1><p>普通二叉树删除节点z有三种情况：</p>
+<ul>
+<li>z的左子节点为空，即用z的右子节点（包括空的情况）取代z</li>
+<li>z的右子节点为空，即用z的左子节点取代z</li>
+<li>z的左子节点和右子节点均不为空，可在其左子树找最大节点或者在其右子树找最小节点y，将y的值赋予z，然后将y删除</li>
+</ul>
+<h1 id="红黑树删除"><a href="#红黑树删除" class="headerlink" title="红黑树删除"></a>红黑树删除</h1><p>红黑树删除节点的操作与普通二叉搜索树的删除节点一致，不同之处在于删除时可能会破坏红黑树的性质，需要后续的调整来恢复其红黑性质。</p>
+<a id="more"></a>
+<h2 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h2><p>红黑树将节点删除后，首先是正常的二叉树删除操作，操作如下</p>
+<blockquote>
+<ul>
+<li>第一种情况，删除节点无左子树，用右子树上移替代当前节点</li>
+<li>第二种情况，删除节点无右子树，用左子树上移替代当前节点</li>
+<li>第三种情况，删除节点存在左右子树，找到当前节点的替代节点（左子树的最大节点或者右子树的最小节点），用替代节点值赋予删除节点（该节点不作物理删除），然后删除替代节点（物理删除）。ps：为什么这么操作？因为这种方式找到的替代节点，左右子树必有一个为空。物理删除时，直接用子树移植替换就可以了</li>
+</ul>
+</blockquote>
+<img src="/2017/04/04/delete-in-rbtree/deleteNormal.png" title="二叉树删除">
+<p>删除最终的结果是对由于物理删除，移植替换的节点x所在的子树产生影响。</p>
+<h2 id="性质调整"><a href="#性质调整" class="headerlink" title="性质调整"></a>性质调整</h2><p>可以思考下红黑树的哪些性质可能被破坏？</p>
+<blockquote>
+<ul>
+<li>如果删除的节点是一个红色节点，显然红黑树的性质依然成立，无需调整。</li>
+<li>如果删除的节点是一个黑色节点，那么移植节点x所在的子树黑高将缺少1，红黑树的性质五被破坏。</li>
+</ul>
+</blockquote>
+<p><strong>性质五被破坏，x子树高比兄弟子树高缺1，如下图</strong> </p>
+<img src="/2017/04/04/delete-in-rbtree/sample.jpg" title="黑高性质被破坏">
+<p><strong>调整的方法是从移植节点x开始，通过循环向上调整（联合父节点和兄弟子树进行旋转、修改颜色），使左右子树高相等，左右子树高相等后有三种情况</strong></p>
+<ul>
+<li>情况1：父子树整体黑高不变，此时调整完成</li>
+<li>情况2：父子树整体黑高-1，但是已经是根节点，调整完成（整颗树黑高-1）</li>
+<li>情况3：父子树整体黑高-1，还没到根节点，将x设置为父子树跟节点，继续向上调整，直到情况1或者情况2结束</li>
+</ul>
+<p>下面开始分情况讨论，以当前调整节点为父节点的作子节点为例（右子节点为对称情况）</p>
+<p>图例中调整节点为X，其父节点为XP，其右边兄弟节点为XR；蓝色表示即可以是红节点也可以是黑节点</p>
+<h3 id="情况1"><a href="#情况1" class="headerlink" title="情况1"></a>情况1</h3><p>调整节点为红</p>
+<img src="/2017/04/04/delete-in-rbtree/s1.jpg" title="情况一">
+<ul>
+<li>将x置黑，调整完成！</li>
+</ul>
+<h3 id="情况2"><a href="#情况2" class="headerlink" title="情况2"></a>情况2</h3><p>调整节点X为黑，父节点XP为红，兄弟节点XR为黑，兄弟节点的左子节点A为黑，右子节点B无所谓</p>
+<img src="/2017/04/04/delete-in-rbtree/s2.1.jpg" title="情况二">
+<ul>
+<li>将XP左旋，调整完成！</li>
+</ul>
+<h3 id="情况3"><a href="#情况3" class="headerlink" title="情况3"></a>情况3</h3><p>调整节点X为黑，父节点XP为红，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为红</p>
+<img src="/2017/04/04/delete-in-rbtree/s3.1.jpg" title="情况三">
+<ul>
+<li>将XP左旋</li>
+<li>将XP置黑</li>
+<li>将XR置红</li>
+<li>将B置黑，调整完成！</li>
+</ul>
+<h3 id="情况4"><a href="#情况4" class="headerlink" title="情况4"></a>情况4</h3><p>调整节点X为黑，父节点XP为红，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为黑</p>
+<img src="/2017/04/04/delete-in-rbtree/s4.jpg" title="情况四">
+<ul>
+<li>将XR右旋</li>
+<li>将A置黑</li>
+<li>将XR置红，此时切换至情况2，继续循环调整</li>
+</ul>
+<h3 id="情况5"><a href="#情况5" class="headerlink" title="情况5"></a>情况5</h3><p>调整节点X为黑，父节点XP为黑，兄弟节点XR为黑，兄弟节点的左子节点A为黑，右子节点B无所谓</p>
+<img src="/2017/04/04/delete-in-rbtree/s5.jpg" title="情况五">
+<ul>
+<li>将XP左旋</li>
+<li>将XP置红，此时左右子树高相等，整体树高-1，将子树根节点置为X，继续循环调整</li>
+</ul>
+<h3 id="情况6"><a href="#情况6" class="headerlink" title="情况6"></a>情况6</h3><p>调整节点X为黑，父节点XP为黑，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为红</p>
+<img src="/2017/04/04/delete-in-rbtree/s6.jpg" title="情况六">
+<ul>
+<li>将XP左旋</li>
+<li>将B置黑，调整完成！</li>
+</ul>
+<h3 id="情况7"><a href="#情况7" class="headerlink" title="情况7"></a>情况7</h3><p>调整节点X为黑，父节点XP为黑，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为黑</p>
+<img src="/2017/04/04/delete-in-rbtree/s7.jpg" title="情况七">
+<ul>
+<li>将XR右旋</li>
+<li>将XR置红</li>
+<li>将A置黑，此时切换至情况5，继续循环调整</li>
+</ul>
+<h3 id="情况8"><a href="#情况8" class="headerlink" title="情况8"></a>情况8</h3><p>调整节点X为黑，父节点XP为黑，兄弟节点XR为红</p>
+<img src="/2017/04/04/delete-in-rbtree/s8.jpg" title="情况八">
+<h3 id="所有调整情况"><a href="#所有调整情况" class="headerlink" title="所有调整情况"></a>所有调整情况</h3><img src="/2017/04/04/delete-in-rbtree/rbt2.0.1.png" title="所有调整情况">
+<p>整体可以看到，有几组case的调整操作是类似一致的</p>
+<ul>
+<li>情况2和情况5，兄弟节点XR为黑，兄弟节点的左子节A点为黑</li>
+<li>情况3和情况6，兄弟节点XR为黑，兄弟节点的左右子节点AB都为红</li>
+<li>情况4和情况7，兄弟节点XR为黑，兄弟节点的左子节点A为红，右子节点B为黑</li>
+</ul>
+<p><strong><em>父节点XP的颜色不影响操作，只影响调整后结果是否满足条件，是否需要继续调整</em></strong></p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>删除调整的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private void deleteFixUp2(RBTreeNode x, RBTreeNode xp) &#123;</span><br><span class="line">    if (root == null || xp == null) return;</span><br><span class="line"></span><br><span class="line">    // 退出调整循环条件：当前x为红或者x调整至根节点</span><br><span class="line">    // 情况1：不进入循环</span><br><span class="line">    while ((x == null || x.color == RBTreeNode.Color.BLACK) &amp;&amp; x != root) &#123;</span><br><span class="line">        // x为作子节点</span><br><span class="line">        if (x == xp.left) &#123;</span><br><span class="line">            RBTreeNode xr = xp.right;</span><br><span class="line">            RBTreeNode a = xr.left;</span><br><span class="line">            RBTreeNode b = xr.right;</span><br><span class="line">            if (xr.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                // 兄弟节点为黑</span><br><span class="line">                // 情况2、情况3、情况4、情况5、情况6、情况7</span><br><span class="line">                if (a == null || a.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    // 情况2、情况5</span><br><span class="line">                    // xp左旋</span><br><span class="line">                    // 将x指向xr</span><br><span class="line">                    // 将xr(x)颜色设置为xp颜色</span><br><span class="line">                    // 情况2：xp为红，调整完成，x置为红退出循环</span><br><span class="line">                    // 情况5：xp为黑，需要继续下一轮调整</span><br><span class="line">                    rotateLeft(xp);</span><br><span class="line">                    x = xr;</span><br><span class="line">                    xr.color = xp.color;</span><br><span class="line">                &#125; else if (b != null &amp;&amp; b.color == RBTreeNode.Color.RED) &#123;</span><br><span class="line">                    // 情况3，情况6</span><br><span class="line">                    // xp左旋</span><br><span class="line">                    // 将xr颜色置为xp颜色（对应情况3、情况6）</span><br><span class="line">                    // xp颜色置黑</span><br><span class="line">                    // 两种情况均调整完成，x置红，退出循环</span><br><span class="line">                    rotateLeft(xp);</span><br><span class="line">                    xr.color = xp.color;</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    x.color = RBTreeNode.Color.RED;</span><br><span class="line">                &#125; else if (b == null || b.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    // 情况4，情况7</span><br><span class="line">                    // xr右旋</span><br><span class="line">                    // a红置黑</span><br><span class="line">                    // xr黑置红</span><br><span class="line">                    // 调整至情况2、情况5，继续下一轮调整</span><br><span class="line">                    rotateRight(xr);</span><br><span class="line">                    a.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xr.color = RBTreeNode.Color.RED;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 兄弟节点为红，父节点必为黑</span><br><span class="line">                // 情况8</span><br><span class="line">                // 左旋xp</span><br><span class="line">                // xp置红</span><br><span class="line">                // xr置黑</span><br><span class="line">                // 此时x的父节点xp变为红色，切换至情况2或情况3或情况4，继续下一轮调整</span><br><span class="line">                rotateLeft(xp);</span><br><span class="line">                xp.color = RBTreeNode.Color.RED;</span><br><span class="line">                xr.color = RBTreeNode.Color.BLACK;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 对称情况</span><br><span class="line">            RBTreeNode xl = xp.left;</span><br><span class="line">            RBTreeNode a = xl.left;</span><br><span class="line">            RBTreeNode b = xl.right;</span><br><span class="line">            if (xl.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                if (b == null || b.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    rotateRight(xp);</span><br><span class="line">                    x = xl;</span><br><span class="line">                    xl.color = xp.color;</span><br><span class="line">                &#125; else if (a != null &amp;&amp; a.color == RBTreeNode.Color.RED) &#123;</span><br><span class="line">                    rotateRight(xp);</span><br><span class="line">                    xl.color = xp.color;</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    x.color = RBTreeNode.Color.RED;</span><br><span class="line">                &#125; else if (a == null || a.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    rotateRight(xl);</span><br><span class="line">                    b.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xl.color = RBTreeNode.Color.RED;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                rotateRight(xp);</span><br><span class="line">                xp.color = RBTreeNode.Color.RED;</span><br><span class="line">                xl.color = RBTreeNode.Color.BLACK;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        // 如果x指向新节点，更新xp</span><br><span class="line">        xp = x != null ? x.parent : xp;</span><br><span class="line">    &#125;</span><br><span class="line">    x.color = RBTreeNode.Color.BLACK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Red Black Tree</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习笔记(9):hadoop shuffle</title>
+    <url>/2021/03/04/hadoop-shuffle/</url>
+    <content><![CDATA[<blockquote>
+<p>在 MapReduce 大数据处理中，除了 Map/Reduce 数据计算处理逻辑，剩余的步骤主要为数据的传输即 shuffle 过程，涉及到数据的序列化/反序列化、网络IO、磁盘IO，shuffle 过程至关重要</p>
+</blockquote>
+<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><img src="/2021/03/04/hadoop-shuffle/hadoop-shuffle.png" title="hadoop shuffle">
+<a id="more"></a>
+<h2 id="shuffle-流程"><a href="#shuffle-流程" class="headerlink" title="shuffle 流程"></a>shuffle 流程</h2><p>整个数据 shuffle 流程分为两个阶段</p>
+<ol>
+<li>map shuffle，即数据从 Map 端输出的过程</li>
+<li>reduce shuffle，即数据输入到 Reduce 端的过程</li>
+</ol>
+<h3 id="map-shuffle"><a href="#map-shuffle" class="headerlink" title="map shuffle"></a>map shuffle</h3><p>数据在 Map Task 端处理完毕后，会经过以下流程：</p>
+<ol>
+<li>Map 首先将数据写入内存中的环形缓冲区，缓冲区数据写满后，批量写出到磁盘上，这样 Map 处理结果会分散在很多小文件中，写出的文件前数据会在内存中进行排序并且分区 partition，不同的 partition 文件对应下游不同的 Reduce Task。如果此时设置了 Combiner，会将内存中的分区排序结果进行 combine 操作后写出。</li>
+<li>Map 端写出分区小文件完成后，会进行数据文件合并，为了提高传输效率，相同 partition 的文件数据会合并成一个大文件，合并后大文件中的数据也是有序的。</li>
+</ol>
+<h3 id="reduce-shuffle"><a href="#reduce-shuffle" class="headerlink" title="reduce shuffle"></a>reduce shuffle</h3><p>Map 端数据写出完成后，Reduce 端处理流程开始：</p>
+<ol>
+<li>Reduce 启动复制线程开始复制 Map 写出的合并文件，此时也会先写入内存中，内存满写出到磁盘，形成小文件。如果此时设置了 Combiner，也会在内存对数据进行 combine 之后写出</li>
+<li>Map 端的数据读取完毕后，Reduce 工作，开始工作之前，Reduce 端也会进行小文件合并，形成一个大文件</li>
+<li>文件合并完成后，作为 Reduce 的输入，进行处理</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>学习笔记(10):flink shuffle</title>
+    <url>/2021/03/09/flink-shuffle/</url>
+    <content><![CDATA[<blockquote>
+<p>与批处理 MapReduce 过程类似，flink 实时流处理中，数据在处理节点中的 shuffle 传输，也是至关重要的过程</p>
+</blockquote>
+<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><img src="/2021/03/09/flink-shuffle/flink-shuffle.png" title="flink shuffle">
+<a id="more"></a>
+<h2 id="shuffle-流程"><a href="#shuffle-流程" class="headerlink" title="shuffle 流程"></a>shuffle 流程</h2><p>在 hadoop 批处理中，节点之间的数据传递是先将数据写入磁盘，通过磁盘作为媒介来进行数据传输</p>
+<p>在 flink 流处理中，节点之间的数据传递是通过网络来进行</p>
+<h3 id="上游算子-shuffle"><a href="#上游算子-shuffle" class="headerlink" title="上游算子 shuffle"></a>上游算子 shuffle</h3><ol>
+<li>当一条记录被上游算子处理完毕后，通过 emitRecord() 方法处理提交，数据会被序列化后写入 buffer，直到遇到以下情况后被写出：<ol>
+<li>buffer 区被写满</li>
+<li>buffer 未写满，但是超过时间限制</li>
+<li>遇到特殊 Event，触发 Checkpoint 的 Barrier 数据</li>
+</ol>
+</li>
+<li>buffer 首先会被写出到本地 buffer pool 中，然后 buffer pool 的数据会在 result partition 中，被 partition 到不同的 subPartition，每个 subPartition 对应下游算子的一个 subTask 实例，subPartition 中的数据会发送到对应的下游 subTask 中</li>
+<li>下游 netty server 端线程会从 subPartition queue 中取走 buffer，通过网络传输至下游</li>
+</ol>
+<h3 id="下游算子-shuffle"><a href="#下游算子-shuffle" class="headerlink" title="下游算子 shuffle"></a>下游算子 shuffle</h3><ol>
+<li>上游 netty client 端接受到从 server 端发送来的数据后，会将 buffer 插入到数据 parition 对应 subTask 的 input channel 中</li>
+<li>input channel 中的 buffer 数据会被拷贝到本地 buffer pool，然后经过反序列后，作为下游算子的输入</li>
+</ol>
+<p>同一个 TaskManager 内的多个 subTask 实例会公用一个 netty 组件进行通信，对同一个 TCP channel 进行复用，这样可以减少大规模下进程之间的网络连接。</p>
+<p>但由于复用连接进行数据传输，当某一个 subTask 实例出现了反压时，buffer pool 或者 channel 资源被沾满，其他 subTask 无法接受输入 buffer，运行停止</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>学习笔记(6):HBase</title>
+    <url>/2020/11/12/hbase/</url>
+    <content><![CDATA[<blockquote>
+<p>HBase(hadoop database)是大数据处理中常见的存储，底层基于 HDFS，支持机器资源水平扩展，上百亿数据存储，可以作为学习分布式数据库的入门级数据库</p>
+</blockquote>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>HBase 的数据存储为 KV 结构</p>
+<ul>
+<li>数据 rowKey 为主键，由使用者设计，rowKey 可以唯一确定到一条记录</li>
+<li>记录的字段列可以水平扩展，一条记录的字段可以任意添加，不同的记录字段可以不一致（需要啥加啥），这和 HBase 的设计和列存储方式有关。和关系型数据库不同，关系型数据库所有数据都有统一确定的 schema，HBase 无强 schema 约束，对于 HBase 一条记录，列字段可以任务扩展，只会存储存在的列字段。</li>
+</ul>
+<h4 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h4><p>HBase 整体上由以下四部分组成：</p>
+<ul>
+<li>Zookeeper：负责整个集群的高可用，选举 Master 节点；保存集群信息</li>
+<li>Master：HBase 管理节点，管理 Region Server 分配 Region，数据 Region 切分；均衡负载；创建表DDL；存储 hbase:meta 信息等</li>
+<li>Region Server：管理 Region，负责实际的数据操作读写，Region 是 HBase 中的数据存储单元。Client 直接和 Region Server 直连进行交互</li>
+<li>HDFS：实际底层的数据物理存储</li>
+</ul>
+<a id="more"></a>
+<img src="/2020/11/12/hbase/hbase.jpg" title="hbase">
+<h5 id="1-1-存储结构"><a href="#1-1-存储结构" class="headerlink" title="1.1 存储结构"></a>1.1 存储结构</h5><p>一条完整的记录在 HBase 中逻辑上还是以一行来存在，以唯一主键 rowKey 定位到唯一一条记录。HBase 物理上是列存储，同一行内可以包含多个列族，列族可以理解为把多个列进行归类，同一个列族内的列字段物理存储在一块区域。</p>
+<p>HBase 中数据以 Region 的形式来管理</p>
+<p>Region 可以理解成，水平上的数据分块，以 rowKey 进行数据切分，范围 [rowKey1 ~ rowKey2]，[rowKey2 ~ rowKey3] … 相同区间的数据落在同一个 Region 内。</p>
+<p>一个 Region 内部包含一个或者多个 Store，一个 Store 负责这个 Region 下一个列组的列字段存储。每个 Store 由 MemStore 和 StoreFile 组成，数据被写入 Store 时，会优先写入内存 MemStore 中，类似内存数据缓冲区，最终会持久化到 StoreFile，StoreFile 底层是 HFile，存储在 HDFS 上。</p>
+<p>可靠性保障：HFile 文件依赖 HDFS 文件系统的可靠性，每个 HFile 默认三个副本；WAL 机制：数据在写入前会先写入HLog，写入 HLog 成功后才会进行真正的数据读写，HLog 用于数据容错恢复，和 binLog 类似</p>
+<img src="/2020/11/12/hbase/region.jpg" title="存储结构">
+<h5 id="1-2-数据格式"><a href="#1-2-数据格式" class="headerlink" title="1.2 数据格式"></a>1.2 数据格式</h5><p>以下三条记录为例：</p>
+<table>
+<thead>
+<tr>
+<th>rowKey</th>
+<th>name(列组A)</th>
+<th>age(列组A)</th>
+<th>addr(列组B)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Tom</td>
+<td>12</td>
+<td>US</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Jerry</td>
+<td>15</td>
+<td>NULL（空值）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Mary</td>
+<td>18</td>
+<td>NULL（空值）</td>
+</tr>
+</tbody>
+</table>
+<p>假设上述三条数据的 rowKey[1~3] 落在同一个 Region 内，则数据在 Region 内的数据分布如下：</p>
+<img src="/2020/11/12/hbase/regionData.jpg" title="数据分布">
+<p>空列不占存储空间</p>
+<h5 id="行列存储对比"><a href="#行列存储对比" class="headerlink" title="行列存储对比"></a>行列存储对比</h5><h6 id="行存"><a href="#行存" class="headerlink" title="行存"></a>行存</h6><ul>
+<li>优点<ul>
+<li>行存储一行数据存储在一起，读取时可以很方便的查询邻近的字段信息。方便修改一行的记录。传统存储，更多使用的是查询、展示的场景，在这中使用场景下比较适合行存储，</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>但是如果行查询只需要某些字段，整行的记录仍然需要被读取</li>
+</ul>
+</li>
+</ul>
+<h6 id="列存"><a href="#列存" class="headerlink" title="列存"></a>列存</h6><ul>
+<li>优点<ul>
+<li>在大数据分析场景，很多数据都是append-only，不需要对数据进行修改；同时数据的处理更多的是进行聚合、排序、分组的操作，其中只依赖某些列字段，列存储优势在于高效读取需要的列字段数据，不需要整行读取，在这种情况下行存需要全表扫描。</li>
+<li>更新：大数据分析中，往往需要聚合很多业务多维度的数据，这些数据往往是独立的，如果要作宽表数据的聚合操作，比如商品价格和商品库存，由多个业务方来维护时，数据相对独立。如果使用行存储的话，部分的数据更新需要整行记录，涉及到另一部分不相关的数据</li>
+<li>列扩展性强，物理上只会存储存在的列字段，利于存储稀疏数据，列字段可以任意水平扩展。行存无法动态扩展</li>
+<li>相同数据类型列字段存储在一起，可以更好地进行数据压缩</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>如果需要列字段过多的话，查询需要分别查出每个列字段，然后组装成一行返回</li>
+</ul>
+</li>
+</ul>
+<h4 id="数据操作"><a href="#数据操作" class="headerlink" title="数据操作"></a>数据操作</h4><h5 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h5><p>上面提到，Client 直接和 Region Server 进行数据交互读写操作，和 Master 无关，Master 只负责 Region Server 的管理。客户端 Client 要将记录写入 HBase 或者读取数据，需要根据 table 表名和 rowKey 定位到某个 Region，然后和对应的 Region Server 建立链接进行通信。数据交互流程：</p>
+<ol>
+<li>Client 首先和 Zookeeper 进行通信，获取 hbase:meta 表的地址，hbase:meta 表本质上也是一张 hbase 表，请求 ZK 是为了获取对应 Region Server 地址</li>
+<li>Client 访问 hbase:meta 表所在的 Region Server，获取 hbase:meta 数据，根据 table 表名和 rowKey 定位 Region，获取数据所在的 Region Server 地址</li>
+<li>Client 获取到数据所在的 Region Server 地址，和数据 Region Server 建立链接，进行数据读写操作</li>
+</ol>
+<h5 id="hbase-meta-表格式"><a href="#hbase-meta-表格式" class="headerlink" title="hbase:meta 表格式"></a>hbase:meta 表格式</h5><p>hbase:meta 作为一张 HBase 表，存在某个 Region Server 上，主要有以下字段</p>
+<table>
+<thead>
+<tr>
+<th>rowKey</th>
+<th>regioninfo</th>
+<th>seqnumDuringOpen</th>
+<th>server</th>
+<th>serverstartcode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>rowKey：由 [table, region_start_key, region_id, encodeValue] 构成</p>
+<ul>
+<li>region_start_key: 这个 Region rowKey 区间的第一个 key，如果为空则是第一个 Region</li>
+<li>region_id: 该 Region 的 id，通常为创建时的时间戳</li>
+<li>encodeValue 值，由 table + region_start_key + timestamp 的 MD5 产生，HBase 在 HDFS 上实际存储 Region 的路径使用的是此 MD5 值，例：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">test,,1611232663206.6956c3fdf27be740b3fd2bf8a2b07fd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>regioninfo: 该 Region 相关 info 信息，例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;ENCODED =&gt; 6956c3fdf27be740b3fd2bf8a2b07fdb, NAME =&gt; &apos;test,,1611232663206.6956c3fdf27be740b3fd2bf8a2b07fdb.&apos;, STARTKEY =&gt; &apos;&apos;, ENDKEY =&gt; &apos;&apos;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>seqnumDuringOpen: Region 序列号</p>
+</li>
+<li><p>server: 该 Region 所在 Region Server 的地址</p>
+</li>
+<li><p>serverstartcode：该 Region 所在 Region Server 的启动时间</p>
+</li>
+</ul>
+<img src="/2020/11/12/hbase/meta.jpg" title="meta 示例">
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><a href="https://developer.ibm.com/zh/articles/ba-cn-bigdata-hbase/" target="_blank" rel="noopener">https://developer.ibm.com/zh/articles/ba-cn-bigdata-hbase/</a></li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>学习笔记(1):红黑树插入</title>
+    <url>/2017/04/03/insert-in-rbtree/</url>
+    <content><![CDATA[<h3 id="关于红黑树"><a href="#关于红黑树" class="headerlink" title="关于红黑树"></a>关于红黑树</h3><p>红黑树是一颗自平衡的树，能在节点插入和删除时调整树的高度。</p>
+<p>红黑树本质上还是一颗二叉搜索树，与普通的二叉搜索树不一样的地方，是红黑树的节点赋予了红黑的颜色属性，用于在树的结构改变时调整树的失衡。</p>
+<p>普通的二叉搜索树在插入和删除时没有树结构的调整，尽管平均树高度为lg(n)，平均复杂度为O(lg(n))，但是高度取决于插入的数据顺序，不稳定；极端情况下，当数据以顺序或者倒序插入时，树结构就退化成了链表，复杂度退化成O(n)。</p>
+<h3 id="红黑树性质"><a href="#红黑树性质" class="headerlink" title="红黑树性质"></a>红黑树性质</h3><p>红黑树的定义有如下五条性质：</p>
+<ul>
+<li>树节点有颜色属性，不是红色就是黑色</li>
+<li>根节点是黑色的</li>
+<li>叶子节点是空节点，颜色是黑色的</li>
+<li>没有连续的红节点</li>
+<li>从根节点开始，到叶子节点的所有路径中，包含的黑色节点个数（黑高）相等</li>
+</ul>
+<p>由4和5两条性质可以推断出，从根节点到叶子节点的所有路径中，最长路径节点数最多是最短路径的2倍；最短路径为全黑节点构成的路径，最长路径为红黑节点交替构成的路径。因此红黑树的高度能够始终控制在2lg(n)数量级内，所有操作复杂度均为O(lg(n))。</p>
+<p>例如：<br><img src="/2017/04/03/insert-in-rbtree/p1.png" title="例子列出了黑高为2的红黑树的所有路径情况，各个路径节点数分别为4，3，3，2。"></p>
+<a id="more"></a>
+<h3 id="牢记"><a href="#牢记" class="headerlink" title="牢记"></a>牢记</h3><p>红黑树在插入节点和删除节点之前，必定是满足红黑性质的！时刻牢记两个性质：</p>
+<ol>
+<li>没有连续的红节点</li>
+<li>黑高相等</li>
+</ol>
+<h3 id="红黑树插入"><a href="#红黑树插入" class="headerlink" title="红黑树插入"></a>红黑树插入</h3><p>红黑树插入节点的操作与普通二叉搜索树的插入操作一致，与普通搜索树不用的是，插入时可能会破坏红黑树的性质，这时就需要通过调整来恢复。</p>
+<p>红黑树将插入的节点设置为红色，可以思考下红黑树哪些性质可能会被破坏？</p>
+<ul>
+<li>因为插入的节点是红色的，不可能对路径的黑高产生影响，因此性质五不会被破坏。</li>
+<li>因为插入的节点是红色的，其父节点可能为红色，可能会产生连续的红节点，因此性质四可能会被破坏，这时候就需要判断调整结构。</li>
+</ul>
+<p>以当前节点x是其父节点xp的左子节点为例（右子节点为对称情况），插入需要调整的情况有三种。</p>
+<ul>
+<li>情况1： 当前节点x为红色，父节点xp为红色，父节点xp为祖父节点xgp的左子节点，并且父节点的兄弟节点xu为红色（图中Ax表示A子树的高黑为x）：</li>
+</ul>
+<img src="/2017/04/03/insert-in-rbtree/insert1.png" title="调整操作将xp，xu设置为黑色，将根节点xgp设置为红色，然后将根节点xgp设置为新的x。">
+<p>对与此子树，通过调整满足了红黑性质，调整前的黑高为x+1，调整后的黑高为x+1，因此对于上层而言，子树的黑高是没有变化的（性质五不会被破坏），唯一的变化是根节点的颜色由黑色变为红色，因此将x设置为根节点，当上层节点为红色时，可继续向上循环判断。</p>
+<ul>
+<li>情况2： 当前节点x为红色，父节点xp为红色，父节点xp为祖父节点xgp的左子节点，并且父节点的兄弟节点xu为黑色：</li>
+</ul>
+<img src="/2017/04/03/insert-in-rbtree/insert2.png" title="调整操作将xp设置为黑色，xgp设置为红色，然后将xgp右旋，将xp设置为新的x。">
+<p>对与此子树，通过调整满足了红黑性质，调整前的黑高为x+1，调整后的黑高为x+1，同时对于上层来说根节点的颜色均为黑色，此情况的红黑树形状恢复完毕，将x设置为黑色的xp节点，跳出循环条件。</p>
+<ul>
+<li>情况3： 当前节点x为红色，父节点xp为红色，父节点xp为祖父节点xgp的右子节点</li>
+</ul>
+<img src="/2017/04/03/insert-in-rbtree/insert3.png" title="调整操作将xp右旋，将xp设置为新的x。">
+<p>此操作可将情况3转化为情况1或者情况2（上述情况的对称情况），然后设置新的x循环判断调整。</p>
+<p>因此，x满足以下条件可终止循环（插入调整完毕）：</p>
+<ul>
+<li>x为黑节点（情况2）</li>
+<li>x为根节点（情况1，回溯到了根节点，整棵树黑高加1）</li>
+<li>x的父节点为黑节点（情况1）</li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>插入调整的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private void insertFixUp(RBTreeNode x) &#123;</span><br><span class="line">    if (x == null) return;</span><br><span class="line"></span><br><span class="line">    while (x.color == RBTreeNode.Color.RED</span><br><span class="line">            &amp;&amp; x.parent != null &amp;&amp; x.parent.color == RBTreeNode.Color.RED) &#123;</span><br><span class="line">        RBTreeNode xp = x.parent;</span><br><span class="line"></span><br><span class="line">        RBTreeNode xpp = xp.parent;</span><br><span class="line">        if (x == xp.left) &#123;</span><br><span class="line">            if (xp == xpp.left) &#123;</span><br><span class="line">                if (xpp.right == null || xpp.right.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    // 情况2</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xpp.color = RBTreeNode.Color.RED;</span><br><span class="line">                    x = rotateRight(xpp);</span><br><span class="line">                    if (xpp == root) root = x; // 若旋转节点为根节点，则设置新的根节点</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    // 情况1</span><br><span class="line">                    xpp.color = RBTreeNode.Color.RED;</span><br><span class="line">                    xpp.right.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    x = xpp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 情况3</span><br><span class="line">                rotateRight(xp);</span><br><span class="line">                x = xp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            if (x == xp.right) &#123;</span><br><span class="line">                if (xpp.left == null || xpp.left.color == RBTreeNode.Color.BLACK) &#123;</span><br><span class="line">                    // 情况2</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xpp.color = RBTreeNode.Color.RED;</span><br><span class="line">                    x = rotateLeft(xpp);</span><br><span class="line">                    if (xpp == root) root = x;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    // 情况1</span><br><span class="line">                    xpp.color = RBTreeNode.Color.RED;</span><br><span class="line">                    xpp.left.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    xp.color = RBTreeNode.Color.BLACK;</span><br><span class="line">                    x = xpp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 情况3</span><br><span class="line">                rotateLeft(xp);</span><br><span class="line">                x = xp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	 // 有可能情况2回溯到了根节点，需要将其颜色恢复</span><br><span class="line">    root.color = RBTreeNode.Color.BLACK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Red Black Tree</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习笔记(7):Java 类加载隔离</title>
+    <url>/2021/02/07/java-class-isolation/</url>
+    <content><![CDATA[<blockquote>
+<p>Java 依赖类冲突是比较常见的问题，简单介绍使用 Java 类隔离机制解决类冲突问题</p>
+</blockquote>
+<h3 id="类冲突问题"><a href="#类冲突问题" class="headerlink" title="类冲突问题"></a>类冲突问题</h3><p>类冲突本质上是由于相同名称的类，同时存在多个版本，并且多个版本之间并不兼容</p>
+<p>由于 JVM 的类加载特性，即使依赖的 Jar 里存在多个版本，一个类只会会被加载一次，运行使用的类和预期类不一致时候可能出现问题。比如：</p>
+<ol>
+<li>A 组件使用了某个只有高版本类中存在的方法，实际加载类为 B 组件引入的低版本，在调用方法时，会抛出 NoSuchMethodError</li>
+<li>A 组件某个类和 B 组件某个类重名，两个类没有任何关系，实际加载类为 B 组件中的类。第二种这是少数情况</li>
+</ol>
+<p>PS：JVM 加载类的顺序由对应的 ClassLoader 决定，一般默认的系统类加载器 AppClassLoader 就按照 -classpath 下的文件列表顺序进行加载。当有类冲突发生时，类版本来自于先加载的 Jar 包</p>
+<a id="more"></a>
+<h3 id="类加载隔离"><a href="#类加载隔离" class="headerlink" title="类加载隔离"></a>类加载隔离</h3><p>JVM 的类加载机制不再详述</p>
+<p>由 JVM 机制可得具体类由加载该类的 ClassLoader + 类名进行确定，要隔离同名类的方法显而易见：<strong>使用不同的 ClassLoader 来加载不同的组件</strong> </p>
+<h3 id="场景示例"><a href="#场景示例" class="headerlink" title="场景示例"></a>场景示例</h3><h4 id="1-一般场景"><a href="#1-一般场景" class="headerlink" title="1. 一般场景"></a>1. 一般场景</h4><p>一般使用场景，当运行以下 main 方法时，类如何加载的？</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Player &#123;</span><br><span class="line">    public void sayHello() &#123;</span><br><span class="line">        System.out.println(&quot;player say hello&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Player player = new Player();</span><br><span class="line">        player.sayHello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>首先，编译后的 class 文件或者 Jar 包，启动时会通过 -classpath 参数传入，并传入启动主类 Main。-classpath 路径下的类文件由系统类加载器 AppClassLoader 进行加载，主类由 AppClassLoader 加载</p>
+</li>
+<li><p>Player 类如何加载？以上的调用中，Player 类是通过隐式加载的。在某个类中 new 对象，会默认使用该类（示例中为主类 Main）的类加载器进行加载。因此 Player 也是由 AppClassLoader 加载的。</p>
+<p>使用该隐式默认加载行为还包括以下等操作，没有显式指定 ClassLoader：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 获取 class 对象，获取前会触发加载</span><br><span class="line">Class&lt;?&gt; clazz = Player.class;</span><br><span class="line">// 显式加载, 等值于 Main.class.getClassLoader.loadClass(&quot;Player&quot;);</span><br><span class="line">Class.forName(&quot;Player&quot;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="2-类冲突场景"><a href="#2-类冲突场景" class="headerlink" title="2. 类冲突场景"></a>2. 类冲突场景</h4><p>假设存在以下类冲突场景</p>
+<img src="/2021/02/07/java-class-isolation/class-conlict.jpg" title="类冲突">
+<p>定义两个模块含有同名冲突类：Player；两者同名，但是方法存在冲突</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// module player1</span><br><span class="line">public class Player &#123;</span><br><span class="line">    public void sayHello() &#123;</span><br><span class="line">        System.out.println(&quot;player1 say hello&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void swim() &#123;</span><br><span class="line">        System.out.println(&quot;player1 swim&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// module player2</span><br><span class="line">public class Player &#123;</span><br><span class="line">    public void sayHello() &#123;</span><br><span class="line">        System.out.println(&quot;player2 say hello&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;player2 run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>a 模块 和 b 模块分别依赖 player1 和 player2</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class A &#123;</span><br><span class="line">    public void doSport() &#123;</span><br><span class="line">        Player player = new Player();</span><br><span class="line">        player.sayHello();</span><br><span class="line">        player.swim();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class B &#123;</span><br><span class="line">    public void doSport() &#123;</span><br><span class="line">        Player player = new Player();</span><br><span class="line">        player.sayHello();</span><br><span class="line">        player.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主模块方法调用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        A a = new A();</span><br><span class="line">        a.doSport();</span><br><span class="line">        </span><br><span class="line">        B b = new B();</span><br><span class="line">        b.doSport();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>模块结构</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">|____a</span><br><span class="line">| |____A.java</span><br><span class="line">|____b</span><br><span class="line">| |____B.java</span><br><span class="line">|____main</span><br><span class="line">| |____Main.java</span><br><span class="line">|____player1</span><br><span class="line">| |____Player.java</span><br><span class="line">|____player2</span><br><span class="line">| |____Player.java</span><br></pre></td></tr></table></figure>
+<p>main 方法运行结果</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">player1 say hello</span><br><span class="line">player1 swim</span><br><span class="line">player1 say hello</span><br><span class="line">Exception in thread &quot;main&quot; java.lang.NoSuchMethodError: Player.run()V</span><br><span class="line">	at B.doSport(B.java:21)</span><br><span class="line">	at Main.main(Main.java:11)</span><br></pre></td></tr></table></figure>
+<p>由于底层类 Player 存在两个同名不兼容版本，直接运行必定出错：</p>
+<ol>
+<li>b 中的 sayHello 方法调到了 a 依赖版本 player1</li>
+<li>b 在对应 Player 类中找不到 run 方法</li>
+</ol>
+<p>这是由于各部分都是由同一个 AppClassLoader 加载导致，因为 player1 先加载，只会存在一个 player1 版本中的 Player.java</p>
+<h4 id="3-类加载隔离冲突"><a href="#3-类加载隔离冲突" class="headerlink" title="3. 类加载隔离冲突"></a>3. 类加载隔离冲突</h4><p>通过不同的类加载器，分别加载组件 a 和组件 b，达到类隔离的目的</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Main &#123;</span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        // a class 文件和依赖的 player1 class 文件路径</span><br><span class="line">        URL urlA1 = new URL(&quot;file:a/target/classes/&quot;);</span><br><span class="line">        URL urlA2 = new URL(&quot;file:player1/target/classes/&quot;);</span><br><span class="line">        URL[] urlA = new URL[]&#123;urlA1, urlA2&#125;;</span><br><span class="line">        // parent 不能指定为 AppClassLoader，不然会优先委托父类加载</span><br><span class="line">        ClassLoader classLoaderA = new URLClassLoader(urlA, null);</span><br><span class="line">        Class&lt;?&gt; classA = classLoaderA.loadClass(&quot;A&quot;);</span><br><span class="line">        Object a = classA.newInstance();</span><br><span class="line">        Method methodA = classA.getMethod(&quot;doSport&quot;);</span><br><span class="line">        methodA.invoke(a);</span><br><span class="line"></span><br><span class="line">        // b class 文件和依赖的 player2 class 文件路径</span><br><span class="line">        URL urlB1 = new URL(&quot;file:b/target/classes/&quot;);</span><br><span class="line">        URL urlB2 = new URL(&quot;file:player2/target/classes/&quot;);</span><br><span class="line">        URL[] urlB = new URL[]&#123;urlB1, urlB2&#125;;</span><br><span class="line">        ClassLoader classLoaderB = new URLClassLoader(urlB, null);</span><br><span class="line">        Class&lt;?&gt; classB = classLoaderB.loadClass(&quot;B&quot;);</span><br><span class="line">        Object b = classB.newInstance();</span><br><span class="line">        Method methodB = classB.getMethod(&quot;doSport&quot;);</span><br><span class="line">        methodB.invoke(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">player1 say hello</span><br><span class="line">player1 swim</span><br><span class="line">player2 say hello</span><br><span class="line">player2 run</span><br></pre></td></tr></table></figure>
+<h4 id="4-类隔离容器"><a href="#4-类隔离容器" class="headerlink" title="4. 类隔离容器"></a>4. 类隔离容器</h4><p>类隔离容器底层原理本质上也是利用不同 ClassLoader 进行类隔离，对组件类加载进行一层封装，可以不侵入主体代码：</p>
+<ol>
+<li>在入口处，提前使用不同的 ClassLoader 进行组件类的加载，放入缓存中。此时缓存中的类是隔离的</li>
+<li>自定义 ClassLoader，类加载时优先从缓存类中获取，获取不到在进行加载</li>
+<li>使用自定义 ClassLoader 重新加载主类运行主方法</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class MyClassLoader extends URLClassLoader &#123;</span><br><span class="line"></span><br><span class="line">    private final Map&lt;String, Class&lt;?&gt;&gt; classCache;</span><br><span class="line"></span><br><span class="line">    public MyClassLoader(URL[] urls, ClassLoader parent, Map&lt;String, Class&lt;?&gt;&gt; classCache) &#123;</span><br><span class="line">        super(urls, parent);</span><br><span class="line">        this.classCache = classCache;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Class&lt;?&gt; loadClass(String name) throws ClassNotFoundException &#123;</span><br><span class="line">        if (classCache != null &amp;&amp; classCache.containsKey(name)) &#123;</span><br><span class="line">            return classCache.get(name);</span><br><span class="line">        &#125;</span><br><span class="line">        return super.loadClass(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Main &#123;</span><br><span class="line"></span><br><span class="line">    private static Boolean isInit = null;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        // 运行主方法前检查</span><br><span class="line">        preRun(args);</span><br><span class="line"></span><br><span class="line">        // 主体方法</span><br><span class="line">        A a = new A();</span><br><span class="line">        a.doSport();</span><br><span class="line"></span><br><span class="line">        B b = new B();</span><br><span class="line">        b.doSport();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static void preRun(String[] args) throws Exception &#123;</span><br><span class="line">        if (isInit != null) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 加载类并缓存</span><br><span class="line">        Map&lt;String, Class&lt;?&gt;&gt; classCache = initClass();</span><br><span class="line">        // 自定义 ClassLoader，父类不能指定为 AppClassLoader</span><br><span class="line">        // 否则由于双亲委派机制，类又会委托给 AppClassLoader 进行加载，GG</span><br><span class="line">        // 可以指定为 null 或者 extClassLoader (和 null 没区别反正加载不到用户 class 文件)</span><br><span class="line">        ClassLoader appClassLoader = Main.class.getClassLoader();</span><br><span class="line">        URL[] urls = ((URLClassLoader) appClassLoader).getURLs();</span><br><span class="line">        MyClassLoader myClassLoader = new MyClassLoader(urls, appClassLoader.getParent(), classCache);</span><br><span class="line"></span><br><span class="line">        // 使用自定义 ClassLoader 重新加载主类</span><br><span class="line">        // 重启主方法，这样才会走自定义的类加载逻辑</span><br><span class="line">        Class&lt;?&gt; mainClass = myClassLoader.loadClass(&quot;Main&quot;);</span><br><span class="line">        // 标志位 isInit，只在第一次进入此方法进行类加载</span><br><span class="line">        Field field = mainClass.getDeclaredField(&quot;isInit&quot;);</span><br><span class="line">        field.setAccessible(true);</span><br><span class="line">        field.set(null, true);</span><br><span class="line">        Method mainMethod = mainClass.getDeclaredMethod(&quot;main&quot;, String[].class);</span><br><span class="line">        mainMethod.invoke(null, new Object[]&#123;args&#125;);</span><br><span class="line"></span><br><span class="line">        // 此时主方法运行结束，结束进程</span><br><span class="line">        System.exit(0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Map&lt;String, Class&lt;?&gt;&gt; initClass() throws Exception &#123;</span><br><span class="line">        Map&lt;String, Class&lt;?&gt;&gt; classCache = new HashMap&lt;&gt;();</span><br><span class="line">        URL urlA1 = new URL(&quot;file:a/target/classes/&quot;);</span><br><span class="line">        URL urlA2 = new URL(&quot;file:player1/target/classes/&quot;);</span><br><span class="line">        URL[] urlA = new URL[]&#123;urlA1, urlA2&#125;;</span><br><span class="line">        // parent 不能指定为 AppClassLoader，不然会优先委托父类加载</span><br><span class="line">        ClassLoader classLoaderA = new URLClassLoader(urlA, null);</span><br><span class="line">        Class&lt;?&gt; classA = classLoaderA.loadClass(&quot;A&quot;);</span><br><span class="line">        classCache.put(&quot;A&quot;, classA);</span><br><span class="line"></span><br><span class="line">        URL urlB1 = new URL(&quot;file:b/target/classes/&quot;);</span><br><span class="line">        URL urlB2 = new URL(&quot;file:player2/target/classes/&quot;);</span><br><span class="line">        URL[] urlB = new URL[]&#123;urlB1, urlB2&#125;;</span><br><span class="line">        ClassLoader classLoaderB = new URLClassLoader(urlB, null);</span><br><span class="line">        Class&lt;?&gt; classB = classLoaderB.loadClass(&quot;B&quot;);</span><br><span class="line">        classCache.put(&quot;B&quot;, classB);</span><br><span class="line">        return classCache;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">player1 say hello</span><br><span class="line">player1 swim</span><br><span class="line">player2 say hello</span><br><span class="line">player2 run</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
+    <title>学习笔记(12):netlogo</title>
+    <url>/2023/04/21/netlogo/</url>
+    <content><![CDATA[<blockquote>
+<p>百科定义：Netlogo 是一个用来对自然和社会现象进行仿真的可编程建模环境。</p>
+</blockquote>
+<h2 id="软件使用"><a href="#软件使用" class="headerlink" title="软件使用"></a>软件使用</h2><h3 id="模型使用"><a href="#模型使用" class="headerlink" title="模型使用"></a>模型使用</h3><p>下载：<a href="https://ccl.northwestern.edu/netlogo/" target="_blank" rel="noopener">https://ccl.northwestern.edu/netlogo/</a></p>
+<h4 id="狼羊捕食模型"><a href="#狼羊捕食模型" class="headerlink" title="狼羊捕食模型"></a>狼羊捕食模型</h4><p>打开模型</p>
+<blockquote>
+<p>文件 -&gt; 模型库 -&gt; Sample Model -&gt; Biology -&gt; Wolf Sheep Predation</p>
+</blockquote>
+<p>运行模型</p>
+<ol>
+<li><p>点击 setup 初始化</p>
+</li>
+<li><p>点击 go 运行</p>
+</li>
+</ol>
+<p>观察模型和统计数据随时间变化</p>
+<img src="/2023/04/21/netlogo/wolf_sheep.png" title="捕食模型">
+<a id="more"></a>
+<h3 id="编程模型"><a href="#编程模型" class="headerlink" title="编程模型"></a>编程模型</h3><p>整个空间叫 world</p>
+<p>world 内的角色</p>
+<ul>
+<li>turtle: 模型上可以移动的元素 </li>
+<li>patch: 元素后面背景中的每个二维网格单位</li>
+<li>link: 元素之间的连接      </li>
+<li>observer: 监控所有事物</li>
+</ul>
+<p>refer to the NetLogo Programming Guide. ：<a href="https://ccl.northwestern.edu/netlogo/docs/programming.html" target="_blank" rel="noopener">https://ccl.northwestern.edu/netlogo/docs/programming.html</a></p>
+<h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><p>命令作用</p>
+<ul>
+<li>控制 world 内的各个角色，修改属性、新建/销毁等等</li>
+<li>统计数据</li>
+</ul>
+<p>observer 全局修改属性</p>
+<ul>
+<li>修改 turtle 属性</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ask turtles [ set color red ] ;; 修改所有turtle</span><br><span class="line">ask turtle idx [ set color red ] ;; 修改某个turtle</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改 patch 属性</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ask patches [ set pcolor green ] ;; 修改所有patche</span><br><span class="line">ask patch x y [ set pcolor green ] ;; 修改某个坐标的patch</span><br></pre></td></tr></table></figure>
+<ul>
+<li>统计数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">count turtles ;; 对所有turtle计数</span><br></pre></td></tr></table></figure>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>代码本质上是一些列命令行的集合</p>
+<h4 id="变量定义"><a href="#变量定义" class="headerlink" title="变量定义"></a>变量定义</h4><ul>
+<li>定义全局变量，声明后要在代码中初始化</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">global [rate-limit]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>定义 turtle 成员变量<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">turtles-own [energy]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">to 方法名</span><br><span class="line">	;; 命令内容</span><br><span class="line">	;; 方法之间可以相互调用</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<ul>
+<li>turtle 操作</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">to move-turtles</span><br><span class="line">  ask turtles [</span><br><span class="line">    right random 360 ;; 设置转向角度</span><br><span class="line">    forward 1 ;; 向前移动 1 格</span><br><span class="line">    set energy energy - 1 ;; 修改成员变量 </span><br><span class="line">  ]</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<ul>
+<li>逻辑时钟操作</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">reset-ticks ;; 重置时钟</span><br><span class="line">tick ;; 时钟 + 1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>清理元素</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">clear-all</span><br></pre></td></tr></table></figure>
+<h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><ul>
+<li>按钮</li>
+</ul>
+<p>用于执行方法，点击即执行对应名称的方法代码</p>
+<ul>
+<li>监视器</li>
+</ul>
+<p>展示当前统计值</p>
+<ul>
+<li>图 plot</li>
+</ul>
+<p>用于统计数值随时间变化曲线</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plot count turtles ;; 展示计数</span><br><span class="line">plot count patches[with pcolor = green]</span><br><span class="line">plot [speed] of turtle 0 ;; 展示成员变量</span><br><span class="line">plot [speed] of sample-car ;; 展示成员变量</span><br><span class="line">plot min[speed] of turtle 0 ;; 展示成员变量</span><br></pre></td></tr></table></figure>
+<ul>
+<li>选择器/滑块…</li>
+</ul>
+<p>组件直接定义全局变量，值为组件内选取的值</p>
+<h2 id="软件架构"><a href="#软件架构" class="headerlink" title="软件架构"></a>软件架构</h2><blockquote>
+<p>Netlogo 主要由 Scala 语言编写，少量 Java<br>基于 Swing 框架编写 GUI 界面的客户端架构</p>
+</blockquote>
+<p>主要由 GUI 和后台事件处理两部分组成</p>
+<h3 id="GUI-界面"><a href="#GUI-界面" class="headerlink" title="GUI 界面"></a>GUI 界面</h3><p>基于 Swing 框架实现</p>
+<p>主要入口：org.nlogo.app.App</p>
+<img src="/2023/04/21/netlogo/GUI.png" title="主要GUI部分">
+<p>GUI 页面主要收集用户行为</p>
+<ul>
+<li>前台 Widget 组件的添加、编辑、修改</li>
+<li>后台 Event 操作事件发送如点击运行命令</li>
+</ul>
+<h3 id="事件处理"><a href="#事件处理" class="headerlink" title="事件处理"></a>事件处理</h3><p>总体事件处理流程</p>
+<img src="/2023/04/21/netlogo/event.png" title="事件处理流程">
+<p>以点击 Button 按钮运行方法为例</p>
+<p>时序调用</p>
+<img src="/2023/04/21/netlogo/buttonClick.png" title="button点击">
+<p>调用完成后一个新 Job 会进入 JobTread 线程的处理队列</p>
+<p>JobTread 工作线程会不断从队列中取出 job，并执行 job</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// org.nlogo.job.JobThread</span><br><span class="line">...</span><br><span class="line">override def run() &#123;</span><br><span class="line">  handling(classOf[RuntimeException]) &#123;</span><br><span class="line">    while (!dying) &#123;</span><br><span class="line">      compact(primaryJobs)</span><br><span class="line">      runPrimaryJobs()</span><br><span class="line">      maybeRunSecondaryJobs()</span><br><span class="line">      // Note that we must synchronize on newJobsCondition before calling isEmpty, since</span><br><span class="line">      // otherwise a job could get added after the empty check but before we sleep - ST 8/11/03</span><br><span class="line">      newJobsCondition.synchronized &#123;</span><br><span class="line">        if (primaryJobs.isEmpty)</span><br><span class="line">          ignoring(classOf[InterruptedException]) &#123;</span><br><span class="line">            // only sleep for a short time, since there may still</span><br><span class="line">            // be secondary jobs that need attention - ST 8/10/03</span><br><span class="line">            newJobsCondition.wait(PeriodicUpdateDelay.DelayInMilliseconds)</span><br><span class="line">          &#125; &#125; &#125; &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>执行过程即取出 commond，对相关的 Agent 对象进行操作</p>
+<img src="/2023/04/21/netlogo/run.png" title="线程处理">
+]]></content>
+      <tags>
+        <tag>netlogo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java 知识点</title>
+    <url>/2017/04/10/java-tips/</url>
+    <content><![CDATA[<h3 id="Thread和Runnable区别"><a href="#Thread和Runnable区别" class="headerlink" title="Thread和Runnable区别"></a>Thread和Runnable区别</h3><p>Java中继承Thread类和实现Runnable接口是两中实现多线程的方式。<br>一般来说，继承某个类通常是为了利用和修改它的行为或者属性，如果不需要对原有类的行为做出改变，采用实现Runnable接口的形式更为方便。</p>
+<h3 id="HashMap和TreeMap"><a href="#HashMap和TreeMap" class="headerlink" title="HashMap和TreeMap"></a>HashMap和TreeMap</h3><p>两者都是Key-Value的形式来存储数据。</p>
+<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap:"></a>HashMap:</h4><p>底层以散列表的形式实现，HashMap内部存储一个数组table，大小length为2的整数次幂。</p>
+<p>table数组用于存放链表节点，当插入或查找时，将key的hash和length-1进行与操作，得到在数组中索引位置index，从而得到对应的链表进行插入或者查找操作。</p>
+<p>以链表来存储，可以防止hash碰撞造成的冲突。碰撞程度受到hash函数的分散程度影响。平均来说链表长度不会太长，平均性能为O(1)。</p>
+<p>链表节点以固定大小的数组来存储，当数据量不断变大时，必定会造成碰撞程度增大，链表长度变长，影响性能；当数据量大于数组大小的一定程度时(默认为75%)，数组会变为2倍来扩容，将根据hash值重新计算原先数据的位置。</p>
+<p>数组大小扩容为2倍，保证大小length为2的整数次幂。2倍的原因是：数组中索引位置index的计算方式为，key的hash值和length-1进行与操作，为了使index分布更加平均，充分利用hash中的各个比特位，使尽可能多的比特位对结果产生相等的影响；当length为2的整数次幂时，length-1比特位全为1，能充分利用hash值中的所有较低位比特。</p>
+<p>在JDK8中，当链表长度大于一定值时(默认为8)，链表会调整为红黑树来存储，来优化性能。</p>
+<a id="more"></a>
+<h4 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h4><p>底层以红黑树的形式实现。</p>
+<p>在树节点中存储Key、Value值，红黑树是自平衡的二叉搜索树，在树的结构改变时会平衡树的高度，其性能为O(lg(n))。</p>
+<h4 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h4><ul>
+<li>HashMap的性能复杂度为O(1)，TreeMap的性能复杂度为O(lg(n))。</li>
+<li>HashMap在大小到达一定值时需要扩容，TreeMap不需要扩容。</li>
+<li>HashMap是无序的，TreeMap底层为二叉搜索树，保存有Key的大小顺序信息。</li>
+</ul>
+<h3 id="类的加载"><a href="#类的加载" class="headerlink" title="类的加载"></a>类的加载</h3><p>类的加载会经历三个步骤：</p>
+<ul>
+<li>加载</li>
+<li>链接（验证、准备、解析）</li>
+<li>初始化</li>
+</ul>
+<h4 id="加载："><a href="#加载：" class="headerlink" title="加载："></a>加载：</h4><p>将类的二进制class文件加载进虚拟机内存</p>
+<h4 id="链接："><a href="#链接：" class="headerlink" title="链接："></a>链接：</h4><p>验证：</p>
+<ol>
+<li>验证class文件的格式，比如开始字节为0xCAFFBABE等</li>
+<li>验证class文件的元数据，比如类的是否有父类（除了Object的所有类均有父类）等</li>
+<li>验证class文件的字节码，比如字节码不会跳转至方法外等</li>
+</ol>
+<p>准备：<br>为类中的static类变量分配空间，并初始化为初始默认值。这里的初始化为变量的默认值，如int为0，boolean为false等。除了一种情况，声明为final的static类变量，编译器在编译时会加入CONSTANT-VALUE属性，在准备阶段即初始化为对应值。</p>
+<p>解析：<br>将类中的字符引用转化为直接引用</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>执行生成的cinit方法，来执行类中的static变量赋值语句和static语句块。</p>
+<p>如果继承了父类，会先进行父类的初始化，然后才进行本类的初始化</p>
+<p>如果实现了接口，不会初始化相应的接口，只会在接口使用到后才进行初始化。</p>
+<h3 id="对象大小"><a href="#对象大小" class="headerlink" title="对象大小"></a>对象大小</h3><p>普通对象占用的空间包含以下部分：</p>
+<ol>
+<li>对象头，固定 8 字节</li>
+<li>指向类对象的指针，正常 8 字节；如果 JVM 开启类指针压缩，为 4 字节</li>
+<li>成员变量占用<ol>
+<li>基本数据类型</li>
+<li>普通对象指针，正常 8 字节；如果 JVM 开启对象指针压缩，为 4 字节</li>
+</ol>
+</li>
+<li>对齐空间占用，长度补全对齐 8 的整数倍</li>
+</ol>
+<p>数组对象占用空间包含以下部分：</p>
+<ol>
+<li>对象头，固定 8 字节</li>
+<li>指向数组内容类对象的指针，正常 8 字节；如果 JVM 开启类指针压缩，为 4 字节</li>
+<li>数据长度，固定 4 字节</li>
+<li>数据内的对象列表</li>
+<li>对齐空间占用，长度补全对齐 8 的整数倍</li>
+</ol>
+<h3 id="乐观锁-vs-悲观锁"><a href="#乐观锁-vs-悲观锁" class="headerlink" title="乐观锁 vs 悲观锁"></a>乐观锁 vs 悲观锁</h3><h4 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h4><p>悲观锁认为锁的竞争是比较悲观的，锁一旦被某个线程获取会长期持有，其他线程不容易获取到锁，因此线程在获取锁失败后，会考虑释放 CPU 资源进行等待，而不是通过自旋来不停尝试获取锁。<br>Java 中 Syncronize 与 ReetrantLock 都是悲观锁</p>
+<h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><p>乐观认为锁的竞争是比较乐观的，锁被获取后，同步操作较少很快就可以释放，其他线程认为可以在短时间内重新获取锁，因此通过自旋的方式不停尝试获取锁<br>Java 中 Atomic 原子类都过 CAS 自旋方式进行多线程下的原子操作</p>
+]]></content>
+      <categories>
+        <category>tips</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习笔记(11):hdfs</title>
+    <url>/2021/03/11/hdfs/</url>
+    <content><![CDATA[<h3 id="HDFS-写流程"><a href="#HDFS-写流程" class="headerlink" title="HDFS 写流程"></a>HDFS 写流程</h3><img src="/2021/03/11/hdfs/hdfs-write.png" title="hdfs write">
+<a id="more"></a>
+<p>写步骤：</p>
+<ol>
+<li>HDFS client 调用 DistributedFileSystem 的 <code>create</code> 方法，创建 FSDataOutputStream 文件输出流对象</li>
+<li>通过 RPC 与 NameNode 进行通信，NameNode 在 HDFS Namespace 中创建一个文件条目，用于记录文件的 block 信息，初始为空；然后 NameNode 会返回文件每个数据块 block 需要拷贝的 DataNode 地址。这些步骤封装在 FSDataOutputStream 内部</li>
+<li>获取数据 block 需要拷贝的 DataNode 地址后，client 从 NameNode 返回的 DataNode 列表中，获取最近的第一个 DataNode 节点，将 DataNode 列表和数据发送至此节点中</li>
+<li>第一个 DataNode 节点接受到 packet 数据，先存储下来，然后向第二个 DataNode 发送；第二个 DataNode 操作以此类推</li>
+<li>每个 DataNode 节点完成数据拷贝后，向前一个节点发送 ACK 确认</li>
+<li>最后 client 收到写入完成的 ACK 通知，调用 FSDataOutputStream 的 <code>close</code> 方法，关闭文件流写入</li>
+<li>client 最后调用 DistributedFileSystem 对象的 <code>complete</code> 方法，通知 NameNode 文件写入成功，NameNode 会将相关结果记录到 editlog 中</li>
+</ol>
+<p>文件数据写完后，每一份 block 数据会在多个 DataNode 上存在多个副本，默认情况下为 3 个</p>
+<h3 id="HDFS-读流程"><a href="#HDFS-读流程" class="headerlink" title="HDFS 读流程"></a>HDFS 读流程</h3><img src="/2021/03/11/hdfs/hdfs-read.png" title="hdfs read">
+<p>读步骤</p>
+<ol>
+<li>HDFS client 调用 DistributedFileSystem 的 <code>open</code> 方法，创建 FSDataInputStream 文件输入流对象</li>
+<li>通过 RPC 与 NameNode 进行通信，从NameNode 获取文件每个数据块 block 以及数据块所在的 DataNode 地址</li>
+<li>client 与 DataNode 信息通信，读取 block 数据</li>
+<li>client 读完所有的 block 后，合并成一个大文件</li>
+<li>关闭文件流读取</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>学习笔记(4):kafka</title>
+    <url>/2017/05/08/kafka/</url>
+    <content><![CDATA[<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><p>Kafka是一种分布式的消息订阅发布系统。</p>
+<h3 id="Kafka结构"><a href="#Kafka结构" class="headerlink" title="Kafka结构"></a>Kafka结构</h3><p>消息传递模型常见有</p>
+<ul>
+<li>基于缓存的生产者/消费者模型</li>
+<li>基于观察者的发布/订阅模型</li>
+</ul>
+<p>Kafka结构中实现消息生产者/消费者，使用的就是发布订阅模型，具体结构如下：</p>
+<a id="more"></a>
+<img src="/2017/05/08/kafka/kafka.png" title="Kafka中消息模型">
+<p>Kafka中Consumer和Producer之间通过特定topic进行消息传递。</p>
+<h3 id="Kafka文件系统"><a href="#Kafka文件系统" class="headerlink" title="Kafka文件系统"></a>Kafka文件系统</h3><p>在Kafka中每个topic分配了单独的文件夹，topic下的每个partition也有其单独的文件夹，partition文件夹下即存放了对应的消息文件，随着Kafka中消息的增加，Kafka会将消息分段存储，每段称为segment。</p>
+<p>每个segment由.index文件和.log文件组成。</p>
+<p>segment文件命名：文件名为19位数字，初始文件为全零，后续文件为上一个文件中最后一条消息的offset，并用零高位补齐19位。这样此文件的起始offset便为文件名fileName + 1。</p>
+<p>.index文件为索引文件，其中存放了消息序号所对应的消息，其在.log数据文件中的偏移位置。</p>
+<p>segment文件虽然是持久化的，可以读取其中的历史消息，但其不是永久存在的，有其生命周期，具体生命周期由Kafka服务器的参数配置决定。</p>
+]]></content>
+      <categories>
+        <category>framwork</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Kafka</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习笔记(3):TCP</title>
+    <url>/2017/04/05/tcp/</url>
+    <content><![CDATA[<h3 id="关于TCP"><a href="#关于TCP" class="headerlink" title="关于TCP"></a>关于TCP</h3><p>TCP传输控制协议（Transmission Control Protocol）是面向连接的传输层协议，提供可靠的字节流传输。</p>
+<p>TCP特点：</p>
+<ul>
+<li>面向连接的传输层协议</li>
+<li>可靠传输</li>
+<li>面向字节流传输</li>
+<li>全双工通信</li>
+</ul>
+<p>TCP把连接作为基本的抽象，每个连接两端为两个套接字socket，socket由IP地址+端口号组成。</p>
+<p>TCP保证报文按顺序，不重复发送报文，则需要对分组进行编号，以字节为基准。</p>
+<p>可靠传输原理</p>
+<ol>
+<li>报文确认机制。发送方发送一个报文，接收方在成功接收后会向发送方发送一个确认报文，确认的序号为期望的下一步接收的起始字节编号。接收方接收后便确认该序号之前的字节分组均成功送达。</li>
+<li>发送方超时重传。发送方发送一个分组不会立即删除而是缓存该分组，同时设置一个超时计时器，若在超时时间段内未收到接收方发送的确认报文，则会重传该分组；若在时间段内收到确认，则删除该分组缓存。</li>
+<li>接收方重复确认。接收方收到重复的报文时，说明确认报文由于丢失未到达发送方，需要重传确认报文，并丢弃该重复报文。确认按累计确认的方式，接收方收到连续的多个分组，只需要对最后一个分组进行确认即可，这样保证确认序号之前的所有数据均已接收。</li>
+</ol>
+<a id="more"></a>
+<h3 id="TCP首部"><a href="#TCP首部" class="headerlink" title="TCP首部"></a>TCP首部</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">2字节</th>
+<th style="text-align:center">2字节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">源端口</td>
+<td style="text-align:center">目的端口</td>
+</tr>
+<tr>
+<td style="text-align:center">发送序号</td>
+<td style="text-align:center">发送序号</td>
+</tr>
+<tr>
+<td style="text-align:center">确认序号</td>
+<td style="text-align:center">确认序号</td>
+</tr>
+<tr>
+<td style="text-align:center">数据偏移、标志位</td>
+<td style="text-align:center">接受窗口</td>
+</tr>
+<tr>
+<td style="text-align:center">检验和</td>
+<td style="text-align:center">紧急指针</td>
+</tr>
+<tr>
+<td style="text-align:center">选项</td>
+<td style="text-align:center">填充</td>
+</tr>
+</tbody>
+</table>
+<p>前20字节（至紧急指针）为固定格式。</p>
+<p>数据偏移：TCP报文中数据在TCP报文的偏移位置，即使报文首部的长度。</p>
+<p>标志位：</p>
+<ul>
+<li>URG：紧急标志位，标志有紧急数据需要优先传输，紧急指针有效，紧急指针表示紧急数据的长度，紧急数据之后为普通数据。</li>
+<li>ACK：确认标志位，表示确认为有效。</li>
+<li>PSH：推送标志位，表示该报文需尽快推送给上传应用，不等待至缓存区满。</li>
+<li>RST：复位标志位，表示TCP连接出现严重错误，需重新连接。</li>
+<li>SYN：同步标志位，用于标志建立连接消息。</li>
+<li>FIN：终止标志位，用于标志释放连接消息。</li>
+</ul>
+<p>接受窗口：告诉发送方可以接受多长的数据。</p>
+<p>检验和：加上伪首部信息（IP源地址，IP目的地址，全零（1字节）+协议号（1字节）+TCP报文长度（2字节）），与整个TCP报文（补零对其）相与得到结果并取反。接收方检验：按相同方式计算结果应全为一。</p>
+<h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3><p>TCP发送方维护着一个发送窗口，发送窗口受到拥塞窗口和接收窗口大小的影响，位于发送窗口内的字节数据可以被发送，可包含多个分组，这样可以同时发送多个分组，不需要一个一个发送分组并等待确认，提高了发送效率。</p>
+<h3 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h3><p>TCP发送方维护一个拥塞窗口，会根据发送报文的重传情况来判断网络状态，并以此来动态调整拥塞窗口的大小。</p>
+<ul>
+<li>慢开始和拥塞避免</li>
+</ul>
+<p>慢开始算法和拥塞避免算法往往配合使用。</p>
+<p>慢开始：该算法有一个门限值，开始时拥塞窗口大小为1（单位为报文段个数），小于门限值时，若没有发生重传，则执行慢开始算法，以两倍的速率增大窗口。</p>
+<p>拥塞避免：当到达门限值时，执行拥塞避免算法，拥塞窗口大小增长速率变为每次增加1；若是发生了一次重传，则将门限值设为窗口大小的一半，拥塞窗口设为初始值1，重新开始执行慢开始算法。</p>
+<ul>
+<li>快重传和快开始</li>
+</ul>
+<p>快重传和快开始算法也往往配合使用。</p>
+<p>快重传：算法要求接收方每收到一个失序的报文时，如收到M1、M3、M4、M5，就立即向发送方发送之前收到的报文确认（确认M1），以通知发送方中间存在报文丢失。发送方在连续收到三个重复的确认之后，判断M2未送达，则重新发送M2分组。</p>
+<p>快开始：发送方连续收到三个确认报文，就将门限值设为窗口大小的一半，并认为网络很可能没有发送拥塞（连续收到三个报文），因此就将拥塞窗口大小直接设置为门限值，执行拥塞避免算法。</p>
+<h3 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h3><p>TCP连接的建立需要发送三次报文后确立，俗称三次握手。</p>
+<p>过程如下：</p>
+<ul>
+<li>客户端A主动发起连接，TCP进程首先创建传输控制模块TCB，然后想服务端B发出连接请求报文。报文中同步标志位SYN=1，同时选择一个初始序号seq=x，然后客户端A进入SYN_SENT状态。此报文需要消耗一个序号。</li>
+<li>服务端B起始处于LISTEN监听状态，收到请求报文后，同意则向A发送确认。确认报文中同步标志位SYN=1，同样选择一个初始序号seq=y；确认标志位ACK=1，确认序号ack=x+1，然后服务端B进入SYN_RCVD状态。此报文需要消耗一个序号。</li>
+<li>客户端A收到确认报文后，也需要给B发送一个确认报文。报文中ACK=1，ack=y+1，seq=x+1，然后进入ESTABLISHED状态。此报文若未携带数据，则不消耗序号（下个报文序号依然为x+1）。</li>
+<li>服务端B收到A的确认报文后，也进入ESTABLISHED状态。</li>
+</ul>
+<p>三次握手的好处：若只有两次发送报文，服务器只收到一次请求报文就进入连接建立状态；假如客户端的某次连接建立请求滞留在网络中延时到达，但是客户端在之前已经建立连接并交换完数据断开，这就会导致服务端收到延时的请求报文时，就进入ESTABLISHED状态，但客户端并未发起请求，导致资源的浪费。</p>
+<h3 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h3><p>TCP连接的断开需要发送四次报文后确立，俗称四次挥手。</p>
+<p>过程如下：</p>
+<ul>
+<li>客户端A发起断开连接，向服务端B发送释放连接报文。报文中终止标志位FIN=1，报文序号seq=u（接之前发送的字节序号），然后客户端A进入FIN-WAIT-1状态。此报文需要消耗一个序号。</li>
+<li>服务端B接受到终止报文后向A发送确认。确认报文中确认标志位ACK=1，确认序号ack=u+1，然后B进入CLOSE_WAIT状态。此时B还能够发送未发送完的数据，TCP连接处于半关闭状态。</li>
+<li>客户端A收到确认报文后，进入FIN-WAIT-2状态，可继续接受数据，并等待服务端B发送终止报文。</li>
+<li>服务端B发送完所有数据之后，向A发送一个终止报文。报文中FIN=1，seq=w（接之前发送的字节序号），ACK=1，确认序号ack=u+1，然后B进入LAST-ACK状态。</li>
+<li>客户端A收到终止报文后，再次发送确认。报文中ACK=1，seq=u+1，ack=w+1，然后进入TIME-WAIT状态，在此状态等待2MSL（最长报文段寿命）时间后，进入CLOSED状态。</li>
+<li>服务端B收到确认后，进入CLOSED状态。</li>
+</ul>
+<p>客户端A要在TIME-WAIT状态等待2MSL时间的意义是：</p>
+<p>若A发送完最后的确认就关闭，假如确认报文未到达服务端B，则B会一直处于LAST-ACK状态；而等待2MSL时，假如确认报文未到达B，B会认为之前的终止报文并未发送到达A，则重新发送该报文，在A重新收到终止报文后，会重传确认报文，使B按正常步骤进入CLOSED状态。</p>
+<h3 id="Java中TCP基本使用"><a href="#Java中TCP基本使用" class="headerlink" title="Java中TCP基本使用"></a>Java中TCP基本使用</h3><p>Java中服务端使用SocketServer，客户端使用Socket来建立连接通信。<br>客户端：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 通过IP和端口创建Socket对象</span><br><span class="line">Socket socket = new Socket(&quot;127.0.0.1&quot;, 9527)</span><br><span class="line">// 通过Socket对象获取输入输出流，进行输入输出字节操作</span><br><span class="line">InputStream in = socket.getInputStream();</span><br><span class="line">InputStream out = socket.getOutputStream();</span><br></pre></td></tr></table></figure>
+<p>服务端：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 通过监听的端口创建ServerSocket对象</span><br><span class="line">ServerSocket serverSocket = new ServerSocket(9527);</span><br><span class="line">// 通过accept()方法来获取一个Socket，获取Socket对象后就可以进行输入输出的字节操作了</span><br><span class="line">// accept()方法为阻塞方法，会阻塞直到某个Socket连接建立</span><br><span class="line">Socket socket = serverSocket.accept();</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Network</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>TCP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常用工具</title>
+    <url>/2020/09/04/tools/</url>
+    <content><![CDATA[<h2 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h2><h3 id="tail"><a href="#tail" class="headerlink" title="tail"></a>tail</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tail -300f shopbase.log #倒数300行并进入实时监听文件写入模式</span><br></pre></td></tr></table></figure>
+<h3 id="grep"><a href="#grep" class="headerlink" title="grep"></a>grep</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">grep forest f.txt   #文件查找</span><br><span class="line">grep forest f.txt cpf.txt #多文件查找</span><br><span class="line">grep &apos;log&apos; /home/admin -r -n #目录下查找所有符合关键字的文件</span><br><span class="line">cat f.txt | grep -i shopbase    </span><br><span class="line">grep &apos;shopbase&apos; /home/admin -r -n --include *.&#123;vm,java&#125; #指定文件后缀</span><br><span class="line">grep &apos;shopbase&apos; /home/admin -r -n --exclude *.&#123;vm,java&#125; #反匹配</span><br><span class="line">seq 10 | grep 5 -A 3    #上匹配</span><br><span class="line">seq 10 | grep 5 -B 3    #下匹配</span><br><span class="line">seq 10 | grep 5 -C 3    #上下匹配，平时用这个就妥了</span><br><span class="line">cat f.txt | grep -c &apos;SHOPBASE&apos;</span><br><span class="line"></span><br><span class="line">grep &quot;xxx&quot; -v f.txt #不包含反向查找</span><br></pre></td></tr></table></figure>
+<h3 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cat xx | awk -F= &apos;&#123;print $2&#125;&apos; | awk &apos;&#123;print $1&#125;&apos; | awk -F. &apos;&#123;if ($2==&quot;na61&quot;) &#123;print $1&quot;.&quot;$2&#125; else if($3==&quot;na61&quot;) &#123;print $1&quot;.&quot;$2&quot;.&quot;$3&#125;&#125;&apos; #分隔处理</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 查看域名</span><br><span class="line">nslookup 11.11.33.123</span><br></pre></td></tr></table></figure>
+<h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 查找</span><br><span class="line">find . -name &quot;*option*&quot;</span><br><span class="line"></span><br><span class="line"># 将目前目录其其下子目录中所有一般文件列出</span><br><span class="line">find . -type f/d</span><br><span class="line"></span><br><span class="line"># 将目前目录及其子目录下所有最近 20 天内更新过的文件列出</span><br><span class="line">find . -ctime -20</span><br></pre></td></tr></table></figure>
+<h3 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netstat -nat | awk  &apos;&#123;print $6&#125;&apos; | sort | uniq -c | sort -rn </span><br><span class="line">#查看当前连接，注意close_wait偏高的情况</span><br></pre></td></tr></table></figure>
+<h3 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 替换</span><br><span class="line">:%s/vivian/sky/g</span><br></pre></td></tr></table></figure>
+<h3 id="du-df"><a href="#du-df" class="headerlink" title="du/df"></a>du/df</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">du -sh ./* #列出当前目录文件占用</span><br><span class="line">df -h #磁盘占用</span><br></pre></td></tr></table></figure>
+<h3 id="od"><a href="#od" class="headerlink" title="od"></a>od</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 查看文件字节</span><br><span class="line">od flie</span><br><span class="line"></span><br><span class="line"># 以ACSII码显示</span><br><span class="line">od -c flie</span><br><span class="line"></span><br><span class="line"># 以字符显示</span><br><span class="line">od –S1 file</span><br></pre></td></tr></table></figure>
+<h3 id="jsp"><a href="#jsp" class="headerlink" title="jsp"></a>jsp</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jps -mlvV xxx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-m 输出main方案参数</li>
+<li>-l 显示主类全名</li>
+<li>-v jvm参数</li>
+<li>-V 通过flag file传入的jvm参数</li>
+</ul>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jstack xxx</span><br></pre></td></tr></table></figure>
+<p>堆栈状态</p>
+<h3 id="idea插件"><a href="#idea插件" class="headerlink" title="idea插件"></a>idea插件</h3><ul>
+<li>key promoter</li>
+<li>maven helper</li>
+<li>Rainbow Brackets</li>
+</ul>
+<h3 id="VM参数"><a href="#VM参数" class="headerlink" title="VM参数"></a>VM参数</h3><ul>
+<li><p>类来自哪个文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-XX:+TraceClassLoading</span><br><span class="line">结果形如[Loaded java.lang.invoke.MethodHandleImpl$Lazy from D:\programme\jdk\jdk8U74\jre\lib\rt.jar]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>应用挂了输出dump文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/home/admin/logs/java.hprof</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>学习笔记(5):PHP</title>
+    <url>/2017/07/10/php-note/</url>
+    <content><![CDATA[<p>时间函数：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;); // &apos;Y-m-d H:m:s&apos;</span><br><span class="line">$first = 1; //$first = 1 表示每周星期一为开始日期 0表示每周日为开始日期</span><br><span class="line">$w = date(&apos;w&apos;, strtotime($date));  //获取当前周的第几天 周日是0,周一到周六是1-6</span><br><span class="line">$now_start = date(&apos;Ymd&apos;, strtotime(&quot;$date -&quot; . ($w ? $w - $first : 6) . &apos; days&apos;)); // 这周周一</span><br><span class="line">$last_start = date(&apos;Ymd&apos;, strtotime(&quot;$now_start - 7 days&quot;)); // 上周周一</span><br><span class="line">return $last_start;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>时间格式转换：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$date = date(&apos;Ymd&apos;);      // Ymd格式</span><br><span class="line">$time = strtotime($date); // 转换为时间戳</span><br><span class="line">$date = date(&apos;Ymd H:m:s&apos;); // Ymd H:m:s格式</span><br></pre></td></tr></table></figure>
+<p>curl发送Get</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ch = curl_init();</span><br><span class="line">curl_setopt($ch, CURLOPT_URL, $url);   //设置url</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, 0);   // 不输出头部</span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 返回结果作为string</span><br><span class="line">$response = curl_exec($ch);</span><br><span class="line">curl_close($ch);</span><br></pre></td></tr></table></figure>
+<p>Json解析</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$result = json_decode(&quot;&quot; . $response, true);  // true解析为数组</span><br><span class="line">$data = $result[&quot;data&quot;];</span><br></pre></td></tr></table></figure>
+<p>文件写入</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$fileName = &quot;puvLog.txt&quot;;</span><br><span class="line">$time = date(&quot;Y-m-d H:i:s&quot;, time());</span><br><span class="line">$log = $time . &quot;  &quot; . $log . &quot;\n&quot;;</span><br><span class="line">file_put_contents($fileName, $log, FILE_APPEND); // 尾部追加</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>tips</category>
+      </categories>
+      <tags>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习笔记(8):YARN</title>
+    <url>/2021/02/24/yarn/</url>
+    <content><![CDATA[<blockquote>
+<p>大数据处理中，会使用到大规模的集群，如何管理庞大的集群资源，由此诞生了 hadoop YARN</p>
+</blockquote>
+<h2 id="YARN-架构"><a href="#YARN-架构" class="headerlink" title="YARN 架构"></a>YARN 架构</h2><img src="/2021/02/24/yarn/yarn.jpg" title="yarn 架构">
+<a id="more"></a>
+<p>YARN 主要由以下几部分构成</p>
+<ul>
+<li>ResourceManager，中心节点，基于 Zookeeper 实现高可用性，RM 负责整个集群的资源管理与调度<ul>
+<li>与客户端交互，接受应用程序提交、状态查询等</li>
+<li>启动和管理各个应用程序 ApplicationMaster；为任务申请第一个 Container 资源来启动 ApplicationMaster，AM 失败时重启</li>
+<li>管理 NodeManager，接受 NM 的资源和健康情况，下达资源管理指令</li>
+<li>应用程序资源管理和调度，接受来自应用程序 AM 的资源申请，为程序分配资源</li>
+</ul>
+</li>
+<li>NodeManager，执行节点上的资源管理器<ul>
+<li>定期向 RM 汇报资源和健康情况</li>
+<li>执行 Container，运行应用程序</li>
+</ul>
+</li>
+<li>ApplicationMaster，为应用程序管理器，负责程序运行期间的生命周期管理，由用户来实现，每个提交到 YARN 上的应用必须包含<ul>
+<li>被 RM 启动后，AM 负责和 RM 协调资源（用于运行的 Container）</li>
+<li>从 RM 得到资源后，将资源分配给内部的任务</li>
+<li>运行期间和 RM 进行通信</li>
+<li>监控任务内部的运行状态，并进行内部任务管理</li>
+</ul>
+</li>
+<li>Container，是 YARN 中的资源抽象，封装了节点的运行资源（CPU/内存），用于运行程序。不同的 Container 之间资源隔离，使用 CGroup 实现</li>
+</ul>
+<h2 id="YARN-组件通信"><a href="#YARN-组件通信" class="headerlink" title="YARN 组件通信"></a>YARN 组件通信</h2><img src="/2021/02/24/yarn/communication.jpg" title="组件间通信">
+<p>各个组件之间的通信，由客户端主要轮询发起</p>
+<h2 id="YARN-工作流程"><a href="#YARN-工作流程" class="headerlink" title="YARN 工作流程"></a>YARN 工作流程</h2><img src="/2021/02/24/yarn/step.jpg" title="工作流程">
+<ol>
+<li>用户使用客户端向 ResourceManager 提交任务，包含 ApplicationMaster 程序，ApplicationMaster 启动命令，实际的任务应用 Task</li>
+<li>RM 为此应用程序分配第一个 Container，用来启动 AM。RM 与对应的 NM 进行通信，要求启动 AM</li>
+<li>AM 启动后，向 RM 注册和汇报。这样用户可以通过 RM 来查看任务状态</li>
+<li>AM 向 RM 轮询申请资源，用于运行内部任务</li>
+<li>AM 申请到 Container 后，与对应的 NodeManager 进行通讯，要求启动任务</li>
+<li>NM 为每个任务准备好运行环境（环境变量、JAR 包等），将任务命令写到一个脚本中，运行脚本启动任务</li>
+<li>Task 任务启动后，向 AM 注册和汇报，AM 可以掌握各个任务的运行状态和处理</li>
+<li>当 AM 检测到 Task 都运行结束后，向 RM 注销并关闭自己</li>
+</ol>
+<h2 id="YARN-能力"><a href="#YARN-能力" class="headerlink" title="YARN 能力"></a>YARN 能力</h2><h3 id="资源调度"><a href="#资源调度" class="headerlink" title="资源调度"></a>资源调度</h3><p>YARN 通过队列进行资源调度划分，任务提交时需要指定队列</p>
+<p>队列会设定一定比例的最低资源保障和使用上限，当一个队列的资源有空余时，剩余资源可以共享给其他队列使用</p>
+<h3 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h3><p>DistributedCache 是 YARN 提供的文件分发工具，会自动将指定文件分发到各个节点上，提供用户程序使用，比如配置文件、依赖库等。用户不必关系如何将这些文件进行分发，只需要设置相关参数</p>
+<ul>
+<li>-files 将指定的本地/HDFS文件分发到 Task 的工作目录下</li>
+<li>-archives 分发文件，并对名称后缀为“.jar”、“.zip”，“.tar.gz”、“.tgz”的文件自动解压</li>
+<li>-libjars 分发 Jar 包，将文件路径自动添加到任务的 CLASS_PATH 环境变量</li>
+</ul>
+<h3 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h3><p>YARN 为 M/S 主从架构，中心节点 RM 通过 ZK 保障高可用性。当 RM 节点故障时，备用 RM 会自动切换为服务状态，集群中的 NM 和 AM 会自动连接到新的 RM</p>
+<p>NodeManager 的健康状态检查，NM 上有专门的服务检查状态，服务通过两种方法检查：</p>
+<ol>
+<li>通过管理员自定义的脚本，周期任务会定期地执行该脚本，通过脚本运行结果判断</li>
+<li>通过检查磁盘好坏，周期任务会定期检查磁盘状态，如果坏磁盘数据达到一定比例，任务节点状态不健康</li>
+</ol>
+<p>当 NM 监控状态为 False 时，会通过心跳汇报到 RM，RM 会从名单移除该 NM，直到健康状态恢复为 True</p>
+]]></content>
+  </entry>
+</search>
