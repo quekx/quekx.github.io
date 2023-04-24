@@ -70,5 +70,5 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/quekx/quekx.github.io.git
+  repo: https://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@github.com/quekx/quekx.github.io.git
   branch: master
