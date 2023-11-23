@@ -67,7 +67,18 @@ token数组：
 
 
 
-## Auto-GPT介绍
+## 应用
+
+### 1. 知识问答: ChatGPT
+
+略
+
+###  2. AI agent: Auto-GPT
+
+> AI agent（人工智能代理）是一种具有感知、推理、学习和执行能力的系统或程序，旨在模拟人类的智能行为以执行特定任务或解决问题。
+>
+
+#### Auto-GPT介绍
 
 > AutoGPT原名是EntreprenurGPT，Significant Gravitas在2023年3月16日表达了他想创造一个实验项目，看看GPT-4能否在人类商业世界中生存，简单来说就是是否可以挣钱。其核心思想就是不停的向GPT-4发送请求，让其做商业决策，最后根据这个决策执行，看GPT-4给的策略能挣多少钱。
 >
@@ -77,3 +88,30 @@ token数组：
 
 
 
+##### AutoGPT原理
+
+ChatGPT背后是语言模型，只支持问答，无法完成实际操作，如网页浏览、代码执行、文件操作等。AutoGPT 核心决策能力基于 ChatGPT。AutoGPT把实际的操作封装成了命令，通过提问+指令选择的形式，发送到ChatGPT，让模型进行决策选择，然后AutoGPT根据模型返回的结果进行操作。
+
+
+
+> https://github.com/Significant-Gravitas/AutoGPT/blob/master/autogpts/autogpt/autogpt/core/planning/templates.py
+
+```
+ABILITIES = (
+    'analyze_code: Analyze Code, args: "code": "<full_code_string>"',
+    'execute_python_file: Execute Python File, args: "filename": "<filename>"',
+    'append_to_file: Append to file, args: "filename": "<filename>", "text": "<text>"',
+    'list_files: List Files in Directory, args: "directory": "<directory>"',
+    'read_file: Read a file, args: "filename": "<filename>"',
+    'write_to_file: Write to file, args: "filename": "<filename>", "text": "<text>"',
+    'google: Google Search, args: "query": "<query>"',
+    'improve_code: Get Improved Code, args: "suggestions": "<list_of_suggestions>", "code": "<full_code_string>"',
+    'browse_website: Browse Website, args: "url": "<url>", "question": "<what_you_want_to_find_on_website>"',
+    'write_tests: Write Tests, args: "code": "<full_code_string>", "focus": "<list_of_focus_areas>"',
+    'get_hyperlinks: Get hyperlinks, args: "url": "<url>"',
+    'get_text_summary: Get text summary, args: "url": "<url>", "question": "<question>"',
+    'task_complete: Task Complete (Shutdown), args: "reason": "<reason>"',
+)
+```
+
+这里作者设计了一个非常精巧的prompt模板，让GPT按照模板进行回答，选择事先定义好的指令，根据这些COMMAND选择最合适的方式去得到答案，并给出每一个COMMAND背后需要使用的参数
